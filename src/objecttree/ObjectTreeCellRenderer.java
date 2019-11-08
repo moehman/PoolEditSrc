@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007 Automation technology laboratory,
+ * Copyright (C) 2019 Automation technology laboratory,
  * Helsinki University of Technology
  *
  * Visit automation.tkk.fi for information about the automation
@@ -38,8 +38,8 @@ import pooledit.Utils;
  */
 public class ObjectTreeCellRenderer extends DefaultTreeCellRenderer {
 
-    static Icon[] ICONS = new Icon[TREE_ELEMENTS.length];
-    static Icon[] LINK_ICONS = new Icon[TREE_ELEMENTS.length];
+    static final Icon[] ICONS = new Icon[TREE_ELEMENTS.length];
+    static final Icon[] LINK_ICONS = new Icon[TREE_ELEMENTS.length];
     
     static class LinkIcon implements Icon {
         private final Icon icon;        

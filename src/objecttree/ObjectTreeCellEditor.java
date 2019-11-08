@@ -100,7 +100,7 @@ class ObjectTreeCellEditor extends DefaultTreeCellEditor {
     @Override
     public boolean isCellEditable(EventObject event) {
         // find out the path to the selected node
-        TreePath p = null;
+        TreePath p;
         if (event == null) {
             p = tree.getSelectionPath();
         }

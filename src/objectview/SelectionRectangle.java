@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007 Automation technology laboratory,
+ * Copyright (C) 2019 Automation technology laboratory,
  * Helsinki University of Technology
  *
  * Visit automation.tkk.fi for information about the automation
@@ -90,8 +90,8 @@ public class SelectionRectangle {
     private final Point pnt = new Point();
     private final Point polystartpoint = new Point();
     private final Polygon polygon = new Polygon();
-    private final List<XMLTreeNode> polynodes = new ArrayList<XMLTreeNode>();
-    private final List<Ellipse2D.Double> polycorners = new ArrayList<Ellipse2D.Double>();
+    private final List<XMLTreeNode> polynodes = new ArrayList<>();
+    private final List<Ellipse2D.Double> polycorners = new ArrayList<>();
     private int polycorner = -1;
     
     private XMLTreeNode source;

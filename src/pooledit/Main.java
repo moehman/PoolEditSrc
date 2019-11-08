@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007 Automation technology laboratory,
+ * Copyright (C) 2019 Automation technology laboratory,
  * Helsinki University of Technology
  *
  * Visit automation.tkk.fi for information about the automation
@@ -35,7 +35,6 @@ import java.awt.event.MouseListener;
 import javax.swing.BorderFactory;
 import javax.swing.TransferHandler;
 import javax.swing.border.Border;
-import javax.swing.JCheckBoxMenuItem;
 import attributetable.AttributeTable;
 import attributetable.AttributeTableModel;
 import java.awt.BorderLayout;
@@ -50,6 +49,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.HashMap;
+import java.util.List;
 import javax.swing.ButtonGroup;
 import javax.swing.Icon;
 import javax.swing.JButton;
@@ -147,8 +147,8 @@ public class Main {
         }
     });
     
-    private final ObjectView objectview = new ObjectView();
-    private final AttributeTable attributetable = new AttributeTable(tablemodel);
+    private final ObjectView objectview = ObjectView.getInstance();
+    private final AttributeTable attributetable = AttributeTable.getInstance(tablemodel);
     
     private final View ovView = new View("Object View", Icons.VIEW_ICON, new JScrollPane(objectview));
     private final View atView = new View("Attribute Table", Icons.VIEW_ICON, new JScrollPane(attributetable));
@@ -177,13 +177,13 @@ public class Main {
     });
     
     /** The one and only root window */
-    private RootWindow rootWindow = DockingUtil.createRootWindow(viewMap, handler, true);
+    private final RootWindow rootWindow = DockingUtil.createRootWindow(viewMap, handler, true);
     
     /** The view menu items */
-    private JMenuItem[] viewItems = new JMenuItem[views.length];
+    private final JMenuItem[] viewItems = new JMenuItem[views.length];
     
     /** Contains the dynamic views that has been added to the root window */
-    private HashMap<Integer,View> dynamicViews = new HashMap<Integer,View>();
+    private final HashMap<Integer,View> dynamicViews = new HashMap<>();
     
     /** The currently applied docking windows theme */
     private DockingWindowsTheme currentTheme = new ShapedGradientDockingTheme();
@@ -193,18 +193,18 @@ public class Main {
      * buttons etc. are stored. This object is cleared when the theme is
      * changed.
      */
-    private RootWindowProperties properties = new RootWindowProperties();
+    private final RootWindowProperties properties = new RootWindowProperties();
     
     /** Where the layouts are stored */
-    private byte[][] layouts = new byte[3][];
+    private final byte[][] layouts = new byte[3][];
     
     /** The application frame */
-    private JFrame frame = new JFrame("PoolEdit");
+    private final JFrame frame = new JFrame("PoolEdit");
     
     /** Filenames */
-    private static String TESTPOOL = "test.xml";
-    private static String LIBRARY = "library.xml";
-    private static String TEMPLATE = "template.xml";
+    private static final String TESTPOOL = "test.xml";
+    private static final String LIBRARY = "library.xml";
+    private static final String TEMPLATE = "template.xml";
     
     /** 
      * Constructor 
@@ -236,7 +236,7 @@ public class Main {
      * @return the dynamic view
      */
     private View getDynamicView(int id) {
-        View view = dynamicViews.get(new Integer(id));
+        View view = dynamicViews.get(Integer.valueOf(id));
         if (view == null) {
             view = new DynamicView("Dynamic View " + id, Icons.VIEW_ICON, createViewComponent(""), id);
         }        
@@ -262,7 +262,7 @@ public class Main {
      */
     private DynamicView createNewObjectTreeView(final SingleDOM sdom) {        
         final XMLTreeModel model = sdom.getTreeModel(); 
-        final ObjectTree objecttree = new ObjectTree(model);
+        final ObjectTree objecttree = ObjectTree.getInstance(model);
         final DynamicView view = new DynamicView(sdom.getJFileChooser().getSelectedFile().getName(), 
                 Icons.VIEW_ICON, new JScrollPane(objecttree), getDynamicViewId());
         
@@ -389,7 +389,8 @@ public class Main {
         
         docArea.setDragEnabled(true);
         
-        ovView.getCustomTabComponents().add(createButton(Icons.ZOOM_PLUS_ICON, "Zoom in", new ActionListener() {
+        List<JButton> ovList = (List<JButton>) ovView.getCustomTabComponents();
+        ovList.add(createButton(Icons.ZOOM_PLUS_ICON, "Zoom in", new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 double z = objectview.getZoom() + 0.5;
@@ -398,7 +399,7 @@ public class Main {
             }
         }));
         
-        ovView.getCustomTabComponents().add(createButton(Icons.ZOOM_MINUS_ICON, "Zoom out", new ActionListener() {
+        ovList.add(createButton(Icons.ZOOM_MINUS_ICON, "Zoom out", new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 double z = objectview.getZoom() - 0.5;
@@ -407,28 +408,29 @@ public class Main {
             }
         }));
         
-        ovView.getCustomTabComponents().add(createButton(Icons.DRAW_BORDERS_ICON, "Show borders", new ActionListener() {
+        ovList.add(createButton(Icons.DRAW_BORDERS_ICON, "Show borders", new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 objectview.setDrawBorders(!objectview.getDrawBorders());
             }
         }));
         
-        ovView.getCustomTabComponents().add(createButton(Icons.DRAW_GRID_ICON, "Show grid", new ActionListener() {
+        ovList.add(createButton(Icons.DRAW_GRID_ICON, "Show grid", new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 objectview.setDrawGrid(!objectview.getDrawGrid());
             }
         }));
         
-        ovView.getCustomTabComponents().add(createButton(Icons.IMAGE_ZOOM_ICON, "Image zoom", new ActionListener() {
+        ovList.add(createButton(Icons.IMAGE_ZOOM_ICON, "Image zoom", new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 objectview.setImageZoom(!objectview.getImageZoom());
             }
         }));
         
-        xmlView.getCustomTabComponents().add(createButton(Icons.XML_PARSE_ICON, "Parse XML", new ActionListener() {
+        List<JButton> xmlList = (List<JButton>) xmlView.getCustomTabComponents();
+        xmlList.add(createButton(Icons.XML_PARSE_ICON, "Parse XML", new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
@@ -440,7 +442,7 @@ public class Main {
             }
         }));
         
-        xmlView.getCustomTabComponents().add(createButton(Icons.XML_GENERATE_ICON, "Generate XML", new ActionListener() {
+        xmlList.add(createButton(Icons.XML_GENERATE_ICON, "Generate XML", new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 SingleDOM sdom = multidom.getActiveDocument();
@@ -457,14 +459,15 @@ public class Main {
             }
         }));
         
-        msgView.getCustomTabComponents().add(createButton(Icons.CLEAR_ICON, "Clear messages", new ActionListener() {
+        List<JButton> msgList = (List<JButton>) msgView.getCustomTabComponents();
+        msgList.add(createButton(Icons.CLEAR_ICON, "Clear messages", new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
                     msgDoc.remove(0, msgDoc.getLength());
-                } catch (Exception ex) {
+                } catch (BadLocationException ex) {
                     ex.printStackTrace();
-                }                
+                }
             }
         }));
         
@@ -533,9 +536,9 @@ public class Main {
         if (window instanceof View) {
             if (window instanceof DynamicView) {
                 if (added) {
-                    dynamicViews.put(new Integer(((DynamicView) window).getId()), (View) window);
+                    dynamicViews.put(Integer.valueOf(((DynamicView) window).getId()), (View) window);
                 } else {
-                    dynamicViews.remove(new Integer(((DynamicView) window).getId()));
+                    dynamicViews.remove(Integer.valueOf(((DynamicView) window).getId()));
                 }
             } else {
                 for (int i = 0; i < views.length; i++) {
@@ -563,13 +566,17 @@ public class Main {
             View lib = createNewObjectTreeView(libdoc); // FIXME: should not be hard coded!
             rootWindow.setWindow(
                 new SplitWindow(true, 0.6f,
-                new SplitWindow(false, 0.7f, new TabWindow(ovView), new TabWindow(new View[] {xmlView, msgView})),
-                new SplitWindow(false, 0.5f, new SplitWindow(true, 0.5f, new TabWindow(pool), new TabWindow(lib)), new TabWindow(atView))));
+                new SplitWindow(false, 0.7f, new TabWindow(ovView),
+                    new TabWindow(new View[] {xmlView, msgView})),
+                new SplitWindow(false, 0.5f,
+                    new SplitWindow(true, 0.5f, new TabWindow(pool),
+                        new TabWindow(lib)), new TabWindow(atView))));
         } catch (Exception e) { 
             e.printStackTrace(); 
             rootWindow.setWindow(
                 new SplitWindow(true, 0.6f,
-                new SplitWindow(false, 0.7f, new TabWindow(ovView), new TabWindow(new View[] {xmlView, msgView})),
+                new SplitWindow(false, 0.7f, new TabWindow(ovView),
+                    new TabWindow(new View[] {xmlView, msgView})),
                 new TabWindow(atView)));
         }
         /*
@@ -1015,7 +1022,7 @@ public class Main {
                 }
                 try {
                     Tools.exportToXML1(file.getAbsolutePath(), doc.actual());
-                } catch (Exception ex) {
+                } catch (IOException ex) {
                     ex.printStackTrace();
                 }
             }
@@ -1370,9 +1377,9 @@ public class Main {
                 JOptionPane.showMessageDialog(frame,
                         new String[] {
                     "PoolEdit",
-                    "Version 1.4",
+                    "Version 1.5",
                     " ",
-                    "Copyright (C) 2007 Automation technology laboratory,",
+                    "Copyright (C) 2015 Automation technology laboratory,",
                     "Helsinki University of Technology",
                     " ",
                     "Visit automation.tkk.fi for information about the automation",
@@ -1384,7 +1391,7 @@ public class Main {
                     "3 of the License, or (at your option) any later version.",
                     " ",
                     "Authors:",
-                    "Matti Öhman (mohman@cc.hut.fi)",
+                    "Matti Öhman (matti.ohman@aalto.fi)",
                     "Jouko Kalmari"},
                         "About PoolEdit", JOptionPane.INFORMATION_MESSAGE, Icons.POOLEDIT_LOGO);
             }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007 Automation technology laboratory,
+ * Copyright (C) 2019 Automation technology laboratory,
  * Helsinki University of Technology
  *
  * Visit automation.tkk.fi for information about the automation
@@ -36,18 +36,28 @@ public class ColorIcon implements Icon {
     private Color color;
     
     /**
-     * Constructor.
+     * Private constructor, use getInstance() instead.
      */
-    public ColorIcon() {
-	this(Color.BLACK);
+    private ColorIcon() {
     }
     
     /**
-     * Constructor.
-     * @param color
+     *
+     * @return
      */
-    public ColorIcon(Color color) {
-	setColor(color);
+    static public ColorIcon getInstance() {
+        return getInstance(Color.BLACK);
+    }
+    
+    /**
+     *
+     * @param color
+     * @return
+     */
+    static public ColorIcon getInstance(Color color) {
+        ColorIcon ci = new ColorIcon();
+        ci.setColor(color);
+        return ci;
     }
     
     /**

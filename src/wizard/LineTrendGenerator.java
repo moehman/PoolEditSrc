@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007 Automation technology laboratory,
+ * Copyright (C) 2019 Automation technology laboratory,
  * Helsinki University of Technology
  *
  * Visit automation.tkk.fi for information about the automation
@@ -35,12 +35,15 @@ import treemodel.XMLTreeNode;
  */
 public class LineTrendGenerator {
 
-    private LineTrendWizard wiz;
-    private XMLTreeNode root;
-    private String name;
+    private final LineTrendWizard wiz;
+    private final XMLTreeNode root;
+    private final String name;
     
     /** 
      * Creates a new instance of TrendGenerator 
+     * @param wiz
+     * @param root
+     * @param name
      */
     public LineTrendGenerator(LineTrendWizard wiz, XMLTreeNode root, String name) {
         this.wiz = wiz;         

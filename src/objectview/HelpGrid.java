@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007 Automation technology laboratory,
+ * Copyright (C) 2019 Automation technology laboratory,
  * Helsinki University of Technology
  *
  * Visit automation.tkk.fi for information about the automation
@@ -44,7 +44,7 @@ public class HelpGrid {
             BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 1.0f,
             new float[] {1.0f, 1.0f}, 0.0f);
     
-    private final List<Line2D.Double> lines = new ArrayList<Line2D.Double>();
+    private final List<Line2D.Double> lines = new ArrayList<>();
     private final AffineTransform xform = new AffineTransform();
     private Rectangle2D rect;
     

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007 Automation technology laboratory,
+ * Copyright (C) 2019 Automation technology laboratory,
  * Helsinki University of Technology
  *
  * Visit automation.tkk.fi for information about the automation
@@ -43,19 +43,12 @@ public class AttributeTablePopupMenu {
     private final AttributeTable table;
     
     /** 
-     * Creates a new instance of AttributeTablePopupMenu 
+     * Private constructor, call getInstance() instead. 
+     * @param table
      */
     public AttributeTablePopupMenu(AttributeTable table) {
         this.table = table;
-        popup = createPopupMenu();
-    }
-    
-    /**
-     * Creates a popup menu.
-     * @return
-     */
-    public JPopupMenu createPopupMenu() {
-        JPopupMenu pup = new JPopupMenu();
+        popup = new JPopupMenu();
         JMenuItem addAttribute = new JMenuItem("Add Attribute");
         addAttribute.addActionListener(new ActionListener() {
             @Override
@@ -72,7 +65,7 @@ public class AttributeTablePopupMenu {
                 elem.setAttribute(texts[0].getText(), texts[1].getText());                
             }
         });
-        pup.add(addAttribute);
+        popup.add(addAttribute);
         
         JMenuItem removeAttribute = new JMenuItem("Remove Attribute");
         removeAttribute.addActionListener(new ActionListener() {
@@ -103,10 +96,9 @@ public class AttributeTablePopupMenu {
                 }
             }
         });
-        pup.add(removeAttribute);
-        return pup;
+        popup.add(removeAttribute);
     }
-    
+       
     /**
      * Show a simple dialog assembled from labels and text fields.
      * @param parentComponent

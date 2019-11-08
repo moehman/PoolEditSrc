@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007 Automation technology laboratory,
+ * Copyright (C) 2019 Automation technology laboratory,
  * Helsinki University of Technology
  *
  * Visit automation.tkk.fi for information about the automation
@@ -60,12 +60,12 @@ public class BitmapFont {
         "latin1", "latin9"
     };
      */
-    
+    /*  
     static private final String[] STYLES = {
         "Bold", "Crossed Out", "Underlined", "Italic",
         "Inverted", "Flashing Inverted", "Flashing Background"
     };
-
+    */
     static private final Dimension[] DIMENSIONS = 
 	new Dimension[NAMES.length];
     
@@ -83,9 +83,9 @@ public class BitmapFont {
     };
 
     /** Needed for changing font color */
-    static private byte[][] lookupdata = new byte[4][256];
-    static private final LookupTable ltab = new ByteLookupTable(0, lookupdata);
-    static private final LookupOp lop = new LookupOp(ltab, null);
+    static private final byte[][] LOOKUP_DATA = new byte[4][256];
+    static private final LookupTable LOOKUP_TABLE = new ByteLookupTable(0, LOOKUP_DATA);
+    static private final LookupOp LOOKUP_OP = new LookupOp(LOOKUP_TABLE, null);
     
     static {
 	// create dimensions
@@ -95,7 +95,7 @@ public class BitmapFont {
 	}
         // use identity transform to the alpha channel
 	for (int i = 0; i < 256; i++) {
-	    lookupdata[3][i] = (byte) i; 
+	    LOOKUP_DATA[3][i] = (byte) i; 
 	}
     }
     
@@ -112,6 +112,53 @@ public class BitmapFont {
         return TYPES;
     }
     */
+
+    static public void showType(BufferedImage bi) {
+	switch (bi.getType()) {
+	case BufferedImage.TYPE_INT_RGB:
+	    System.out.println("INT_RGB");
+	    break;
+	case BufferedImage.TYPE_INT_ARGB:
+	    System.out.println("INT_ARGB");
+	    break;
+	case BufferedImage.TYPE_INT_ARGB_PRE:
+            System.out.println("INT_ARGB_PRE");
+            break;
+	case BufferedImage.TYPE_INT_BGR:
+            System.out.println("INT_BGR");
+            break;
+	case BufferedImage.TYPE_3BYTE_BGR:
+            System.out.println("3BYTE_BGR");
+            break;
+	case BufferedImage.TYPE_4BYTE_ABGR:
+            System.out.println("4BYTE_ABGR");
+            break;
+	case BufferedImage.TYPE_4BYTE_ABGR_PRE:
+            System.out.println("4BYTE_ABGR_PRE");
+            break;
+	case BufferedImage.TYPE_BYTE_GRAY:
+            System.out.println("BYTE_GRAY");
+            break;
+	case BufferedImage.TYPE_BYTE_BINARY:
+            System.out.println("BYTE_BINARY");
+            break;
+	case BufferedImage.TYPE_BYTE_INDEXED:
+	    System.out.println("BYTE_INDEXED");
+	    break;
+	case BufferedImage.TYPE_USHORT_GRAY:
+	    System.out.println("USHORT_GRAY");
+	    break;
+	case BufferedImage.TYPE_USHORT_565_RGB:
+	    System.out.println("USHORT_565_RGB");
+	    break;
+	case BufferedImage.TYPE_USHORT_555_RGB:
+	    System.out.println("USHORT_555_RGB");
+	    break;
+	case BufferedImage.TYPE_CUSTOM:
+	    System.out.println("CUSTOM");
+	    break;
+        }
+    }
     
     /**
      * Gets the specified bitmap.
@@ -128,7 +175,16 @@ public class BitmapFont {
             URL url = BitmapFont.class.getResource(PATH + FILENAMES[index]);
             if (url != null) {
                 URLConnection conn = url.openConnection();
-                BITMAPS[index] = ImageIO.read(conn.getInputStream());
+                BufferedImage img = ImageIO.read(conn.getInputStream());
+                /* if the image format is not ARGB, then fix it! */
+		if (img.getType() != BufferedImage.TYPE_INT_ARGB) {
+                    BufferedImage tmp = new BufferedImage(img.getWidth(),img.getHeight(),
+                        BufferedImage.TYPE_INT_ARGB);
+                    tmp.getGraphics().drawImage(img, 0, 0, null);
+                    img = tmp;
+                }
+//              showType(img);
+                BITMAPS[index] = img;
             }
             return BITMAPS[index];
         }
@@ -183,9 +239,9 @@ public class BitmapFont {
      */
     static public void changeFontColor(String font, Color color) throws IOException {
         // map every color to the target color
-        Arrays.fill(lookupdata[0], (byte) color.getRed());
-        Arrays.fill(lookupdata[1], (byte) color.getGreen());
-        Arrays.fill(lookupdata[2], (byte) color.getBlue());
+        Arrays.fill(LOOKUP_DATA[0], (byte) color.getRed());
+        Arrays.fill(LOOKUP_DATA[1], (byte) color.getGreen());
+        Arrays.fill(LOOKUP_DATA[2], (byte) color.getBlue());
     }
     
     /**
@@ -238,7 +294,7 @@ public class BitmapFont {
 	BufferedImage img = 
 	    getBitmap(font).getSubimage(sx, sy, d.width, d.height);
        
-	gfx.drawImage(img, lop, x, y);
+	gfx.drawImage(img, LOOKUP_OP, x, y);
     }
    
     /**

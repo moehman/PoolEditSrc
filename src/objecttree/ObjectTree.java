@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007 Automation technology laboratory,
+ * Copyright (C) 2019 Automation technology laboratory,
  * Helsinki University of Technology
  *
  * Visit automation.tkk.fi for information about the automation
@@ -57,36 +57,30 @@ public class ObjectTree extends JTree implements KeyListener {
      * Creates a new instance of ObjectTree.
      * @param model
      */
-    public ObjectTree(XMLTreeModel model) {
+    private ObjectTree(XMLTreeModel model) {
         super(model);
-        // create renderer and editor
+    }
+
+    static public ObjectTree getInstance(XMLTreeModel model) {
+        ObjectTree ot = new ObjectTree(model);
+        
+         // create renderer and editor
         DefaultTreeCellRenderer renderer = new ObjectTreeCellRenderer();
-        DefaultTreeCellEditor editor = new ObjectTreeCellEditor(this, renderer);
+        DefaultTreeCellEditor editor = new ObjectTreeCellEditor(ot, renderer);
         
         // set renderer and editor
-        setEditable(true);
+        ot.setEditable(true);
         //setToggleClickCount(10); // default is two
-        setCellRenderer(renderer);
-        setCellEditor(editor);
-        getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
-        
-        //setEditable(true);
-        //setDragEnabled(true);
-        
-        // create and set transfer handler
-        //ObjectTransferHandler handler = new ObjectTransferHandler();
-        //setTransferHandler(handler);
-        
-        // create and set drop target
-        //ObjectDropTarget droptarget = new ObjectDropTarget(handler);
-        //setDropTarget(droptarget);
-        
+        ot.setCellRenderer(renderer);
+        ot.setCellEditor(editor);
+        ot.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+                
         final DragSource dragSource = DragSource.getDefaultDragSource();
         final DragSourceListener dsListener = new ObjectTreeDragSourceListener();
         
         // component, action, listener
         DragGestureRecognizer recognizer = dragSource.createDefaultDragGestureRecognizer(
-                this,
+                ot,
                 DnDConstants.ACTION_COPY |
                 DnDConstants.ACTION_MOVE |
                 DnDConstants.ACTION_LINK,
@@ -102,7 +96,7 @@ public class ObjectTree extends JTree implements KeyListener {
                     return;
                 }
                 // category nodes cannot be dragged
-                TreePath path = getSelectionPath();
+                TreePath path = ot.getSelectionPath();
                 if (path == null) {
                     return;
                 }
@@ -114,7 +108,8 @@ public class ObjectTree extends JTree implements KeyListener {
                 }
                 // accept only 1st mouse button
                 InputEvent ie = e.getTriggerEvent();
-                if (ie instanceof MouseEvent && ((MouseEvent) ie).getButton() != MouseEvent.BUTTON1) {
+                if (ie instanceof MouseEvent &&
+                        ((MouseEvent) ie).getButton() != MouseEvent.BUTTON1) {
                     return;
                 }
                 /*
@@ -133,7 +128,7 @@ public class ObjectTree extends JTree implements KeyListener {
                 // drag is recognized!
                 try {
                     e.startDrag(DragSource.DefaultCopyNoDrop,
-                            new XMLTransferable(getSelectionPaths()),
+                            new XMLTransferable(ot.getSelectionPaths()),
                             dsListener);
                 } 
                 catch (InvalidDnDOperationException idoe) {
@@ -146,7 +141,7 @@ public class ObjectTree extends JTree implements KeyListener {
         
         // component, ops, listener, accepting
         final DropTarget dropTarget = new DropTarget(
-                this,
+                ot,
                 DnDConstants.ACTION_COPY |
                 DnDConstants.ACTION_MOVE |
                 DnDConstants.ACTION_LINK,
@@ -154,11 +149,13 @@ public class ObjectTree extends JTree implements KeyListener {
                 true);
         
         // set up popup menu
-        ObjectTreePopup objectTreePopup = new ObjectTreePopup(this);
-        this.addMouseListener(objectTreePopup);
+        ObjectTreePopup objectTreePopup = new ObjectTreePopup(ot);
+        ot.addMouseListener(objectTreePopup);
         
         // set up keylistener
-        this.addKeyListener(this);
+        ot.addKeyListener(ot);
+        
+        return ot;
     }
     
     /**

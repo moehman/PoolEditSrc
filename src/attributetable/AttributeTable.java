@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007 Automation technology laboratory,
+ * Copyright (C) 2019 Automation technology laboratory,
  * Helsinki University of Technology
  *
  * Visit automation.tkk.fi for information about the automation
@@ -39,6 +39,7 @@ import java.awt.Component;
 import javax.swing.DefaultCellEditor;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JTable;
 import javax.swing.ListCellRenderer;
@@ -92,10 +93,10 @@ public class AttributeTable extends JTable {
     private final TableCellRenderer colorRenderer;
     
     /**
-     * Constructor.
+     * Private constructor, call getInstance() instead.
      * @param model
      */
-    public AttributeTable(TableModel model) {
+    private AttributeTable(TableModel model) {
 	super(model);
         yesNoEditor = createEditor("no", "yes");
         //trueFalseEditor = createEditor("false", "true");
@@ -127,23 +128,26 @@ public class AttributeTable extends JTable {
         validationTypeEditor = createEditor("invalidcharacters", "validcharacters");
         maskTypeEditor = createEditor("datamask", "alarmmask");
         
-        fileRenderer = new FileCellRenderer();
-        fileEditor = new FileCellEditor();
-        
-        addMouseListener(new MouseAdapter() {
+        fileRenderer = FileCellRenderer.getInstance();
+        fileEditor = FileCellEditor.getInstance();
+    }
+    static public AttributeTable getInstance(TableModel model) {
+        AttributeTable at = new AttributeTable(model);
+        at.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
                 if (e.isPopupTrigger()) {
-                    popup.showPopup(e);
+                    at.popup.showPopup(e);
                 }
             }
             @Override
             public void mouseReleased(MouseEvent e) {
                 if (e.isPopupTrigger()) {
-                    popup.showPopup(e);
+                    at.popup.showPopup(e);
                 }
             }
         });
+        return at;
     }
 
     /*
@@ -164,7 +168,7 @@ public class AttributeTable extends JTable {
 
     private static TableCellRenderer createColorRenderer() {
 	return new DefaultTableCellRenderer() {
-            private final ColorIcon icon = new ColorIcon();
+            private final ColorIcon icon = ColorIcon.getInstance();
             @Override
             public Component getTableCellRendererComponent
                 (JTable tbl, Object val, boolean isSel, 
@@ -185,21 +189,22 @@ public class AttributeTable extends JTable {
      * Creates a color list renderer.
      * @return
      */
-    public static ListCellRenderer createColorListRenderer() {
-	return new DefaultListCellRenderer() {
-            private final ColorIcon icon = new ColorIcon();
+    public static ListCellRenderer<String> createColorListRenderer() {
+	return new ListCellRenderer<String>() {
+            protected DefaultListCellRenderer defren = new DefaultListCellRenderer();
+            private final ColorIcon icon = ColorIcon.getInstance();
             @Override
             public Component getListCellRendererComponent
-                (JList list, Object val, int idx,
+                (JList list, String val, int idx,
                  boolean isSel, boolean hasFocus) {
-                super.getListCellRendererComponent
+                JLabel renderer = (JLabel) defren.getListCellRendererComponent
                     (list, val, idx, isSel, hasFocus);
 
                 String clr = (String) val;
                 icon.setColor(ColorPalette.getColor8Bit(clr));
-                setIcon(icon);
-                setText(clr);
-                return this;
+                renderer.setIcon(icon);
+                renderer.setText(clr);
+                return renderer;
             }
         };
     }
@@ -403,8 +408,8 @@ public class AttributeTable extends JTable {
      * @param names
      * @return
      */
-    private static Object[] findElements(Document doc, boolean empty, String ... names){
-        List<String> namelist = new ArrayList<String>();
+    private static String[] findElements(Document doc, boolean empty, String ... names){
+        List<String> namelist = new ArrayList<>();
         if (empty) { 
             namelist.add(""); // empty string
         } 
@@ -414,7 +419,7 @@ public class AttributeTable extends JTable {
                 namelist.add(((Element) (nodes.item(i))).getAttribute(NAME));
             }
         }
-        return namelist.toArray();
+        return namelist.toArray(new String[0]);
     }
 
     /**
@@ -424,16 +429,16 @@ public class AttributeTable extends JTable {
      * @param elem
      * @return
      */
-    private static Object[] findLinkingElements(Element elem) {
-        List<Element> list = new ArrayList<Element>();
+    private static String[] findLinkingElements(Element elem) {
+        List<Element> list = new ArrayList<>();
         Tools.findParentElements(elem, list);
         
-        List<String> namelist = new ArrayList<String>();
+        List<String> namelist = new ArrayList<>();
         namelist.add(""); // empty string
         for (Element e : list) {
             namelist.add(Tools.getPath(e));
         }
-        return namelist.toArray();
+        return namelist.toArray(new String[0]);
     }
     /*
     private static Object[] findLinkingElements(Element elem) {
@@ -491,11 +496,13 @@ public class AttributeTable extends JTable {
      * @param names
      * @return
      */
+    /*
     static private TableCellEditor createEditor(String ... names) {
         return createEditor((Object[]) names);
     }
-    static private TableCellEditor createEditor(Object[] names) {
-        JComboBox cb = new JComboBox();
+    */
+    static private TableCellEditor createEditor(String ... names) {
+        JComboBox<String> cb = new JComboBox<>();
         for (int i = 0, n = names.length; i < n; i++) {
             cb.addItem(names[i]);
         }
@@ -509,11 +516,13 @@ public class AttributeTable extends JTable {
      * @param names
      * @return
      */
+    /*
     static private TableCellEditor createEditor(ListCellRenderer renderer, String ... names) {
         return createEditor(renderer, (Object[]) names);
     }
-    static private TableCellEditor createEditor(ListCellRenderer renderer, Object[] names) {
-        JComboBox cb = new JComboBox();
+    */
+    static private TableCellEditor createEditor(ListCellRenderer<String> renderer, String[] names) {
+        JComboBox<String> cb = new JComboBox<>();
         for (int i = 0, n = names.length; i < n; i++) {
             cb.addItem(names[i]);
         }

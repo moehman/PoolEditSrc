@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007 Automation technology laboratory,
+ * Copyright (C) 2019 Automation technology laboratory,
  * Helsinki University of Technology
  *
  * Visit automation.tkk.fi for information about the automation
@@ -37,9 +37,12 @@ import treemodel.XMLTreeNode;
  */
 public class XMLTransferable implements Transferable {
     
-    private TreePath[] paths;
+    private final TreePath[] paths;
             
-    /** Creates a new instance of XMLTransferrable */
+    /**
+     * Creates a new instance of XMLTransferrable
+     * @param paths
+     */
     public XMLTransferable(TreePath[] paths) {
         this.paths = paths;
     }

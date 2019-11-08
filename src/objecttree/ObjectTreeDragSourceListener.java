@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007 Automation technology laboratory,
+ * Copyright (C) 2019 Automation technology laboratory,
  * Helsinki University of Technology
  *
  * Visit automation.tkk.fi for information about the automation
@@ -83,17 +83,19 @@ public class ObjectTreeDragSourceListener implements DragSourceListener {
      * @param context
      */
     private void setCursor(int dropAction, DragSourceContext context) {
-        if (dropAction == DnDConstants.ACTION_COPY) {
-            context.setCursor(DragSource.DefaultCopyDrop);
-        } 
-        else if (dropAction == DnDConstants.ACTION_MOVE) {
-            context.setCursor(DragSource.DefaultMoveDrop);
-        }
-        else if (dropAction == DnDConstants.ACTION_LINK) {
-            context.setCursor(DragSource.DefaultLinkDrop);
-        }
-        else {
-            context.setCursor(DragSource.DefaultCopyNoDrop);
+        switch (dropAction) {
+            case DnDConstants.ACTION_COPY:
+                context.setCursor(DragSource.DefaultCopyDrop);
+                break;
+            case DnDConstants.ACTION_MOVE:
+                context.setCursor(DragSource.DefaultMoveDrop);
+                break;
+            case DnDConstants.ACTION_LINK:
+                context.setCursor(DragSource.DefaultLinkDrop);
+                break;
+            default:
+                context.setCursor(DragSource.DefaultCopyNoDrop);
+                break;
         }
     }
     

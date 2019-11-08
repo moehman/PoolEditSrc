@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007 Automation technology laboratory,
+ * Copyright (C) 2019 Automation technology laboratory,
  * Helsinki University of Technology
  *
  * Visit automation.tkk.fi for information about the automation
@@ -34,9 +34,9 @@ import treemodel.XMLTreeNode;
  */
 public class MeterGenerator {
     
-    private MeterWizard wiz;    
-    private XMLTreeNode root;
-    private String name;
+    private final MeterWizard wiz;    
+    private final XMLTreeNode root;
+    private final String name;
     
     //A list of elements that are created in process
     //private List<Element> elements = new ArrayList<Element>();    
@@ -44,6 +44,9 @@ public class MeterGenerator {
     /** 
      * Creates a new instance of MeterGenerator 
      * father is the father-elment where the meter should be added
+     * @param meterWizard
+     * @param root
+     * @param name
      */    
     public MeterGenerator(MeterWizard meterWizard, XMLTreeNode root, String name) {
         this.wiz = meterWizard;         

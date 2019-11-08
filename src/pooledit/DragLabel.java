@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007 Automation technology laboratory,
+ * Copyright (C) 2019 Automation technology laboratory,
  * Helsinki University of Technology
  *
  * Visit automation.tkk.fi for information about the automation
@@ -22,7 +22,6 @@
  */
 package pooledit;
 
-import static pooledit.Definitions.*;
 import java.util.List;
 import java.util.Map;
 import javax.swing.JLabel;
@@ -60,7 +59,7 @@ public class DragLabel extends JLabel {
         List<Element> list = Tools.getChildElementList(doc.getDocumentElement());
         for (Element e : list) {
             if (e.getNodeName().equals(type)) {
-                Map namemap = Tools.createNameMap(doc);
+                Map<String,Element> namemap = Tools.createNameMap(doc);
                 return Tools.writeToStringNoDec(Tools.createMergedElementRecursive(e, namemap));
             }
         }

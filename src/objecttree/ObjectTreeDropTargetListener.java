@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007 Automation technology laboratory,
+ * Copyright (C) 2019 Automation technology laboratory,
  * Helsinki University of Technology
  *
  * Visit automation.tkk.fi for information about the automation
@@ -138,7 +138,7 @@ public class ObjectTreeDropTargetListener implements DropTargetListener {
      * Clear drawings
      * @param tree
      */
-    private final void clearImage(JTree tree) {
+    private void clearImage(JTree tree) {
 	tree.paintImmediately(rect2D.getBounds());
     }
 
@@ -343,7 +343,7 @@ public class ObjectTreeDropTargetListener implements DropTargetListener {
             return;
         }
         
-        Object data = null;
+        Object data;
         try {
             /*
              * the source listener receives this action in dragDropEnd.
@@ -370,9 +370,9 @@ public class ObjectTreeDropTargetListener implements DropTargetListener {
         }
         else if (data instanceof StringReader) {
             StringReader rdr = (StringReader) data;
-            StringBuffer bff = new StringBuffer();
-            int in = -1;
+            StringBuilder bff = new StringBuilder();
             try {
+                int in;
                 while ((in = rdr.read()) >= 0) {
                     if (in != 0) {
                         bff.append((char) in);
@@ -499,10 +499,12 @@ public class ObjectTreeDropTargetListener implements DropTargetListener {
         boolean ok = false;
         if (e.isDataFlavorSupported(DataFlavor.stringFlavor)) {
             ok = true;
-        } 
-        else if (e.isDataFlavorSupported(DataFlavor.plainTextFlavor)) {
+        }
+        /* Deprecated as of 1.3.
+        else if (e.isDataFlavorSupported(DataFlavor.plainTextFlavor)) {                    
             ok = true;
         }
+        */
         else if (e.isDataFlavorSupported(stringFlavor)) { // shouldn't this be identical to stringFlavor (but it isn't)?
             ok = true;
         }
@@ -527,10 +529,12 @@ public class ObjectTreeDropTargetListener implements DropTargetListener {
         DataFlavor chosen = null;
         if (e.isDataFlavorSupported(DataFlavor.stringFlavor)) {
             chosen = DataFlavor.stringFlavor;
-        } 
+        }
+        /* Deprecated as of 1.3.
         else if (e.isDataFlavorSupported(DataFlavor.plainTextFlavor)) {
             chosen = DataFlavor.plainTextFlavor;
         }
+        */
         else if (e.isDataFlavorSupported(stringFlavor)) {
             chosen = stringFlavor;
         }

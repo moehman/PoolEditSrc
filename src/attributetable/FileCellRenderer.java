@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007 Automation technology laboratory,
+ * Copyright (C) 2019 Automation technology laboratory,
  * Helsinki University of Technology
  *
  * Visit automation.tkk.fi for information about the automation
@@ -41,13 +41,22 @@ public class FileCellRenderer extends DefaultTableCellRenderer {
     private final JButton button = new JButton("...");
             
     /** 
-     * Creates a new instance of FileCellEditor 
+     * Private constructor, use getInstance() instead.
      */
-    public FileCellRenderer() {
+    private FileCellRenderer() {
         button.setMargin(new Insets(0, 0, 0, 0));         
         panel.setLayout(new BorderLayout());
-        panel.add(this);
         panel.add(button, BorderLayout.EAST);
+    }
+    
+    /**
+     * Creates a FileCellEditor.
+     * @return
+     */
+    static public FileCellRenderer getInstance() {
+        FileCellRenderer cr = new FileCellRenderer();
+        cr.panel.add(cr);
+        return cr;
     }
     
     /**

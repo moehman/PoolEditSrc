@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007 Automation technology laboratory,
+ * Copyright (C) 2019 Automation technology laboratory,
  * Helsinki University of Technology
  *
  * Visit automation.tkk.fi for information about the automation
@@ -33,7 +33,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import pooledit.Tools;
-import treemodel.XMLTreeNode;
 
 /**
  *
@@ -111,8 +110,14 @@ public class WizardTools {
      * if name is null a new name is created
      * if father is null, element will be added to root
      * if first is true the element is created as first child
+     * @param type
+     * @param name
+     * @param father
+     * @param first
+     * @return 
      */
-    public static Element createElement(String type, String name, Element father, boolean first) {
+    public static Element createElement(String type, String name,
+            Element father, boolean first) {
   
         // iterate ovet father's direct children to see if it already has
         // the specified child
@@ -147,10 +152,14 @@ public class WizardTools {
      * Creates a new include object child element that points to an object 
      * called "name". Removes any other child elements that have the same role.
      * If name is null, no new element is created and the method returns null.
+     * @param name
+     * @param role
+     * @param father
+     * @return
      */
     public static Element createIncludeRoleElement(String name, String role, Element father) {
         Element rv = null;
-        List<Element> worklist = new ArrayList<Element>();
+        List<Element> worklist = new ArrayList<>();
         NodeList children = father.getChildNodes();
         for (int i = 0, n = children.getLength(); i < n; i++) {
             Node node = children.item(i);
@@ -206,6 +215,9 @@ public class WizardTools {
     
     /**
      * Sets the element's attribute only if it has been changed.
+     * @param elem
+     * @param name
+     * @param value
      */
     public static void setAttribute(Element elem, String name, Object value) {
         String val = value == null ? null : value.toString();
@@ -216,6 +228,9 @@ public class WizardTools {
     
     /**
      * Sets the element's attribute only if it does not exist.
+     * @param elem
+     * @param name
+     * @param value
      */
     public static void setAttributeIfMissing(Element elem, String name, Object value) {
         if (!elem.hasAttribute(name)) {
@@ -237,9 +252,12 @@ public class WizardTools {
     /**
      * Finds all elements of the given type *at the root level* and returns 
      * their names.
+     * @param root
+     * @param tagname
+     * @return 
      */    
     public static List<String> findElementNames(Element root, String tagname) {
-        List<String> names = new ArrayList<String>();
+        List<String> names = new ArrayList<>();
         NodeList children = root.getChildNodes();
         for (int i = 0, n = children.getLength(); i < n; i++) {
             Node node = children.item(i);
@@ -253,18 +271,21 @@ public class WizardTools {
         return names;
     }
     
-    public static Object[] findElements(Element root, String tagname) {
+    public static String[] findElements(Element root, String tagname) {
         List<String> names = findElementNames(root, tagname);
-        return names.toArray();
+        return names.toArray(new String[0]);
     }
     
     /**
      * The same as findElements but includes a null element at the beginning 
      * of the array.
+     * @param root
+     * @param tagname
+     * @return 
      */
-    public static Object[] findElementsWithEmpty(Element root, String tagname) {
+    public static String[] findElementsWithEmpty(Element root, String tagname) {
         List<String> names = findElementNames(root, tagname);
         names.add(0, null);
-        return names.toArray();
+        return names.toArray(new String[0]);
     }
 }

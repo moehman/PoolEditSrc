@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007 Automation technology laboratory,
+ * Copyright (C) 2019 Automation technology laboratory,
  * Helsinki University of Technology
  *
  * Visit automation.tkk.fi for information about the automation
@@ -32,7 +32,6 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
-import javax.swing.JScrollPane;
 import javax.swing.tree.TreePath;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -49,7 +48,7 @@ public class MouseController implements MouseListener, MouseMotionListener, Mous
     private final double MIN_ZOOM_FACTOR = 0.5;
     
     /** Link to the parent view */
-    private ObjectView view;
+    private final ObjectView view;
     
     /** The original rectangle (before editing starts) */ 
     private Rectangle oldrect;
@@ -62,12 +61,15 @@ public class MouseController implements MouseListener, MouseMotionListener, Mous
     private Point point;
    
     /** Popup window that is opened*/
-    private ObjectViewPopup objectViewPopup;
+    private final ObjectViewPopup objectViewPopup;
         
     /** Keeps child object stationary, when the parent is expanded left / up */
     private boolean smartMoves = true;
     
-    /** Creates a new instance of MouseController */
+    /**
+     * Creates a new instance of MouseController
+     * @param view
+     */
     public MouseController(ObjectView view, ObjectViewPopup objectViewPopup) {
         this.view = view;
         this.objectViewPopup = objectViewPopup;

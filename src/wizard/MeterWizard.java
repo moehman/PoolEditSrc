@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007 Automation technology laboratory,
+ * Copyright (C) 2019 Automation technology laboratory,
  * Helsinki University of Technology
  *
  * Visit automation.tkk.fi for information about the automation
@@ -43,13 +43,13 @@ public class MeterWizard extends javax.swing.JPanel {
     private MeterGenerator meterGenerator;
     
     private String[] colors = ColorPalette.getAllColorNames();
-    private DefaultComboBoxModel colorModel1 = new DefaultComboBoxModel(colors);
-    private DefaultComboBoxModel colorModel2 = new DefaultComboBoxModel(colors);
+    private DefaultComboBoxModel<String> colorModel1 = new DefaultComboBoxModel<>(colors);
+    private DefaultComboBoxModel<String> colorModel2 = new DefaultComboBoxModel<>(colors);
     private ListCellRenderer colorRenderer = AttributeTable.createColorListRenderer();
-    private DefaultComboBoxModel fillModel;
-    private DefaultComboBoxModel fontModel;
-    private DefaultComboBoxModel lineModel;
-    private DefaultComboBoxModel numberModel;
+    private DefaultComboBoxModel<String> fillModel;
+    private DefaultComboBoxModel<String> fontModel;
+    private DefaultComboBoxModel<String> lineModel;
+    private DefaultComboBoxModel<String> numberModel;
     
     /** Creates new form MeterWizard */
     public MeterWizard() {
@@ -59,10 +59,10 @@ public class MeterWizard extends javax.swing.JPanel {
     public void setMeterGenerator(MeterGenerator meterGenerator) {
         this.meterGenerator = meterGenerator;
         Element root = meterGenerator.getRoot().getModel().getDocument().getDocumentElement();
-        fillModel = new DefaultComboBoxModel(WizardTools.findElementsWithEmpty(root, FILLATTRIBUTES));
-        fontModel = new DefaultComboBoxModel(WizardTools.findElements(root, FONTATTRIBUTES));
-        lineModel = new DefaultComboBoxModel(WizardTools.findElements(root, LINEATTRIBUTES));
-        numberModel = new DefaultComboBoxModel(WizardTools.findElementsWithEmpty(root, NUMBERVARIABLE));
+        fillModel = new DefaultComboBoxModel<>(WizardTools.findElementsWithEmpty(root, FILLATTRIBUTES));
+        fontModel = new DefaultComboBoxModel<>(WizardTools.findElements(root, FONTATTRIBUTES));
+        lineModel = new DefaultComboBoxModel<>(WizardTools.findElements(root, LINEATTRIBUTES));
+        numberModel = new DefaultComboBoxModel<>(WizardTools.findElementsWithEmpty(root, NUMBERVARIABLE));
         initComponents();
     }
        

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007 Automation technology laboratory,
+ * Copyright (C) 2019 Automation technology laboratory,
  * Helsinki University of Technology
  *
  * Visit automation.tkk.fi for information about the automation
@@ -75,24 +75,27 @@ public class XMLTreeNode {
     
     /**
      * Creates a root node.
+     * @param model
+     * @param actual
+     * @return 
      */
     protected static XMLTreeNode createRootNode(XMLTreeModel model, Element actual) {
         return new XMLTreeNode(model, null, new TreePath(actual), actual, null, null);
     }
        
     protected XMLTreeNode createChildNode(Element node) {
-        Element actual = findActualElement(node);
-        Element link = null;
+        Element act = findActualElement(node);
+        Element lnk = null;
         // node was not an actual node? -> it must have been a link node
-        if (actual == null) {
-            actual = node;
+        if (act == null) {
+            act = node;
         } 
-        else if (actual != node) {
-            link = node;
+        else if (act != node) {
+            lnk = node;
         }
         return new XMLTreeNode(this.getModel(), this,
-                this.getPath().pathByAddingChild(link != null ? link : actual),
-                actual, link, null);
+                this.getPath().pathByAddingChild(lnk != null ? lnk : act),
+                act, lnk, null);
     }
     
     protected XMLTreeNode createTypeNode(String type) {
@@ -135,8 +138,9 @@ public class XMLTreeNode {
     }
     
     /**
-     * This returns the type of a category node, otherwise returns null. 
+     * This returns the type of a category node, otherwise returns null.
      * DO NOT use with other nodes!
+     * @return
      */
     public String type() {
         return type;
@@ -171,6 +175,8 @@ public class XMLTreeNode {
     /**
      * This method checks whether the name of the node is one of the
      * parameters.
+     * @param names
+     * @return 
      */
     public boolean isType(String ... names) {
         String s = getType();
@@ -183,13 +189,15 @@ public class XMLTreeNode {
     }
        
     /**
-     * This method returns the name of the node, e.g. "objectpool".
+     * This method returns the name of the node, e.g."objectpool".
+     * @return 
      */
     public String getType() {
         return actual == null ? type : actual.getNodeName();
     }
     /**
      * This method returns the value of the "name" attribute.
+     * @return 
      */
     public String getName() {
         return actual != null ? actual.getAttribute(NAME) :
@@ -197,6 +205,7 @@ public class XMLTreeNode {
     }
     /**
      * This method returns the value of the "role" attribute.
+     * @return 
      */
     public String getRole() {
         return link != null ? link.getAttribute(ROLE) : 
@@ -205,6 +214,7 @@ public class XMLTreeNode {
     /**
      * This method returns the value of the "pos_x" attribute corrected by
      * other attributes that affect it (such as block_col).
+     * @return 
      */
     public Integer getX() {
         Element src = (link == null) ? actual : link;
@@ -230,6 +240,7 @@ public class XMLTreeNode {
     /**
      * This method returns the value of the "pos_y" attribute corrected by
      * other attributes that affect it (such as block_row).
+     * @return 
      */
     public Integer getY() {
         Element src = (link == null) ? actual : link;
@@ -256,6 +267,7 @@ public class XMLTreeNode {
     /**
      * This method changes the pos_x attribute
      * FIXME should this be corrected somehow
+     * @param x
      */
     public void setX(int x) {   
         Element src = (link == null) ? actual : link;        
@@ -265,6 +277,7 @@ public class XMLTreeNode {
      /**
      * This method changes the pos_x attribute
      * FIXME should this be corrected somehow
+     * @param y
      */
     public void setY(int y) {   
         Element src = (link == null) ? actual : link;        
@@ -273,6 +286,7 @@ public class XMLTreeNode {
     
     /**
      * This method returns the value of the "number_of_decimals" attribute.
+     * @return 
      */
     public Integer getNumberOfDecimals(){
         String d = actual.getAttribute(NUMBER_OF_DECIMALS);
@@ -280,6 +294,7 @@ public class XMLTreeNode {
     }
     /**
      * This method returns the value of the "width" attribute.
+     * @return 
      */
     public Integer getWidth() {
         String w = actual.getAttribute(WIDTH);
@@ -287,12 +302,14 @@ public class XMLTreeNode {
     }
     /**
      * This method changes the value of the "width" attribute.
+     * @param width
      */
     public void setWidth(int width) {                
         actual.setAttribute(WIDTH, Integer.toString(width));        
     }
     /**
      * This method returns the value of the "height" attribute.
+     * @return 
      */
     public Integer getHeight() {
         String h = actual.getAttribute(HEIGHT);
@@ -300,12 +317,14 @@ public class XMLTreeNode {
     }
      /**
      * This method changes the value of the "height" attribute.
+     * @param height
      */
     public void setHeight(int height) {                
         actual.setAttribute(HEIGHT, Integer.toString(height));        
     }
     /**
      * This method returns the value of the "start_angle" attribute.
+     * @return 
      */
     public Integer getStartAngle() {
         String w = actual.getAttribute(START_ANGLE);
@@ -313,12 +332,14 @@ public class XMLTreeNode {
     }
     /**
      * This method changes the value of the "start_angle" attribute.
+     * @param angle
      */
     public void setStartAngle(int angle) {        
         actual.setAttribute(START_ANGLE, Integer.toString(angle));
     }
     /**
      * This method returns the value of the "end_angle" attribute.
+     * @return 
      */
     public Integer getEndAngle() {
         String h = actual.getAttribute(END_ANGLE);
@@ -326,12 +347,14 @@ public class XMLTreeNode {
     }
     /**
      * This method changes the value of the "end_angle" attribute.
+     * @param angle
      */
     public void setEndAngle(int angle) {        
         actual.setAttribute(END_ANGLE, Integer.toString(angle));
     }
     /**
      * This method returns the value of the "line_direction" attribute.
+     * @return 
      */
     public Boolean getLineDirection() {
         String d = actual.getAttribute(LINE_DIRECTION);
@@ -347,6 +370,7 @@ public class XMLTreeNode {
     }
     /**
      * This method sets the value of the "line_direction" attribute.
+     * @param lineDirection
      */
     public void setLineDirection(boolean lineDirection) {
         if( lineDirection && !getLineDirection())
@@ -358,6 +382,7 @@ public class XMLTreeNode {
     /**
      * This method returns the value of the "actual_width" attribute.
      * FIXME: this is never used, actual witdh is read from the file?
+     * @return
      */
     public Integer getActualWidth() {
         String w = actual.getAttribute("actual_width");
@@ -366,6 +391,7 @@ public class XMLTreeNode {
     /**
      * This method returns the value of the "actual_height" attribute.
      * FIXME: this is never used, actual height is read from the file?
+     * @return
      */
     public Integer getActualHeight() {
         String h = actual.getAttribute("actual_height");
@@ -374,6 +400,7 @@ public class XMLTreeNode {
     /**
      * This method returns the value of the "dimension" attribute of the 
      * objectpool root element.
+     * @return 
      */
     public Integer getDimension() {
         String d = actual.getAttribute(DIMENSION);
@@ -382,6 +409,7 @@ public class XMLTreeNode {
     /**
      * This method returns the value of the "sk_width" attribute of the 
      * objectpool root element.
+     * @return 
      */
     public Integer getSKWidth() {
         String s = actual.getAttribute(SK_WIDTH);
@@ -390,6 +418,7 @@ public class XMLTreeNode {
     /**
      * This method returns the value of the "sk_height" attribute of the 
      * objectpool root element.
+     * @return 
      */
     public Integer getSKHeight() {
         String s = actual.getAttribute(SK_HEIGHT);
@@ -398,6 +427,7 @@ public class XMLTreeNode {
     /**
      * This method returns the value of the "fix_bitmap_path" attribute of the 
      * objectpool root element.
+     * @return 
      */
     public String getFixBitmapPath() {
         String f = actual.getAttribute(FIX_BITMAP_PATH);
@@ -406,6 +436,7 @@ public class XMLTreeNode {
     /**
      * This method returns the value of the "std_bitmap_path" attribute of the 
      * objectpool root element.
+     * @return 
      */
     public String getStdBitmapPath() {
         String s = actual.getAttribute(STD_BITMAP_PATH);
@@ -414,6 +445,7 @@ public class XMLTreeNode {
     /**
      * This method determines what text is shown in the tree view.
      */
+    @Override
     public String toString() {
         if (type != null) {
             return type;
@@ -459,6 +491,7 @@ public class XMLTreeNode {
     }
     /**
      * This method returns the value of the "font_size" attribute.
+     * @return 
      */
     public Dimension getFontSize() {
         String s = actual.getAttribute(FONT_SIZE);
@@ -467,6 +500,7 @@ public class XMLTreeNode {
      
     /**
      * This method returns the value of the "font_size" attribute.
+     * @return 
      */
     public String getFontSizeString() {
         String f = actual.getAttribute(FONT_SIZE);
@@ -497,6 +531,7 @@ public class XMLTreeNode {
     
     /**
      * This method returns a integer representing the line supression of a rectangle     
+     * @return 
      */
     public int getLineSuppression() {
         String s = actual.getAttribute(LINE_SUPPRESSION);
@@ -514,6 +549,8 @@ public class XMLTreeNode {
     
     /**
      * This method returns the value of the "fill_colour" attribute.
+     * @param colorDepth
+     * @return 
      */
     public Color getFillColor(int colorDepth) {
         String f = actual.getAttribute(FILL_COLOUR);
@@ -521,6 +558,8 @@ public class XMLTreeNode {
     }
     /**
      * This method returns the value of the "colour" attribute.
+     * @param colorDepth
+     * @return 
      */
     public Color getColor(int colorDepth) {
         String c = actual.getAttribute(COLOUR);
@@ -528,6 +567,8 @@ public class XMLTreeNode {
     }
     /**
      * This method returns the value of the "font_colour" attribute.
+     * @param colorDepth
+     * @return 
      */
     public Color getFontColor(int colorDepth) {
         String c = actual.getAttribute(FONT_COLOUR);
@@ -535,6 +576,8 @@ public class XMLTreeNode {
     }
     /**
      * This method returns the value of the "background_colour" attribute.
+     * @param colorDepth
+     * @return 
      */
     public Color getBackgroundColor(int colorDepth) {
         String c = actual.getAttribute(BACKGROUND_COLOUR);
@@ -542,6 +585,8 @@ public class XMLTreeNode {
     }
     /**
      * This method returns the value of the "line_colour" attribute.
+     * @param colorDepth
+     * @return 
      */
     public Color getLineColor(int colorDepth) {
         String c = actual.getAttribute(LINE_COLOUR);
@@ -549,12 +594,20 @@ public class XMLTreeNode {
     }
     /**
      * This method returns the value of the "transparency_colour" attribute.
+     * @param reduceImages
+     * @param colorDepth
+     * @return 
      */
     public Color getTransparencyColor(boolean reduceImages, int colorDepth) {
         String c = actual.getAttribute(TRANSPARENCY_COLOUR);
-        return c.isEmpty() ? Color.GRAY : ColorPalette.getColor(c, reduceImages ? colorDepth : ColorPalette.COLOR_8BIT);
+        return c.isEmpty() ? Color.GRAY : ColorPalette.getColor(c, reduceImages ?
+                colorDepth : ColorPalette.COLOR_8BIT);
     }
     
+    /**
+     * This method returns the value of the line stroke parameter.
+     * @return
+     */
     public BasicStroke getLineStroke() {
         float w = Float.parseFloat(actual.getAttribute(LINE_WIDTH));
         String lineArt = actual.getAttribute(LINE_ART);
@@ -581,6 +634,7 @@ public class XMLTreeNode {
 
     /**
      * This method returns the value of the "fill_type" attribute.
+     * @return 
      */
     public String getFillType() {
         String f = actual.getAttribute(FILL_TYPE);
@@ -590,6 +644,8 @@ public class XMLTreeNode {
     /**
      * Opens the image
      * Attributes are searched in this order: file8, file, file4, file1
+     * @return 
+     * @throws java.io.IOException
      */
     public BufferedImage getImageFile() throws IOException {
         XMLTreeNode root = (XMLTreeNode) model.getRoot();
@@ -609,7 +665,7 @@ public class XMLTreeNode {
     
     private BufferedImage getImageFile(String fileAttr, String imagepath) throws IOException {
         String s = actual.getAttribute(fileAttr);
-        File f = null;
+        File f;
         if (s.isEmpty()) {
             return null;
         }
@@ -634,6 +690,7 @@ public class XMLTreeNode {
       
     /**
      * This method returns the value of the "ellipse_type" attribute.
+     * @return 
      */
     public Integer getEllipseType() {
         String e = actual.getAttribute(ELLIPSE_TYPE);
@@ -689,6 +746,7 @@ public class XMLTreeNode {
     /**
      * Returns whether of not no fill option is specified for Linear and 
      * arched bar graphs.
+     * @return 
      */
     public boolean isOptionsNoFill() {
         return actual.getAttribute(OPTIONS).contains("nofill");
@@ -784,6 +842,7 @@ public class XMLTreeNode {
     
     /**
      * This method returns the value of the "autowrap" bit in the "code" attribute.
+     * @return 
      */
     public boolean isOptionsAutoWrap() {
         return actual.getAttribute(OPTIONS).contains("autowrap");
@@ -791,6 +850,7 @@ public class XMLTreeNode {
     
      /**
      * This method returns the value of the "format" attribute.
+     * @return 
      */
     public boolean isExponentialFormat() {
         String f = actual.getAttribute(FORMAT);
@@ -799,6 +859,7 @@ public class XMLTreeNode {
     
     /**
      * This method returns the value of the "leadingzeros" bit in the options
+     * @return 
      */
     public boolean isOptionsDisplayLeadingZeros() {
         return actual.getAttribute(OPTIONS).contains("leadingzeros");
@@ -806,6 +867,7 @@ public class XMLTreeNode {
     
     /**
      * This method returns the value of the "blankzero" bit in the options
+     * @return 
      */
     public boolean isOptionsBlankZero() {
         return actual.getAttribute(OPTIONS).contains("blankzero");
@@ -813,6 +875,8 @@ public class XMLTreeNode {
     
     /**
      * This method returns the value of the "needle_colour" attribute.
+     * @param colorDepth
+     * @return 
      */
     public Color getNeedleColor(int colorDepth) {
         String n = actual.getAttribute(NEEDLE_COLOUR);
@@ -820,6 +884,8 @@ public class XMLTreeNode {
     }
     /**
      * This method returns the value of the "border_colour" attribute.
+     * @param colorDepth
+     * @return 
      */
     public Color getBorderColor(int colorDepth) {
         String b = actual.getAttribute(BORDER_COLOUR);
@@ -827,6 +893,8 @@ public class XMLTreeNode {
     }
     /**
      * This method returns the value of the "target_line_colour" attribute.
+     * @param colorDepth
+     * @return 
      */
     public Color getTargetLineColor(int colorDepth) {
         String t = actual.getAttribute(TARGET_LINE_COLOUR);
@@ -834,6 +902,8 @@ public class XMLTreeNode {
     }
     /**
      * This method returns the value of the "arc_and_tick_colour" attribute.
+     * @param colorDepth
+     * @return 
      */
     public Color getArcAndTickColor(int colorDepth) {
         String a = actual.getAttribute(ARC_AND_TICK_COLOUR);
@@ -841,6 +911,7 @@ public class XMLTreeNode {
     }
     /**
      * This method returns the value of the "min_value" attribute.
+     * @return 
      */
     public Integer getMinValue() {
         String w = actual.getAttribute(MIN_VALUE);
@@ -848,6 +919,7 @@ public class XMLTreeNode {
     }
     /**
      * This method returns the value of the "max_value" attribute.
+     * @return 
      */
     public Integer getMaxValue() {
         String w = actual.getAttribute(MAX_VALUE);
@@ -855,6 +927,7 @@ public class XMLTreeNode {
     }
     /**
      * This method returns the value of the "number_of_ticks" attribute.
+     * @return 
      */
     public Integer getTicks() {
         String w = actual.getAttribute(NUMBER_OF_TICKS);
@@ -862,6 +935,7 @@ public class XMLTreeNode {
     }
     /**
      * This method returns the value of the "bar_graph_width" attribute.
+     * @return 
      */
     public int getBargraphWidth() {
         String w = actual.getAttribute(BAR_GRAPH_WIDTH);
@@ -869,6 +943,7 @@ public class XMLTreeNode {
     }
     /**
      * This method returns the value of the "scale" attribute.
+     * @return 
      */
     public double getScale() {
         String w = actual.getAttribute(SCALE);
@@ -876,6 +951,7 @@ public class XMLTreeNode {
     }
     /**
      * This method returns the value of the "offset" attribute.
+     * @return 
      */
     public int getOffset(){
         String w = actual.getAttribute(OFFSET);
@@ -883,6 +959,7 @@ public class XMLTreeNode {
     }
     /**
      * This method returns the value of the "value" attribute.
+     * @return 
      */
     public String getValue() {
         return actual.getAttribute(VALUE);
@@ -890,6 +967,7 @@ public class XMLTreeNode {
     /**
      * This method returns the value of the "value" attribute parsed as 
      * integer. 
+     * @return 
      */
     public Integer getValueInt() {
         String v = actual.getAttribute(VALUE);
@@ -898,6 +976,7 @@ public class XMLTreeNode {
     
     /**
      * This method returns the value of the "target_value" attribute.
+     * @return 
      */
     public Integer getTargetValueInt() {
         String v = actual.getAttribute(TARGET_VALUE);
@@ -905,12 +984,14 @@ public class XMLTreeNode {
     }
     /**
      * This method returns the value of the "code" attribute.
+     * @return 
      */
     public String getCode() {
         return actual.getAttribute(CODE);
     }
     /**
      * This method returns the value of the "variable_reference" attribute.
+     * @return 
      */
     public String getVariableReferenceName() {
         String n = actual.getAttribute(VARIABLE_REFERENCE);
@@ -918,6 +999,7 @@ public class XMLTreeNode {
     }
     /**
      * This method returns the value of the "target_value_variable_reference" attribute.
+     * @return 
      */
     public String getTargetValueVariableReferenceName() {
         String n = actual.getAttribute(TARGET_VALUE_VARIABLE_REFERENCE);
@@ -925,38 +1007,45 @@ public class XMLTreeNode {
     }
     /**
      * Returns a Paint-object which can be used for painting
+     * @param lineColor
+     * @param imagePath
+     * @param errPaint
+     * @param reduceImages
+     * @param colorDepth
+     * @return
+     * @throws IOException
      */
-    public Paint getFillPaint(Color lineColor, String imagePath, Paint errPaint, boolean reduceImages, int colorDepth) throws IOException {
+    public Paint getFillPaint(Color lineColor, String imagePath, Paint errPaint,
+            boolean reduceImages, int colorDepth) throws IOException {
         String fillType = this.getFillType();
-        if (fillType.equals("fillcolour")) {
-            return this.getFillColor(colorDepth);
-        }
-        else if (fillType.equals("linecolour")) {
-            return lineColor;
-        }
-        else if (fillType.equals("pattern")) {
-            BufferedImage image = null;
-            for (int j = 0, m = model.getChildCount( this ); j < m; j++) {
-                XMLTreeNode nd2 = (XMLTreeNode) model.getChild(this, j);
-                if (nd2.isType(PICTUREGRAPHIC)){
-                    image = nd2.getImageFile();
-                    Color transparencyColor = nd2.getTransparencyColor(reduceImages, colorDepth);
-                    image = PictureConverter.applyTransparencyAndReduceColors(image, 
-                            transparencyColor, nd2.isOptionsTransparent(), 
-                            reduceImages, colorDepth);
+        switch (fillType) {
+            case "fillcolour":
+                return this.getFillColor(colorDepth);
+            case "linecolour":
+                return lineColor;
+            case "pattern":
+                BufferedImage image = null;
+                for (int j = 0, m = model.getChildCount( this ); j < m; j++) {
+                    XMLTreeNode nd2 = (XMLTreeNode) model.getChild(this, j);
+                    if (nd2.isType(PICTUREGRAPHIC)){
+                        image = nd2.getImageFile();
+                        Color transparencyColor = nd2.getTransparencyColor(reduceImages, colorDepth);
+                        image = PictureConverter.applyTransparencyAndReduceColors(image,
+                                transparencyColor, nd2.isOptionsTransparent(),
+                                reduceImages, colorDepth);
+                    }
                 }
-            }
-            return image == null ? errPaint : 
-                new TexturePaint(image, new Rectangle2D.Double(0, 0, image.getWidth(), image.getHeight()));
-        }
-        // nofill
-        else {
-            return null;
+                return image == null ? errPaint :
+                        new TexturePaint(image, new Rectangle2D.Double(0, 0, image.getWidth(), image.getHeight()));
+            default:
+                return null;
         }
     }
     
     /**
      * Gets the value of the "value" attribute from the number variable child
+     * @param role
+     * @return 
      */
     public Integer getNumberVariableValue(String role) {
         for (int i = 0, n = model.getChildCount(this); i < n; i++) {
@@ -969,6 +1058,7 @@ public class XMLTreeNode {
     }
     /**
      * Gets the value of the "value" attribute from the string variable child
+     * @return 
      */
     public String getStringVariableValue() {
         for (int i = 0, n = model.getChildCount(this); i < n; i++) {
@@ -1003,7 +1093,12 @@ public class XMLTreeNode {
         return null;
     }
     */
-            
+    
+    /**
+     * Gets the font.
+     * @param colorDepth
+     * @return
+     */
     public BitmapFont getFont(int colorDepth) {
         return new BitmapFont(getFontSizeString(), getFontColor(colorDepth));
     }
@@ -1023,6 +1118,8 @@ public class XMLTreeNode {
      */
     /**
      * Gets the line attributes from the line attributes child
+     * @param colorDepth
+     * @return 
      */
     public LineAttributes getLineAttributes(int colorDepth) {
         for (int i = 0, n = model.getChildCount(this); i < n; i++) {
@@ -1035,8 +1132,16 @@ public class XMLTreeNode {
     }
     /**
      * Gets the fill attributes from the fill attributes child
-     */    
-    public Paint getFillAttributesPaint(Color lineColor, String imagepath, Paint errPaint, boolean reduceImages, int colorDepth) throws IOException {
+     * @param lineColor
+     * @param imagepath
+     * @param errPaint
+     * @param reduceImages
+     * @param colorDepth
+     * @return
+     * @throws IOException
+     */
+    public Paint getFillAttributesPaint(Color lineColor, String imagepath,
+            Paint errPaint, boolean reduceImages, int colorDepth) throws IOException {
         for (int i = 0, n = model.getChildCount(this); i < n; i++) {
 	    XMLTreeNode nd = (XMLTreeNode) model.getChild(this, i);
 	    if (nd.isType(FILLATTRIBUTES)) {
@@ -1047,6 +1152,7 @@ public class XMLTreeNode {
     }
     /**
      * Gets the polygon formed from the point children
+     * @return 
      */
     public Polygon getPolygon() {
         Polygon p = new Polygon();
@@ -1060,6 +1166,7 @@ public class XMLTreeNode {
     }
     /**
      * Returns an array that has all points of polygon (x,y)-pairs
+     * @return 
      */
     public int[] getPolygonPoints() {
         // calculate the number of points
@@ -1085,6 +1192,9 @@ public class XMLTreeNode {
     
     /**
      * Sets the wanted point of a polygon
+     * @param index
+     * @param x
+     * @param y
      */
     public void setPolygonPoint(int index, int x, int y) {
         int index2 = 0;
@@ -1103,6 +1213,8 @@ public class XMLTreeNode {
     /**
      * There is a bug in Integer.parseInt - it does not handle "positive"
      * strings e.g. "+123"
+     * @param value
+     * @return 
      */
     static public int parseInt(String value) {
         if (value.startsWith("+")) {
@@ -1113,6 +1225,7 @@ public class XMLTreeNode {
 
     /**
      * Formats number (without leading zeros)
+     * @return 
      */
     public String getFormatedNumber() {
         int number_of_decimals = getNumberOfDecimals();
@@ -1143,6 +1256,7 @@ public class XMLTreeNode {
     /**
      * Returns the value of the variable reference, if defined, otherwise
      * returns the embedded value. 
+     * @return 
      */ 
     public Integer getEffectiveValue() {
         Integer value = getNumberVariableValue(VARIABLE_REFERENCE); //getVariableReferenceName());
@@ -1155,6 +1269,7 @@ public class XMLTreeNode {
     /**
      * Returns the value of the target variable reference, if defined, otherwise
      * returns the embedded target value. 
+     * @return 
      */ 
     public Integer getEffectiveTargetValue() {
         Integer targetLineValue = getNumberVariableValue(TARGET_VALUE_VARIABLE_REFERENCE);
@@ -1165,10 +1280,12 @@ public class XMLTreeNode {
     }
 
     /**
-     * Returns the size of this node. For example the size of a container
+     * Returns the size of this node.For example the size of a container
      * is obtained by calling getWidth() and getHeight() methods, but the
-     * size of a meter is its width times width. The sizes of picture graphic
+     * size of a meter is its width times width.The sizes of picture graphic
      * and object pointer objects are more difficult to calculate.
+     * @param dim
+     * @return 
      */
     public Dimension getNodeSize(Dimension dim) {
         if (isType(WORKINGSET, KEY, AUXILIARYFUNCTION, AUXILIARYINPUT)) {

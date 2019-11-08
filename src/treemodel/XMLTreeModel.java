@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007 Automation technology laboratory,
+ * Copyright (C) 2019 Automation technology laboratory,
  * Helsinki University of Technology
  *
  * Visit automation.tkk.fi for information about the automation
@@ -59,13 +59,13 @@ public class XMLTreeModel implements TreeModel, EventListener {
     private XMLTreeNode root;
     private Map<String, Element> nameMap;
     
-    private Map<XMLTreeNode, XMLTreeNodeList> childMap;
+    private final Map<XMLTreeNode, XMLTreeNodeList> childMap;
     
     /**
      * Default constructor.
      */
     public XMLTreeModel() {
-        this.childMap = new HashMap();
+        this.childMap = new HashMap<>();
     }
     
     /**
@@ -76,7 +76,7 @@ public class XMLTreeModel implements TreeModel, EventListener {
     public XMLTreeModel(Document doc, Map<String, Element> nameMap) {
         this.doc = doc;
         this.nameMap = nameMap;
-        this.childMap = new HashMap();
+        this.childMap = new HashMap<>();
         this.root = createRootAndCategoryNodes();
     }
     
@@ -237,7 +237,7 @@ public class XMLTreeModel implements TreeModel, EventListener {
     
     //------------------------------------------------------------//
     
-    private Vector<TreeModelListener> listeners = new Vector<TreeModelListener>();
+    private Vector<TreeModelListener> listeners = new Vector<>();
     
     /**
      * Adds a listener for the TreeModelEvent posted after the tree
@@ -317,7 +317,7 @@ public class XMLTreeModel implements TreeModel, EventListener {
         
         // the listeners vector might change as a result of calling 
         // treeNodesRemoved
-        Vector<TreeModelListener> temp = new Vector<TreeModelListener>(listeners);
+        Vector<TreeModelListener> temp = new Vector<>(listeners);
         for (TreeModelListener l : temp) {
             l.treeNodesRemoved(e);
         }
@@ -386,15 +386,15 @@ public class XMLTreeModel implements TreeModel, EventListener {
         showList("new: ", newChildren);
          */
         
-        List<XMLTreeNode> toBeRemoved = new ArrayList<XMLTreeNode>();
+        List<XMLTreeNode> toBeRemoved = new ArrayList<>();
         toBeRemoved.addAll(oldChildren);
         toBeRemoved.removeAll(newChildren);
         
-        List<XMLTreeNode> toBeInserted = new ArrayList<XMLTreeNode>();
+        List<XMLTreeNode> toBeInserted = new ArrayList<>();
         toBeInserted.addAll(newChildren);
         toBeInserted.removeAll(oldChildren);
         
-        List<XMLTreeNode> toBeRetained = new ArrayList<XMLTreeNode>();
+        List<XMLTreeNode> toBeRetained = new ArrayList<>();
         toBeRetained.addAll(newChildren);
         toBeRetained.retainAll(oldChildren);
         //toBeRetained.addAll(oldChildren);
@@ -470,7 +470,7 @@ public class XMLTreeModel implements TreeModel, EventListener {
         if (toBeInserted.size() > 0) {
             
             int[] insertedIndices = new int[toBeInserted.size()];
-            Map<Integer, XMLTreeNode> insertMap = new HashMap<Integer, XMLTreeNode>();
+            Map<Integer, XMLTreeNode> insertMap = new HashMap<>();
             for (int i = 0, n = insertedIndices.length; i < n; i++) {
                 XMLTreeNode object = toBeInserted.get(i);
                 int index = newChildren.indexOf(object);
@@ -968,6 +968,8 @@ public class XMLTreeModel implements TreeModel, EventListener {
     
     /**
      * Tries to convert string path into TreePath of XMLTreeNodes. 
+     * @param pathStr
+     * @return 
      */
     public TreePath findPathByPath(String pathStr) {
         return findPathByPath(pathStr, new TreePath(root));

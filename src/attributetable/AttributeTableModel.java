@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007 Automation technology laboratory,
+ * Copyright (C) 2019 Automation technology laboratory,
  * Helsinki University of Technology
  *
  * Visit automation.tkk.fi for information about the automation
@@ -221,7 +221,7 @@ public class AttributeTableModel extends AbstractTableModel implements EventList
 
     //------------------------------------------------------------//
     
-    private final Vector<TreeSelectionListener> listeners = new Vector<TreeSelectionListener>();
+    private final Vector<TreeSelectionListener> listeners = new Vector<>();
     
     /**
      * Adds listener.
@@ -236,6 +236,7 @@ public class AttributeTableModel extends AbstractTableModel implements EventList
     /**
      * Removes listener.
      * @param l
+     * @return true if listeners contained the specified listener
      */
     public boolean removeTreeSelectionListener(TreeSelectionListener l) {
         return listeners.remove(l);

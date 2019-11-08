@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007 Automation technology laboratory,
+ * Copyright (C) 2019 Automation technology laboratory,
  * Helsinki University of Technology
  *
  * Visit automation.tkk.fi for information about the automation
@@ -39,12 +39,15 @@ public class TableGenerator {
     
     static private final char SEPARATOR = '_';
     private static final String CELLNAME = "cell";
-    private TableWizard wiz;
-    private XMLTreeNode root;
-    private String name;
+    private final TableWizard wiz;
+    private final XMLTreeNode root;
+    private final String name;
     
     /** 
      * Creates a new instance of TableGenerator 
+     * @param tableWizard
+     * @param root
+     * @param name
      */
     public TableGenerator(TableWizard tableWizard, XMLTreeNode root, String name) {
         this.wiz = tableWizard;         

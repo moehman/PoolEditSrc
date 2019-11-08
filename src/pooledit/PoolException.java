@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007 Automation technology laboratory,
+ * Copyright (C) 2019 Automation technology laboratory,
  * Helsinki University of Technology
  *
  * Visit automation.tkk.fi for information about the automation
@@ -32,12 +32,19 @@ public class PoolException extends Exception {
     public PoolException() {
     }
           
-    /** Constructs a new exception with the specified detail message. */
+    /**
+     * Constructs a new exception with the specified detail message.
+     * @param message
+     */
     public PoolException(String message) {
         super(message);
     }
           
-    /** Constructs a new exception with the specified detail message and cause. */
+    /**
+     * Constructs a new exception with the specified detail message and cause.
+     * @param message
+     * @param cause
+     */
     public PoolException(String message, Throwable cause) {
         super(message, cause);
     }

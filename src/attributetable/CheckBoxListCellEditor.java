@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007 Automation technology laboratory,
+ * Copyright (C) 2019 Automation technology laboratory,
  * Helsinki University of Technology
  *
  * Visit automation.tkk.fi for information about the automation
@@ -28,9 +28,11 @@ import javax.swing.DefaultCellEditor;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.Icon;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JTable;
 import javax.swing.JTree;
+import javax.swing.ListCellRenderer;
 import pooledit.Utils;
 
 /**
@@ -51,25 +53,27 @@ public class CheckBoxListCellEditor extends DefaultCellEditor {
         public int getIconHeight() { return CHECK.getIconHeight(); }
     };
 
-    static class CheckBoxListCellRenderer extends DefaultListCellRenderer {
+    static class CheckBoxListCellRenderer implements ListCellRenderer<String> {
+        protected DefaultListCellRenderer defren = new DefaultListCellRenderer();
         private final String selectedItems;
         CheckBoxListCellRenderer(String selectedItems) {
             this.selectedItems = selectedItems;
         }
         @Override
-        public Component getListCellRendererComponent(JList list, Object val, 
+        public Component getListCellRendererComponent(JList list, String val, 
                 int idx,  boolean isSel, boolean hasFocus) {
-            super.getListCellRendererComponent(list, val, idx, isSel, hasFocus);
+            JLabel renderer = (JLabel) defren.getListCellRendererComponent
+                (list, val, idx, isSel, hasFocus);
             
             String clr = (String) val;
-            setIcon(clr.isEmpty() ? EMPTY : Utils.optionsContain(selectedItems, clr) ? CHECK : NOCHECK);            
-            setText(clr);
-            return this;
+            renderer.setIcon(clr.isEmpty() ? EMPTY : Utils.optionsContain(selectedItems, clr) ? CHECK : NOCHECK);            
+            renderer.setText(clr);
+            return renderer;
         }
     }
        
-    static private JComboBox createJComboBox(String ... allItems) {
-        JComboBox cb = new JComboBox();
+    static private JComboBox<String> createJComboBox(String ... allItems) {
+        JComboBox<String> cb = new JComboBox<>();
         cb.addItem(""); // "no change item"
         for (int i = 0, n = allItems.length; i < n; i++) {
             cb.addItem(allItems[i]);
@@ -107,7 +111,7 @@ public class CheckBoxListCellEditor extends DefaultCellEditor {
 	//this.selectedItems = tree.convertValueToText(value, isSelected,
 	//				    expanded, leaf, row, false);
         this.selectedItems = (String) value;
-        JComboBox cb = (JComboBox) this.getComponent();
+        JComboBox<String> cb = (JComboBox<String>) this.getComponent();
         cb.setRenderer(new CheckBoxListCellRenderer(selectedItems));
 	return super.getTreeCellEditorComponent(tree, "" /*value*/, isSelected, expanded, leaf, row);
     }
@@ -126,7 +130,7 @@ public class CheckBoxListCellEditor extends DefaultCellEditor {
 						 boolean isSelected,
 						 int row, int col) {
         this.selectedItems = (String) value;
-        JComboBox cb = (JComboBox) this.getComponent();
+        JComboBox<String> cb = (JComboBox<String>) this.getComponent();
         cb.setRenderer(new CheckBoxListCellRenderer(selectedItems));
 	return super.getTableCellEditorComponent(table, "" /*value*/, isSelected, row, col);
     }
@@ -152,7 +156,7 @@ public class CheckBoxListCellEditor extends DefaultCellEditor {
         }
         // regenerate options string from the "all items" list,
         // this way the order of the items stays the same every time
-        StringBuffer out = new StringBuffer();
+        StringBuilder out = new StringBuilder();
         for (int i = 0, n = allItems.length; i < n; i++) {
             if (Utils.optionsContain(rv, allItems[i])) {
                 if (out.length() > 0) {

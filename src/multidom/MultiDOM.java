@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007 Automation technology laboratory,
+ * Copyright (C) 2019 Automation technology laboratory,
  * Helsinki University of Technology
  *
  * Visit automation.tkk.fi for information about the automation
@@ -36,7 +36,7 @@ import org.w3c.dom.Document;
  */
 public class MultiDOM {
     
-    private List<SingleDOM> documents;
+    private final List<SingleDOM> documents;
     private SingleDOM activeDocument;
     private boolean newDocument = true;
     
@@ -44,7 +44,7 @@ public class MultiDOM {
      * Constructor.
      */
     public MultiDOM() {
-        this.documents = new ArrayList<SingleDOM>();
+        this.documents = new ArrayList<>();
     }
 
     /**
@@ -203,8 +203,7 @@ public class MultiDOM {
         }
     }
     
-    private final Vector<ChangeListener> docChangeListeners = 
-            new Vector<ChangeListener>();
+    private final Vector<ChangeListener> docChangeListeners = new Vector<>();
     
     /**
      * Adds a listener.
@@ -234,8 +233,7 @@ public class MultiDOM {
         }
     }
     
-    private final Vector<ChangeListener> pathChangeListeners = 
-            new Vector<ChangeListener>();
+    private final Vector<ChangeListener> pathChangeListeners = new Vector<>();
     
     /**
      * Adds a listener.

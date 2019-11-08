@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007 Automation technology laboratory,
+ * Copyright (C) 2019 Automation technology laboratory,
  * Helsinki University of Technology
  *
  * Visit automation.tkk.fi for information about the automation
@@ -51,10 +51,10 @@ public class TableWizard extends javax.swing.JPanel {
     public void setTableGenerator(TableGenerator tableGenerator) {
         this.tableGenerator = tableGenerator;
         Element root = tableGenerator.getRoot().getModel().getDocument().getDocumentElement();
-        fontModel = new DefaultComboBoxModel(WizardTools.findElements(root, FONTATTRIBUTES));
-        lineModel = new DefaultComboBoxModel(WizardTools.findElements(root, LINEATTRIBUTES));
-        fillModel1 = new DefaultComboBoxModel(WizardTools.findElementsWithEmpty(root, FILLATTRIBUTES));
-        fillModel2 = new DefaultComboBoxModel(WizardTools.findElementsWithEmpty(root, FILLATTRIBUTES));
+        fontModel = new DefaultComboBoxModel<>(WizardTools.findElements(root, FONTATTRIBUTES));
+        lineModel = new DefaultComboBoxModel<>(WizardTools.findElements(root, LINEATTRIBUTES));
+        fillModel1 = new DefaultComboBoxModel<>(WizardTools.findElementsWithEmpty(root, FILLATTRIBUTES));
+        fillModel2 = new DefaultComboBoxModel<>(WizardTools.findElementsWithEmpty(root, FILLATTRIBUTES));
         initComponents();
     }
         

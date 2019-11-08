@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007 Automation technology laboratory,
+ * Copyright (C) 2019 Automation technology laboratory,
  * Helsinki University of Technology
  *
  * Visit automation.tkk.fi for information about the automation
@@ -41,7 +41,7 @@ public class LineTrendWizard extends javax.swing.JPanel {
     private LineTrendGenerator lineTrendGenerator;
     
     private final String[] colors = ColorPalette.getAllColorNames();
-    private DefaultComboBoxModel colorModel = new DefaultComboBoxModel(colors);
+    private DefaultComboBoxModel<String> colorModel = new DefaultComboBoxModel<>(colors);
     private ListCellRenderer colorRenderer = AttributeTable.createColorListRenderer();
     private DefaultComboBoxModel fillModel1; 
     private DefaultComboBoxModel lineModel1;    
@@ -62,13 +62,13 @@ public class LineTrendWizard extends javax.swing.JPanel {
     public void setTrendGenerator(LineTrendGenerator lineTrendGenerator) {
         this.lineTrendGenerator = lineTrendGenerator;
         Element root = lineTrendGenerator.getRoot().getModel().getDocument().getDocumentElement();
-        fillModel1 = new DefaultComboBoxModel(WizardTools.findElementsWithEmpty(root, FILLATTRIBUTES));
-        lineModel1 = new DefaultComboBoxModel(WizardTools.findElements(root, LINEATTRIBUTES));
-        fillModel2 = new DefaultComboBoxModel(WizardTools.findElementsWithEmpty(root, FILLATTRIBUTES));
-        lineModel2 = new DefaultComboBoxModel(WizardTools.findElements(root, LINEATTRIBUTES));
-        lineModel3 = new DefaultComboBoxModel(WizardTools.findElements(root, LINEATTRIBUTES));
+        fillModel1 = new DefaultComboBoxModel<>(WizardTools.findElementsWithEmpty(root, FILLATTRIBUTES));
+        lineModel1 = new DefaultComboBoxModel<>(WizardTools.findElements(root, LINEATTRIBUTES));
+        fillModel2 = new DefaultComboBoxModel<>(WizardTools.findElementsWithEmpty(root, FILLATTRIBUTES));
+        lineModel2 = new DefaultComboBoxModel<>(WizardTools.findElements(root, LINEATTRIBUTES));
+        lineModel3 = new DefaultComboBoxModel<>(WizardTools.findElements(root, LINEATTRIBUTES));
         
-        fontModel = new DefaultComboBoxModel(WizardTools.findElements(root, FONTATTRIBUTES));
+        fontModel = new DefaultComboBoxModel<>(WizardTools.findElements(root, FONTATTRIBUTES));
         initComponents();                
     }
     

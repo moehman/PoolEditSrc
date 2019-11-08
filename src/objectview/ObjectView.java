@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007 Automation technology laboratory,
+ * Copyright (C) 2019 Automation technology laboratory,
  * Helsinki University of Technology
  *
  * Visit automation.tkk.fi for information about the automation
@@ -74,8 +74,8 @@ public class ObjectView extends JComponent implements TreeModelListener,
     //static private final AffineTransform IDENTITY = new AffineTransform();
     static private final GraphicObjectOperations GFXOP = new GraphicObjectOperations();
     
-    static private int IMAGE_FULL = 16;
-    static private int IMAGE_HALF = IMAGE_FULL / 2;
+    static private final int IMAGE_FULL = 16;
+    static private final int IMAGE_HALF = IMAGE_FULL / 2;
     static private Paint BACKGROUND = createPaint();
     static private Paint createPaint() {
         BufferedImage image = new BufferedImage(IMAGE_FULL, IMAGE_FULL, 
@@ -153,43 +153,53 @@ public class ObjectView extends JComponent implements TreeModelListener,
     }
     
     /**
-     * Default constructor
+     * Private constructor, use getInstance() instead.
      */
-    public ObjectView() {
-        this(null, System.out);
-    }
-    
-    /**
-     * Constructor.
-     * @param out
-     */
-    public ObjectView(PrintStream out) {
-        this(null, out);
-    }
-    
-    /**
-     * Constructor.
-     * @param model
-     * @param out
-     */
-    public ObjectView(XMLTreeModel model, PrintStream out) {
-        // double buffering is implemented in own code
-        this.setDoubleBuffered(false);
-        
-        // set key listener
-        this.setFocusable(true);
-        this.addKeyListener(this);
-        
-        // set mouse listeners
-        this.addMouseListener(mc);
-        this.addMouseMotionListener(mc);
-        this.addMouseWheelListener(mc);   
-                
-        // set model
-        this.setMessageStream(out);
-        this.setModel(model);
+    private ObjectView() {
     }
 
+    /**
+     * Creates an ObjectView.
+     * @return
+     */
+    static public ObjectView getInstance() {
+        return getInstance(null, System.out);
+    }
+    
+    /**
+     * Creates an ObjectView.
+     * @param out
+     * @return
+     */
+    static public ObjectView getInstance(PrintStream out) {
+        return getInstance(null, out);
+    }
+    /**
+     * Creates an ObjectView.
+     * @param model
+     * @param out
+     * @return
+     */
+    static public ObjectView getInstance(XMLTreeModel model, PrintStream out) {
+        ObjectView ov = new ObjectView();
+        // double buffering is implemented in own code
+        ov.setDoubleBuffered(false);
+        
+        // set key listener
+        ov.setFocusable(true);
+        ov.addKeyListener(ov);
+        
+        // set mouse listeners
+        ov.addMouseListener(ov.mc);
+        ov.addMouseMotionListener(ov.mc);
+        ov.addMouseWheelListener(ov.mc);   
+                
+        // set model
+        ov.setMessageStream(out);
+        ov.setModel(model);
+        return ov;
+    }
+    
     /**
      * Prints debug messages to System.out.
      * @param obj
@@ -610,83 +620,85 @@ public class ObjectView extends JComponent implements TreeModelListener,
         Shape shape = null;
 	String type = node.getType();
         try {
-            if (type == null) {
+            if (null == type) {
                 // normally this should not happen
             }            
-            else if (type.equals(WORKINGSET)) {
-                shape = processWorkingSet(gfx, node, oper);
-            }
-            else if (type.equals(DATAMASK)) {
-                shape = processDataMask(gfx, node, oper);
-            }
-            else if (type.equals(ALARMMASK)) {
-                shape = processAlarmMask(gfx, node, oper);
-            }
-            else if (type.equals(CONTAINER)) {
-                shape = processContainer(gfx, node, oper);
-            }
-            else if (type.equals(SOFTKEYMASK)) {
-                shape = processSoftKeyMask(gfx, node, oper);
-            }
-            else if (type.equals(KEY)) {
-                shape = processKey(gfx, node, oper);
-            }
-            else if (type.equals(BUTTON)) {
-                shape = processButton(gfx, node, oper);
-            }
-            else if (type.equals(INPUTBOOLEAN)) {
-                shape = processInputboolean(gfx, node, oper);
-            }
-            else if (type.equals(INPUTSTRING)) {
-                shape = processInputString(gfx, node, oper);
-            }
-            else if (type.equals(INPUTNUMBER)) {
-                shape = processInputNumber(gfx, node, oper);
-            }
-            else if (type.equals(INPUTLIST)) {
-                shape = processInputList(gfx, node, oper);
-            }
-            else if (type.equals(OUTPUTSTRING)) {
-                shape = processOutputString(gfx, node, oper);
-            }
-            else if (type.equals(OUTPUTNUMBER)) {
-                shape = processOutputNumber(gfx, node, oper);
-            }
-            else if (type.equals(LINE)) {
-                shape = processLine(gfx, node, oper);
-            }
-            else if (type.equals(RECTANGLE)) {
-                shape = processRectangle(gfx, node, oper);
-            }
-            else if (type.equals(ELLIPSE)) {
-                shape = processEllipse(gfx, node, oper);
-            }
-            else if (type.equals(POLYGON)) {
-                shape = processPolygon(gfx, node, oper);
-            }
-            else if (type.equals(METER)) {
-                shape = processMeter(gfx, node, oper);
-            }
-            else if (type.equals(LINEARBARGRAPH)) {
-                shape = processLinearBarGraph(gfx, node, oper);
-            }
-            else if (type.equals(ARCHEDBARGRAPH)) {
-                shape = processArchedBarGraph(gfx, node, oper);
-            }
-            else if (type.equals(PICTUREGRAPHIC)) {
-                shape = processPictureGraphic(gfx, node, oper);
-            }
-            else if (type.equals(OBJECTPOINTER)) {
-                shape = processObjectPointer(gfx, node, oper);
-            }
-            else if (type.equals(AUXILIARYFUNCTION)) {
-                shape = processAuxiliaryFunction(gfx, node, oper);
-            }
-            else if (type.equals(AUXILIARYINPUT)) {
-                shape = processAuxiliaryInput(gfx, node, oper);
-            }
-            else {
-                // node is not drawable, do nothing
+            else switch (type) {
+                case WORKINGSET:
+                    shape = processWorkingSet(gfx, node, oper);
+                    break;
+                case DATAMASK:
+                    shape = processDataMask(gfx, node, oper);
+                    break;
+                case ALARMMASK:
+                    shape = processAlarmMask(gfx, node, oper);
+                    break;
+                case CONTAINER:
+                    shape = processContainer(gfx, node, oper);
+                    break;
+                case SOFTKEYMASK:
+                    shape = processSoftKeyMask(gfx, node, oper);
+                    break;
+                case KEY:
+                    shape = processKey(gfx, node, oper);
+                    break;
+                case BUTTON:
+                    shape = processButton(gfx, node, oper);
+                    break;
+                case INPUTBOOLEAN:
+                    shape = processInputboolean(gfx, node, oper);
+                    break;
+                case INPUTSTRING:
+                    shape = processInputString(gfx, node, oper);
+                    break;
+                case INPUTNUMBER:
+                    shape = processInputNumber(gfx, node, oper);
+                    break;
+                case INPUTLIST:
+                    shape = processInputList(gfx, node, oper);
+                    break;
+                case OUTPUTSTRING:
+                    shape = processOutputString(gfx, node, oper);
+                    break;
+                case OUTPUTNUMBER:
+                    shape = processOutputNumber(gfx, node, oper);
+                    break;
+                case LINE:
+                    shape = processLine(gfx, node, oper);
+                    break;
+                case RECTANGLE:
+                    shape = processRectangle(gfx, node, oper);
+                    break;
+                case ELLIPSE:
+                    shape = processEllipse(gfx, node, oper);
+                    break;
+                case POLYGON:
+                    shape = processPolygon(gfx, node, oper);
+                    break;
+                case METER:
+                    shape = processMeter(gfx, node, oper);
+                    break;
+                case LINEARBARGRAPH:
+                    shape = processLinearBarGraph(gfx, node, oper);
+                    break;
+                case ARCHEDBARGRAPH:
+                    shape = processArchedBarGraph(gfx, node, oper);
+                    break;
+                case PICTUREGRAPHIC:
+                    shape = processPictureGraphic(gfx, node, oper);
+                    break;
+                case OBJECTPOINTER:
+                    shape = processObjectPointer(gfx, node, oper);
+                    break;
+                case AUXILIARYFUNCTION:
+                    shape = processAuxiliaryFunction(gfx, node, oper);
+                    break;
+                case AUXILIARYINPUT:
+                    shape = processAuxiliaryInput(gfx, node, oper);
+                    break;
+                default:
+                    // node is not drawable, do nothing
+                    break;
             }
         }
         catch (Exception ex) {
@@ -1326,8 +1338,7 @@ public class ObjectView extends JComponent implements TreeModelListener,
 
     //------------------------------------------------------------//
     
-    private final Vector<TreeSelectionListener> listeners = 
-            new Vector<TreeSelectionListener>();
+    private final Vector<TreeSelectionListener> listeners = new Vector<>();
     
     /**
      * Adds a listener.

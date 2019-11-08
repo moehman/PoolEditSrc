@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007 Automation technology laboratory,
+ * Copyright (C) 2019 Automation technology laboratory,
  * Helsinki University of Technology
  *
  * Visit automation.tkk.fi for information about the automation
@@ -679,6 +679,9 @@ public abstract class TreeEditPopup {
 
     /**
      * Adapted from mouse controller.
+     * @param element
+     * @param attr
+     * @param diff
      */
     static public void changeAttribute(Element element, String attr, int diff) {
         String val = element.getAttribute(attr);
@@ -693,6 +696,9 @@ public abstract class TreeEditPopup {
     /**
      * Moves the selected node either as the last element (front) or the 
      * first element (back). 
+     * @param node
+     * @param front
+     * @param one
      */
     static public void moveFrontBack(XMLTreeNode node, boolean front, boolean one) {
         Element elem = node.link() != null ? node.link() : node.actual();
@@ -735,8 +741,13 @@ public abstract class TreeEditPopup {
     /**
      * NOTE: if node points to the same object as candidate, then this method
      * does nothing and returns true.
+     * @param actual
+     * @param candidate
+     * @param nameMap
+     * @return 
      */
-    public static boolean optimize(Element actual, Element candidate, Map<String, Element> nameMap) {
+    public static boolean optimize(Element actual, Element candidate,
+            Map<String, Element> nameMap) {
 
         List<Element> alist = Tools.getChildElementList(actual);
         int n = alist.size();
@@ -806,7 +817,7 @@ public abstract class TreeEditPopup {
      */
     public static void geometricTransformation(XMLTreeNode node, int xform) {
         // create a set to prevent multiple transformations
-        Set<Element> visitedElements = new HashSet<Element>();
+        Set<Element> visitedElements = new HashSet<>();
         String type = node.getType();        
         int width;
         int height;

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007 Automation technology laboratory,
+ * Copyright (C) 2019 Automation technology laboratory,
  * Helsinki University of Technology
  *
  * Visit automation.tkk.fi for information about the automation
@@ -38,7 +38,7 @@ import treemodel.XMLTreeNode;
 public class PointObjectOperations implements ObjectOperations {
     
     private final Point point = new Point();
-    private final Vector<XMLTreeNode> currentPath = new Vector<XMLTreeNode>();
+    private final Vector<XMLTreeNode> currentPath = new Vector<>();
     private TreePath pointedPath;
     private int depth = 0;
     

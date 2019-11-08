@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007 Automation technology laboratory,
+ * Copyright (C) 2019 Automation technology laboratory,
  * Helsinki University of Technology
  *
  * Visit automation.tkk.fi for information about the automation
@@ -64,13 +64,14 @@ public class Tools {
     static {
         System.setProperty(DOMImplementationRegistry.PROPERTY,
 	       "org.apache.xerces.dom.DOMImplementationSourceImpl");
-        DOMImplementationRegistry reg = null;
+        DOMImplementationRegistry reg;
         try { 
-             reg = DOMImplementationRegistry.newInstance();
+            reg = DOMImplementationRegistry.newInstance();
         }
         catch (Exception ex) {
             ex.printStackTrace();
             System.exit(-1);
+            reg = null;
         }
         REGISTRY = reg;
         IMPL_LS = (DOMImplementationLS) REGISTRY.getDOMImplementation("LS 3.0");
@@ -78,21 +79,32 @@ public class Tools {
        
     /**
      * Creates a (root level) name map of all real objects that have a name 
-     * attribute. The key is the name value of attribute and value is the 
+     * attribute.The key is the name value of attribute and value is the 
      * element.
+     * @param doc
+     * @return 
      */
     public static Map<String,Element> createNameMap(Document doc) {
 	// create a new HashMap
-	return updateNameMap(doc, new HashMap<String,Element>(), false); 
+	return updateNameMap(doc, new HashMap<>(), false); 
     }
     
+    /**
+     * See above.
+     * @param doc
+     * @param fullMap
+     * @return
+     */
     public static Map<String,Element> createNameMap(Document doc, boolean fullMap) {
 	// create a new HashMap
-	return updateNameMap(doc, new HashMap<String,Element>(), fullMap); 
+	return updateNameMap(doc, new HashMap<>(), fullMap); 
     }
     
     /**
      * Updates (root level) name map. 
+     * @param doc
+     * @param nameMap
+     * @return 
      */
     public static Map<String,Element> updateNameMap(Document doc, 
 						    Map<String,Element> nameMap) {       
@@ -171,6 +183,7 @@ public class Tools {
     
     /**
      * Must be executed after createRoles!
+     * @param doc
      */
     public static void checkNaming(Document doc) {
     
@@ -181,7 +194,7 @@ public class Tools {
         Map<String, Element> rootMap = createNameMap(doc, false);
         
         // nodes that need fixing are put on this work list
-        List<Element> worklist = new ArrayList<Element>();
+        List<Element> worklist = new ArrayList<>();
         
         Element root = doc.getDocumentElement();
         
@@ -245,6 +258,7 @@ public class Tools {
 
     /**
      * Checks if the document and nameMap are ok
+     *
     public static boolean checkDocument(Document doc, 
 					Map<String, Element> nameMap)  {
    
@@ -266,8 +280,14 @@ public class Tools {
 	}
         return ok;
     }
+    */
+
+    /**
+     * Parses document.
+     * @param text
+     * @param schema
+     * @return
      */
-    
     public static Document parseDocument(String text, String schema) {
         LSParser parser = 
             IMPL_LS.createLSParser(DOMImplementationLS.MODE_SYNCHRONOUS,
@@ -328,6 +348,11 @@ public class Tools {
      * <li> roles are converted back to attributes
      * <li> start and end angles are converted to "double degrees" (divided by two)
      * </ul>
+     *
+     * @param name
+     * @param doc
+     * @throws FileNotFoundException
+     * @throws IOException
      */
     public static void exportToXML1(String name, Document doc) 
             throws FileNotFoundException, IOException {
@@ -358,8 +383,15 @@ public class Tools {
      * <li> missing ids are generated for objects
      * <li> id attributes are added to include_objects
      * </ul>
+     *
+     * @param out
+     * @param fileName
+     * @param doc
+     * @throws IOException
+     * @throws PoolException
      */
-    public static void exportToXML3(PrintStream out, String fileName, Document doc) throws IOException, PoolException {
+    public static void exportToXML3(PrintStream out, String fileName, Document doc)
+            throws IOException, PoolException {
         
         // the document is cloned (this copies all attributes too!)
         Document clone = (Document) doc.cloneNode(true);
@@ -445,7 +477,7 @@ public class Tools {
                 
         // create id to all objects
         nodes = clone.getElementsByTagName("*"); 
-        TreeSet<Integer> usedIDs = new TreeSet<Integer>();
+        TreeSet<Integer> usedIDs = new TreeSet<>();
         
         // find all ids and remove id from include_objects
         for (int i = 0, n = nodes.getLength(); i < n; i++) {
@@ -454,14 +486,15 @@ public class Tools {
             if (!id.isEmpty()) {
                 if (element.getNodeName().equals(INCLUDE_OBJECT)) {
                     element.removeAttribute(ID);
-                    out.println("Removing ID " + id + " from " + element.getAttribute(NAME) + " (include_object)");
+                    out.println("Removing ID " + id + " from " + element.getAttribute(NAME) +
+                            " (include_object)");
                 }                
                 else {
-                    Integer idn = new Integer(id); //Integer.getInteger(id);
+                    Integer idn = Integer.valueOf(id);
                     if (idn == null || usedIDs.contains(idn)) {
                         element.removeAttribute(ID);
-                        out.println("ID " + idn + " already in use. Removing id from " + element.getAttribute(NAME) + 
-                                " (" + element.getNodeName() + ")");   
+                        out.println("ID " + idn + " already in use. Removing id from " +
+                                element.getAttribute(NAME) + " (" + element.getNodeName() + ")");   
                     }
                     else {
                         usedIDs.add(idn);
@@ -959,7 +992,10 @@ public class Tools {
     */    
 
     /**
-     * Parses a XML fragment which can contain objects inside other objects
+     * Parses a XML fragment which can contain objects
+     * @param text other objects
+     * @param doc
+     * @return 
      */
     public static Element parseFragment(String text, Document doc) {
         LSParser parser = 
@@ -972,7 +1008,8 @@ public class Tools {
         return (Element) doc.adoptNode(child);
     }
     
-    public static boolean insertFragment(Element fragment, Element actual, Element link, boolean asSibling) {
+    public static boolean insertFragment(Element fragment, Element actual,
+            Element link, boolean asSibling) {
 
         // System.out.println("OTHER NODE: " + otherElement + ", ITS PARENT: " + otherElement.getParentNode());
         String trgName;
@@ -1268,8 +1305,10 @@ public class Tools {
      * @return
      * @throws pooledit.PoolException
      */
-    public static boolean createsLoop(Element fragment, Element actual, Element link, boolean asSibling) throws PoolException {        
-        LinkedList<Element> worklist = new LinkedList<Element>();
+    public static boolean createsLoop(Element fragment, Element actual,
+            Element link, boolean asSibling) throws PoolException {
+        
+        LinkedList<Element> worklist = new LinkedList<>();
         
         if (!fragment.getNodeName().equals(INCLUDE_OBJECT)) {
             throw new PoolException(fragment.getNodeName() + " is not include_object");
@@ -1357,12 +1396,12 @@ public class Tools {
     }
     
     public static void findAncestorElements(Element element, List<Element> ancestors) {
-        List<Element> worklist = new ArrayList<Element>();
+        List<Element> worklist = new ArrayList<>();
         worklist.add(element);
         findAncestorElements(worklist, ancestors);
     }
     public static void findAncestorElements(List<Element> elements, List<Element> ancestors) {
-        List<Element> worklist = new ArrayList<Element>();
+        List<Element> worklist = new ArrayList<>();
         for (Element e : elements) {
             findParentElements(e, worklist);
             ancestors.addAll(worklist);
@@ -1373,6 +1412,9 @@ public class Tools {
     /**
      * Copies the specified attributes from the source element to the target 
      * element.
+     * @param src
+     * @param trg
+     * @param attributes
      */
     static public void copyAttributes(Element src, Element trg, String ... attributes) {
          for (int i = 0; i < attributes.length; i++) { 
@@ -1387,6 +1429,10 @@ public class Tools {
      * source element. The source has to have every attribute the target has
      * except POS_X, POS_Y, BLOCK_COL, BLOCK_ROW, BLOCK_FONT and ROLE. The
      * values of the arguments must also match.
+     *
+     * @param trg
+     * @param src
+     * @return
      */
     static public boolean equalAttributes(Element trg, Element src) {
         NamedNodeMap attribs = trg.getAttributes();
@@ -1401,7 +1447,8 @@ public class Tools {
             String trgval = attr.getNodeValue();
             String srcval = src.getAttribute(name);            
             if (!trgval.equals(srcval)) {
-                System.err.println("attribute \"" + name + "\" has different value: " + trgval + " <-> " + srcval);
+                System.err.println("attribute \"" + name + "\" has different value: " +
+                        trgval + " <-> " + srcval);
                 return false;
             }
         }
@@ -1428,8 +1475,8 @@ public class Tools {
      */
     
     static private class Pair<A, B> {
-        private A parent;
-        private B child;
+        private final A parent;
+        private final B child;
         Pair(A parent, B child) {
             this.parent = parent;
             this.child = child;
@@ -1453,12 +1500,14 @@ public class Tools {
      * <inputnumber variable_reference="speed"/>
      * ...
      * <numbervariable name="speed">
+     *
+     * @param root
      */
     public static void removeRoles(Element root) {
         // while iterating through the document, all the insertions of new 
         // elements are stored in a work list (inserting new elements while
         // iterating through the old ones, might yield unpredictable results)
-        List<Pair<Element, Element>> worklist = new ArrayList<Pair<Element, Element>>();
+        List<Pair<Element, Element>> worklist = new ArrayList<>();
         
         // iterate over all include objects
         NodeList elements = root.getElementsByTagName(INCLUDE_OBJECT); 
@@ -1473,7 +1522,7 @@ public class Tools {
                 parent.setAttribute(role, roleName);
                 
                 // schedule the element for deletion
-                worklist.add(new Pair<Element, Element>(parent, element));
+                worklist.add(new Pair<>(parent, element));
             }
         }
         for (Pair<Element, Element> p : worklist) {
@@ -1519,16 +1568,17 @@ public class Tools {
      * XML1 -> XML2
      *
      * Substitutes all attributes that are actually object references with
-     * include objects. This makes the resulting document easier to work with
+     * include objects.This makes the resulting document easier to work with
      * as all references are include objects. Unlike attributes, the include
      * objects can also be replaced by actual objects.
+     * @param root
      */
     public static void createRoles(Element root) {
         
         // while iterating through the document, all the insertions of new 
         // elements are stored in a work list (inserting new elements while
         // iterating through the old ones, might yield unpredictable results)
-        List<Pair<Element, Element>> worklist = new ArrayList<Pair<Element, Element>>();
+        List<Pair<Element, Element>> worklist = new ArrayList<>();
         
         // iterate over all elements and build work list
         NodeList elements = root.getElementsByTagName("*");      
@@ -1567,7 +1617,7 @@ public class Tools {
                 Element includeObject = doc.createElement(INCLUDE_OBJECT);
                 includeObject.setAttribute(ROLE, role);
                 includeObject.setAttribute(NAME, roleName);
-                worklist.add(new Pair<Element, Element>(element, includeObject));
+                worklist.add(new Pair<>(element, includeObject));
             }
         }
     
@@ -1580,7 +1630,7 @@ public class Tools {
             Element includeObject = doc.createElement(INCLUDE_OBJECT);
             includeObject.setAttribute(ROLE, VALUE);
             includeObject.setAttribute(NAME, roleName);
-            worklist.add(new Pair<Element, Element>(element, includeObject));
+            worklist.add(new Pair<>(element, includeObject));
         }        
     }     
     
@@ -1648,6 +1698,8 @@ public class Tools {
 
     /**
      * Gets the next sibling element, or null if there are none.
+     * @param element
+     * @return 
      */
     public static Element getNextSiblingElement(Element element) {
         if (element == null) {
@@ -1662,6 +1714,8 @@ public class Tools {
     
     /**
      * Gets the previous sibling element, or null if there are none.
+     * @param element
+     * @return 
      */
     public static Element getPrevSiblingElement(Element element) {
         if (element == null) {
@@ -1675,14 +1729,16 @@ public class Tools {
     }
     
     /**
-     * Gets a list of child elements for the specified parent element.
-     * Node.getChildNodes() method returns all kinds of nodes. This method
-     * filters out only element nodes and returns them as a list.
+     * Gets a list of child elements for the specified parent
+     * element.Node.getChildNodes() method returns all kinds of nodes. 
+     * This method filters out only element nodes and returns them as a list.
+     * @param parent
+     * @return 
      */
     public static List<Element> getChildElementList(Element parent) {        
         NodeList children = parent.getChildNodes();
         int n = children.getLength();
-        List<Element> elements = new ArrayList<Element>(n); // this list cannot have more than n elements
+        List<Element> elements = new ArrayList<>(n); // this list cannot have more than n elements
         for (int i = 0; i < n; i++) {
             Node child = children.item(i);
             if (child.getNodeType() == Node.ELEMENT_NODE) {
@@ -1694,6 +1750,8 @@ public class Tools {
     
     /**
      * Removes the specified attributes.
+     * @param node
+     * @param names
      */
     public static void removeAttributes(Element node, String ... names) {
 	for (int i = 0, n = names.length; i < n; i++) {
@@ -1704,6 +1762,9 @@ public class Tools {
     /**
      * This method combines recursively element and it's linked or actual 
      * children in to a single composite object.
+     * @param element
+     * @param nameMap
+     * @return 
      */
     public static Element createMergedElementRecursive(Element element, Map<String, Element> nameMap) {
         Document doc = element.getOwnerDocument();
@@ -1767,7 +1828,11 @@ public class Tools {
      * Copies attributes from the source element to the target element.
      * If the source does not have the specified attribute, the specified
      * default value is used. The existing attributes in the target element
-     * are overriden.
+     * are overwritten.
+     * @param src
+     * @param trg
+     * @param names
+     * @param defaults
      */
     public static void copyAndCreateAttributes(Element src, Element trg, 
 				       String[] names, String[] defaults) {
@@ -1784,7 +1849,7 @@ public class Tools {
     
     /**
      * Creates the specified attributes with the specified default values.
-     * The existing attributes are never overriden.
+     * The existing attributes are never overwritten.
      */
     private static void createMissingAttributes(Element to, String[] names,
             String[] defaults) {
@@ -1804,6 +1869,11 @@ public class Tools {
      * FIXME: this works only if names are unambiguous. Elements should be
      * searched by their paths. That would require the search function to
      * understand the structure of the xml file. 
+     *
+     * @param text
+     * @param elementType
+     * @param elementName
+     * @return
      */
     public static int findElementFromString(String text, String elementType, String elementName) {
         int index = 0;

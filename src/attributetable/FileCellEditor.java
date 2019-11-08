@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007 Automation technology laboratory,
+ * Copyright (C) 2019 Automation technology laboratory,
  * Helsinki University of Technology
  *
  * Visit automation.tkk.fi for information about the automation
@@ -52,14 +52,13 @@ public class FileCellEditor extends DefaultCellEditor implements
     private String value; // super class has probably value as well, but it is not writable?
     
     /** 
-     * Creates a new instance of FileCellEditor 
+     * Private constructor, use getInstance() instead. 
      */
-    public FileCellEditor() {
+    private FileCellEditor() {
         super(new JTextField());
         //panel.setBackground(Color.WHITE);
         button.setMargin(new Insets(0, 0, 0, 0));
-        button.addActionListener(this);
-            
+        
         panel.setLayout(new BorderLayout());
         panel.add(super.getComponent(), BorderLayout.CENTER);
         panel.add(button, BorderLayout.EAST);
@@ -67,6 +66,16 @@ public class FileCellEditor extends DefaultCellEditor implements
         filechooser.setCurrentDirectory(new File(PATH));
     }
 
+    /**
+     * Creates a FileCellEditor.
+     * @return
+     */
+    static public FileCellEditor getInstance() {
+        FileCellEditor ce = new FileCellEditor();
+        ce.button.addActionListener(ce);
+        return ce;
+    }
+    
     /**
      * Shows the open file dialog when the button is pressed.
      * @param e

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007 Automation technology laboratory,
+ * Copyright (C) 2019 Automation technology laboratory,
  * Helsinki University of Technology
  *
  * Visit automation.tkk.fi for information about the automation
@@ -174,8 +174,7 @@ public class SingleDOM {
         Tools.saveDocument(getName(), doc);
     }
         
-    private final Vector<ChangeListener> pathChangeListeners = 
-            new Vector<ChangeListener>();
+    private final Vector<ChangeListener> pathChangeListeners = new Vector<>();
     
     /**
      * Adds a listener.
@@ -206,8 +205,7 @@ public class SingleDOM {
         }
     }
     
-    private final Vector<ChangeListener> nameChangeListeners =
-            new Vector<ChangeListener>();
+    private final Vector<ChangeListener> nameChangeListeners = new Vector<>();
     
     /**
      * Adds a listener.

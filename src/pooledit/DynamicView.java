@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007 Automation technology laboratory,
+ * Copyright (C) 2019 Automation technology laboratory,
  * Helsinki University of Technology
  *
  * Visit automation.tkk.fi for information about the automation
@@ -31,7 +31,7 @@ import net.infonode.docking.View;
  * @author mohman
  */
 public class DynamicView extends View {
-    private int id;
+    private final int id;
 
     /**
     * Constructor.

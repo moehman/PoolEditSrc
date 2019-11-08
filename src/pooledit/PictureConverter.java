@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007 Automation technology laboratory,
+ * Copyright (C) 2019 Automation technology laboratory,
  * Helsinki University of Technology
  *
  * Visit automation.tkk.fi for information about the automation
@@ -41,6 +41,8 @@ public class PictureConverter {
     /**
      * Converts the specified image to base64 encoded string, which is the
      * embedded XML image format.
+     * @param image
+     * @return 
      */
     public static String convertToString(BufferedImage image) {
         int width = image.getWidth();
@@ -117,8 +119,10 @@ public class PictureConverter {
     */
     
     /**
-     * Returns the character that is equalent to given index. 
-     * e.g. index=0 -> returns A
+     * Returns the character that is equivalent to given index.e.g.
+     * index=0 -> returns A
+     * @param index
+     * @return 
      */
     public static char indexToBase64(int index) {
         if (index >= 0 && index < 26) {
@@ -172,8 +176,13 @@ public class PictureConverter {
         return base64;
     }
     
-    /************************* Convert back **************************/
-    
+    //////////////////// Convert back ////////////////////
+
+    /**
+     *
+     * @param base64
+     * @return
+     */
     public static int base64toIndex(char base64) {
         if (base64 >= 'A' && base64 <= 'Z') {
             return base64 - 'A';
