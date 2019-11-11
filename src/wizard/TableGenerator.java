@@ -88,9 +88,9 @@ public class TableGenerator {
         } 
         
         //create a box under the heading row        
-        if(wiz.hasHeadingRow()) {
+        if (wiz.hasHeadingRow()) {
             Element rectangle = createRectangle(container, "rowrectangle", width, 
-                    wiz.getHeadingRowHeight()+1, wiz.getLineAttribute(), 
+                    wiz.getHeadingRowHeight() + 1, wiz.getLineAttribute(), 
                     wiz.getFillAttributeHeading(), true);
             setIncludeAttributes(rectangle, 0, 0);
         } 

@@ -69,6 +69,7 @@ public class MouseController implements MouseListener, MouseMotionListener, Mous
     /**
      * Creates a new instance of MouseController
      * @param view
+     * @param objectViewPopup
      */
     public MouseController(ObjectView view, ObjectViewPopup objectViewPopup) {
         this.view = view;

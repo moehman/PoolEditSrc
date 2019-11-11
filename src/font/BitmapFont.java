@@ -220,10 +220,10 @@ public class BitmapFont {
     static public void changeFontColor(String font, Color fontColor) throws IOException {       
         int fontIndex = nameToIndex(font);
         BufferedImage img = getBitmap(fontIndex);
-        for(int y = 0; y < img.getHeight(); y++)
-            for(int x = 0; x < img.getWidth(); x++) {
+        for (int y = 0; y < img.getHeight(); y++)
+            for (int x = 0; x < img.getWidth(); x++) {
                 int alpha = img.getRGB(x, y) >>> 24;
-                if(alpha == 0xFF) { 
+                if (alpha == 0xFF) { 
                     int color = fontColor.getRGB();
                     img.setRGB(x,y, color);
                 }

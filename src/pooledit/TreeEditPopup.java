@@ -522,7 +522,7 @@ public abstract class TreeEditPopup {
         Element fatherElement = ((XMLTreeNode) path.getPathComponent(path.getPathCount()-2)).actual();
         // go trough all childs and find the child
         NodeList childElements = fatherElement.getChildNodes();
-        for(int i = childElements.getLength() - 1; i >= 0; i--) {    // last first
+        for (int i = childElements.getLength() - 1; i >= 0; i--) {    // last first
         Node child = childElements.item(i);
         // assumes linearized document and unique link names 
         // which is not true!
@@ -545,9 +545,9 @@ public abstract class TreeEditPopup {
         Element fatherElement = ((XMLTreeNode) path.getPathComponent(path.getPathCount()-2)).actual();
         NodeList childElements = fatherElement.getChildNodes();
         //go trough all childs and find the child
-        for(int i = 0; i < childElements.getLength(); i++) {    // first first
+        for (int i = 0; i < childElements.getLength(); i++) {    // first first
         Node child = childElements.item(i);
-        if(child.getNodeName().equals("include_object") && ((Element)child).getAttribute("name").equals(node.getName())) {
+        if (child.getNodeName().equals("include_object") && ((Element)child).getAttribute("name").equals(node.getName())) {
         fatherElement.insertBefore(child, childElements.item(0));  //insert first
         }
         }                   
@@ -1062,15 +1062,15 @@ public abstract class TreeEditPopup {
                 throw new RuntimeException("no such transform (" + xform + ")");
         }
     /*
-    if(transformation == 0)
+    if (transformation == 0)
     return 2*midX - x;
-    if(transformation == 1)
+    if (transformation == 1)
     return x;
-    if(transformation == 2)
+    if (transformation == 2)
     return midX - (y-midY);
-    if(transformation == 3)
+    if (transformation == 3)
     return midX + (y-midY);
-    if(transformation == 4)
+    if (transformation == 4)
     return 2*midX - x;
     else
     return 0;
@@ -1093,15 +1093,15 @@ public abstract class TreeEditPopup {
                 throw new RuntimeException("no such transform (" + xform + ")");
         }
     /*
-    if(transformation == 0)
+    if (transformation == 0)
     return y;     
-    if(transformation == 1)
+    if (transformation == 1)
     return 2*midY - y;
-    if(transformation == 2)
+    if (transformation == 2)
     return midY + (x-midX);
-    if(transformation == 3)
+    if (transformation == 3)
     return midY - (x-midX);
-    if(transformation == 4)
+    if (transformation == 4)
     return 2*midY - y;
     else
     return 0;

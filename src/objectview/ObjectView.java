@@ -27,7 +27,6 @@ import org.w3c.dom.Element;
 import java.io.PrintStream;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.Vector;
 import javax.swing.SwingUtilities;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
@@ -46,6 +45,7 @@ import javax.swing.tree.TreePath;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 import javax.swing.JComponent;
@@ -76,7 +76,7 @@ public class ObjectView extends JComponent implements TreeModelListener,
     
     static private final int IMAGE_FULL = 16;
     static private final int IMAGE_HALF = IMAGE_FULL / 2;
-    static private Paint BACKGROUND = createPaint();
+    static private final Paint BACKGROUND = createPaint();
     static private Paint createPaint() {
         BufferedImage image = new BufferedImage(IMAGE_FULL, IMAGE_FULL, 
 						BufferedImage.TYPE_INT_RGB);
@@ -1316,7 +1316,7 @@ public class ObjectView extends JComponent implements TreeModelListener,
         else if (node.isType(PICTUREGRAPHIC)) {
             try {
                 BufferedImage image = node.getImageFile(); // for size calculation only
-                if(image != null) {
+                if (image != null) {
                     int w = node.getWidth();
                     int h = w * image.getHeight() / image.getWidth();
                     lim.set(w, h);
@@ -1338,24 +1338,29 @@ public class ObjectView extends JComponent implements TreeModelListener,
 
     //------------------------------------------------------------//
     
-    private final Vector<TreeSelectionListener> listeners = new Vector<>();
+    private final ArrayList<TreeSelectionListener> listeners = new ArrayList<>();
     
     /**
      * Adds a listener.
      * @param l
      */
     public void addTreeSelectionListener(TreeSelectionListener l) {
-        if (!listeners.contains(l)) {
-            listeners.add(l);
+        synchronized (listeners) {
+            if (!listeners.contains(l)) {
+                listeners.add(l);
+            }
         }
     }
 
     /**
      * Removes a listener.
      * @param l
+     * @return 
      */
-    public void removeTreeSelectionListener(TreeSelectionListener l) {
-        listeners.remove(l);
+    public boolean removeTreeSelectionListener(TreeSelectionListener l) {
+        synchronized (listeners) {
+            return listeners.remove(l);
+        }
     }
     
     /**
@@ -1368,9 +1373,10 @@ public class ObjectView extends JComponent implements TreeModelListener,
                           Utils.equalObjects(newPath, path),
                           path,
                           newPath);
-
-        for (TreeSelectionListener l : listeners) {
-            l.valueChanged(e);
+        synchronized (listeners) {
+            for (TreeSelectionListener l : listeners) {
+                l.valueChanged(e);
+            }
         }
     }
     //------------------------------------------------------------//
@@ -1436,7 +1442,7 @@ public class ObjectView extends JComponent implements TreeModelListener,
 
     //------------------------------------------------------------//
 
-    private Dimension preferredScrollableViewportSize =
+    private final Dimension preferredScrollableViewportSize =
 	new Dimension(320, 320);
 
     public void setPreferredScrollableViewportSize(Dimension d) {
@@ -1503,7 +1509,7 @@ public class ObjectView extends JComponent implements TreeModelListener,
 
     @Override
     public void keyPressed(KeyEvent e) {
-        if(e.getKeyCode() == KeyEvent.VK_DELETE) {
+        if (e.getKeyCode() == KeyEvent.VK_DELETE) {
             System.out.println("DELETE: ");
             if (path != null && path.getPathCount() > 1) {
                 

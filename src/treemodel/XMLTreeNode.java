@@ -43,6 +43,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.util.StringTokenizer;
 import org.w3c.dom.Element;
+import pooledit.FileTools;
 import pooledit.PictureConverter;
 
 /**
@@ -373,9 +374,9 @@ public class XMLTreeNode {
      * @param lineDirection
      */
     public void setLineDirection(boolean lineDirection) {
-        if( lineDirection && !getLineDirection())
+        if (lineDirection && !getLineDirection())
             actual.setAttribute(LINE_DIRECTION, "bottomlefttotopright");
-        if( !lineDirection && getLineDirection())
+        if (!lineDirection && getLineDirection())
             actual.setAttribute(LINE_DIRECTION, "toplefttobottomright");       
     }
     
@@ -450,43 +451,43 @@ public class XMLTreeNode {
         if (type != null) {
             return type;
         }
-        String base = getName();
-        String type = getType();
+        String bs = getName();
+        String tp = getType();
         
-        if (type == null) {
+        if (tp == null) {
             // do nothing
         }
-        else if (type.equals(OBJECTPOOL)) {
-            base = type;
+        else if (tp.equals(OBJECTPOOL)) {
+            bs = tp;
         }
-        else if (type.equals(LANGUAGE)) {
-            base = type + ": " + getCode();
+        else if (tp.equals(LANGUAGE)) {
+            bs = tp + ": " + getCode();
         }
-        else if (type.equals(POINT)) {
-            base = type;
+        else if (tp.equals(POINT)) {
+            bs = tp;
         }
-        else if (type.equals(FIXEDBITMAP)) {
-            base = type;
+        else if (tp.equals(FIXEDBITMAP)) {
+            bs = tp;
         }
-        else if (type.equals(OUTPUTSTRING) ||
-                type.equals(INPUTSTRING) ||
-                type.equals(STRINGVARIABLE)) {
+        else if (tp.equals(OUTPUTSTRING) ||
+                tp.equals(INPUTSTRING) ||
+                tp.equals(STRINGVARIABLE)) {
             
-            base += ": \"" + getValue() + "\"";
+            bs += ": \"" + getValue() + "\"";
         } 
-        else if (type.equals(NUMBERVARIABLE)) {
-            base += ": " + getValue();
+        else if (tp.equals(NUMBERVARIABLE)) {
+            bs += ": " + getValue();
         }
-        else if (type.startsWith(COMMAND)) {
-            base = type.substring(type.indexOf('_') + 1, type.length());
+        else if (tp.startsWith(COMMAND)) {
+            bs = tp.substring(tp.indexOf('_') + 1, tp.length());
         }
         Integer x = getX();
         Integer y = getY();
         if (x == null || y == null) {
-            return base;
+            return bs;
         } 
         else {
-            return "(" + x + ", " + y + ") " + base;
+            return "(" + x + ", " + y + ") " + bs;
         }
     }
     /**
@@ -671,7 +672,8 @@ public class XMLTreeNode {
         }
         try {
             //all \ are converted to / on a unix system and vice versa
-            f = new File((imagepath + s).replace('\\', File.separatorChar).replace('/', File.separatorChar));
+            String fullname = FileTools.joinPaths(imagepath, s);
+            f = new File(fullname);
             return ImageIO.read(f);
         }
         catch (IOException ex) {
@@ -694,13 +696,19 @@ public class XMLTreeNode {
      */
     public Integer getEllipseType() {
         String e = actual.getAttribute(ELLIPSE_TYPE);
-        
         // the cast (integer) is needed, otherwise auto-boxing does not work
-        return e.equals("open") ? (Integer) Arc2D.OPEN :
-            e.equals("closed") ? null :
-            e.equals("closedsegment") ? Arc2D.PIE :
-            e.equals("closedsection") ? Arc2D.CHORD : 
-                /* default */ null;
+        switch (e) {
+            case "open":
+                return Arc2D.OPEN;
+            case "closed":
+                return null;
+            case "closedsegment":
+                return Arc2D.PIE;
+            case "closedsection":
+                return Arc2D.CHORD;
+            default:
+                return null; /* default */
+        }
     }
     
     public boolean isHidden() {
@@ -763,12 +771,12 @@ public class XMLTreeNode {
     public void changeOptionsHorizontal(boolean horizontal) {
         String options = actual.getAttribute(OPTIONS);
         
-        if(horizontal && !options.contains("horizontal")) {
+        if (horizontal && !options.contains("horizontal")) {
             options = options + "+horizontal";
             actual.setAttribute(OPTIONS, options);
         }
         
-        if(!horizontal && options.contains("horizontal")) {
+        if (!horizontal && options.contains("horizontal")) {
             options = options.replace("+horizontal", "");
             options = options.replace("horizontal", "");
             actual.setAttribute(OPTIONS, options);
@@ -782,12 +790,12 @@ public class XMLTreeNode {
     public void changeOptionsGrowPositive(boolean growPositive) {
         String options = actual.getAttribute(OPTIONS);
         
-        if(growPositive && !options.contains("growpositive")) {
+        if (growPositive && !options.contains("growpositive")) {
             options = options + "+growpositive";
             actual.setAttribute(OPTIONS, options);
         }
         
-        if(!growPositive && options.contains("growpositive")) {
+        if (!growPositive && options.contains("growpositive")) {
             options = options.replace("+growpositive", "");
             options = options.replace("growpositive", "");
             actual.setAttribute(OPTIONS, options);
@@ -1313,7 +1321,7 @@ public class XMLTreeNode {
         else if (isType(PICTUREGRAPHIC)) {
             try {
                 BufferedImage image = getImageFile(); // for size calculation only
-                if(image != null) {
+                if (image != null) {
                     int w = getWidth();
                     int h = w * image.getHeight() / image.getWidth();
                     dim.setSize(w, h);

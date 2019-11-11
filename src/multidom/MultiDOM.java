@@ -24,7 +24,6 @@ package multidom;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.tree.TreePath;
@@ -203,24 +202,29 @@ public class MultiDOM {
         }
     }
     
-    private final Vector<ChangeListener> docChangeListeners = new Vector<>();
+    private final ArrayList<ChangeListener> docChangeListeners = new ArrayList<>();
     
     /**
      * Adds a listener.
      * @param l
      */
     public void addDocumentChangeListener(ChangeListener l) {
-        if (!docChangeListeners.contains(l)) {
-            docChangeListeners.add(l);
+        synchronized (docChangeListeners) {
+            if (!docChangeListeners.contains(l)) {
+                docChangeListeners.add(l);
+            }
         }
     }
     
     /**
      * Removes a listener.
      * @param l
+     * @return 
      */
-    public void removeDocumentChangeListener(ChangeListener l) {
-        docChangeListeners.remove(l);
+    public boolean removeDocumentChangeListener(ChangeListener l) {
+        synchronized (docChangeListeners) {
+            return docChangeListeners.remove(l);
+        }
     }
     
     /**
@@ -228,29 +232,36 @@ public class MultiDOM {
      */
     private void fireDocChangeListeners() {
         ChangeEvent e = new ChangeEvent(this);
-        for (ChangeListener l : docChangeListeners) {
-            l.stateChanged(e);
+        synchronized (docChangeListeners) {
+            for (ChangeListener l : docChangeListeners) {
+                l.stateChanged(e);
+            }
         }
     }
     
-    private final Vector<ChangeListener> pathChangeListeners = new Vector<>();
+    private final ArrayList<ChangeListener> pathChangeListeners = new ArrayList<>();
     
     /**
      * Adds a listener.
      * @param l
      */
     public void addPathChangeListener(ChangeListener l) {
-        if (!pathChangeListeners.contains(l)) {
-            pathChangeListeners.add(l);
+        synchronized (pathChangeListeners) {
+            if (!pathChangeListeners.contains(l)) {
+                pathChangeListeners.add(l);
+            }
         }
     }
     
     /**
      * Removes a listener.
      * @param l
+     * @return 
      */
-    public void removePathChangeListener(ChangeListener l) {
-        pathChangeListeners.remove(l);
+    public boolean removePathChangeListener(ChangeListener l) {
+        synchronized (pathChangeListeners) {
+            return pathChangeListeners.remove(l);
+        }
     }
     
     /**
@@ -258,8 +269,10 @@ public class MultiDOM {
      */
     public void firePathChange() {
         ChangeEvent e = new ChangeEvent(this);
-        for (ChangeListener l : pathChangeListeners) {
-            l.stateChanged(e);
+        synchronized (pathChangeListeners) {
+            for (ChangeListener l : pathChangeListeners) {
+                l.stateChanged(e);
+            }
         }
     }
 }

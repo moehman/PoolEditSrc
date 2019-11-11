@@ -340,7 +340,7 @@ public class GraphicObjectOperations implements ObjectOperations {
                 (fas.isFontStyleFlashingInverted() && flash)) {
             Color tmp = font.getColor();
             font.setColor(backgroundColor);
-            backgroundColor = tmp;
+//          backgroundColor = tmp;
         }        
         
         // fill background
@@ -447,7 +447,7 @@ public class GraphicObjectOperations implements ObjectOperations {
                 (fas.isFontStyleFlashingInverted() && flash)) {
             Color tmp = font.getColor();
             font.setColor(backgroundColor);
-            backgroundColor = tmp;
+//          backgroundColor = tmp;
         }    
         
         // fill background

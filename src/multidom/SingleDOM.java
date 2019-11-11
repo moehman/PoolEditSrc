@@ -23,7 +23,7 @@
 package multidom;
 
 import java.io.File;
-import java.util.Vector;
+import java.util.ArrayList;
 import javax.swing.JFileChooser;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -174,15 +174,17 @@ public class SingleDOM {
         Tools.saveDocument(getName(), doc);
     }
         
-    private final Vector<ChangeListener> pathChangeListeners = new Vector<>();
+    private final ArrayList<ChangeListener> pathChangeListeners = new ArrayList<>();
     
     /**
      * Adds a listener.
      * @param l
      */
     public void addPathChangeListener(ChangeListener l) {
-        if (!pathChangeListeners.contains(l)) {
-            pathChangeListeners.add(l);
+        synchronized (pathChangeListeners) {
+            if (!pathChangeListeners.contains(l)) {
+                pathChangeListeners.add(l);
+            }
         }
     }
     
@@ -192,7 +194,9 @@ public class SingleDOM {
      * @return
      */
     public boolean removePathChangeListener(ChangeListener l) {
-        return pathChangeListeners.remove(l);
+        synchronized (pathChangeListeners) {
+            return pathChangeListeners.remove(l);
+        }
     }
     
     /**
@@ -200,20 +204,24 @@ public class SingleDOM {
      */
     private void firePathChange() {
         ChangeEvent e = new ChangeEvent(this);
-        for (ChangeListener l : pathChangeListeners) {
-            l.stateChanged(e);
+        synchronized (pathChangeListeners) {
+            for (ChangeListener l : pathChangeListeners) {
+                l.stateChanged(e);
+            }
         }
     }
     
-    private final Vector<ChangeListener> nameChangeListeners = new Vector<>();
+    private final ArrayList<ChangeListener> nameChangeListeners = new ArrayList<>();
     
     /**
      * Adds a listener.
      * @param l
      */
     public void addNameChangeListener(ChangeListener l) {
-        if (!nameChangeListeners.contains(l)) {
-            nameChangeListeners.add(l);
+        synchronized (nameChangeListeners) {
+            if (!nameChangeListeners.contains(l)) {
+                nameChangeListeners.add(l);
+            }
         }
     }
     
@@ -223,7 +231,9 @@ public class SingleDOM {
      * @return
      */
     public boolean removeNameChangeListener(ChangeListener l) {
-        return nameChangeListeners.remove(l);
+        synchronized (nameChangeListeners) {
+            return nameChangeListeners.remove(l);
+        }
     }
     
     /**
@@ -231,8 +241,10 @@ public class SingleDOM {
      */
     private void fireNameChange() {
         ChangeEvent e = new ChangeEvent(this);
-        for (ChangeListener l : nameChangeListeners) {
-            l.stateChanged(e);
+        synchronized (nameChangeListeners) {
+            for (ChangeListener l : nameChangeListeners) {
+                l.stateChanged(e);
+            }
         }
     }
 }

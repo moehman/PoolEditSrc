@@ -27,7 +27,6 @@ import java.util.Arrays;
 import java.util.BitSet;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 import javax.swing.SwingUtilities;
 import org.w3c.dom.events.Event;
 import org.w3c.dom.events.EventListener;
@@ -65,7 +64,7 @@ public class XMLTreeModel implements TreeModel, EventListener {
      * Default constructor.
      */
     public XMLTreeModel() {
-        this.childMap = new HashMap<>();
+        childMap = new HashMap<>();
     }
     
     /**
@@ -76,8 +75,8 @@ public class XMLTreeModel implements TreeModel, EventListener {
     public XMLTreeModel(Document doc, Map<String, Element> nameMap) {
         this.doc = doc;
         this.nameMap = nameMap;
-        this.childMap = new HashMap<>();
-        this.root = createRootAndCategoryNodes();
+        childMap = new HashMap<>();
+        root = createRootAndCategoryNodes();
     }
     
     /**
@@ -99,10 +98,10 @@ public class XMLTreeModel implements TreeModel, EventListener {
         ((EventTarget) doc).addEventListener("DOMAttrModified", this, false);
         
         this.doc = doc;
-        this.childMap.clear();
-        this.nameMap = Tools.createNameMap(doc);
+        childMap.clear();
+        nameMap = Tools.createNameMap(doc);
         
-        this.root = createRootAndCategoryNodes();
+        root = createRootAndCategoryNodes();
         fireTreeStructureChanged(new TreePath(root));
     }
     
@@ -237,7 +236,7 @@ public class XMLTreeModel implements TreeModel, EventListener {
     
     //------------------------------------------------------------//
     
-    private Vector<TreeModelListener> listeners = new Vector<>();
+    private final ArrayList<TreeModelListener> listeners = new ArrayList<>();
     
     /**
      * Adds a listener for the TreeModelEvent posted after the tree
@@ -246,20 +245,26 @@ public class XMLTreeModel implements TreeModel, EventListener {
      */
     @Override
     public void addTreeModelListener(TreeModelListener l) {
-        if (!listeners.contains(l)) {
-            //System.out.println("ADDING TREE MODEL LISTENER: " + l);
-            listeners.add(l);
+        synchronized (listeners) {
+            if (!listeners.contains(l)) {
+                //System.out.println("ADDING TREE MODEL LISTENER: " + l);
+                listeners.add(l);
+            }
         }
     }
     
     /**
      * Removes a listener previously added with addTreeModelListener.
+     * NOTE: this method cannot return a Boolean value because this is an
+     * override and the corresponding method in the super class doesn't.
      * @param l
      */
     @Override
     public void removeTreeModelListener(TreeModelListener l) {
-        // System.out.println("REMOVING TREE MODEL LISTENER: " + l);
-        listeners.remove(l);
+        synchronized (listeners) {
+            // System.out.println("REMOVING TREE MODEL LISTENER: " + l);
+            listeners.remove(l);
+        }
     }
     
     //------------------------------------------------------------//
@@ -278,8 +283,10 @@ public class XMLTreeModel implements TreeModel, EventListener {
         TreeModelEvent e = new TreeModelEvent(this, path, childIndices,
                 children);
         //System.out.println(" ---------- changed ---------- " + e);
-        for (TreeModelListener l : listeners) {
-            l.treeNodesChanged(e);
+        synchronized (listeners) {
+            for (TreeModelListener l : listeners) {
+                l.treeNodesChanged(e);
+            }
         }
     }
     
@@ -296,8 +303,10 @@ public class XMLTreeModel implements TreeModel, EventListener {
         TreeModelEvent e = new TreeModelEvent(this, path, childIndices,
                 children);
         //System.out.println(" ---------- inserted ---------- " + e);
-        for (TreeModelListener l : listeners) {
-            l.treeNodesInserted(e);
+        synchronized (listeners) {
+            for (TreeModelListener l : listeners) {
+                l.treeNodesInserted(e);
+            }
         }
     }
     
@@ -315,9 +324,9 @@ public class XMLTreeModel implements TreeModel, EventListener {
                 children);
         //System.out.println(" ---------- removed ---------- " + e);
         
-        // the listeners vector might change as a result of calling 
+        // the listeners list might change as a result of calling 
         // treeNodesRemoved
-        Vector<TreeModelListener> temp = new Vector<>(listeners);
+        ArrayList<TreeModelListener> temp = new ArrayList<>(listeners);
         for (TreeModelListener l : temp) {
             l.treeNodesRemoved(e);
         }
@@ -331,8 +340,10 @@ public class XMLTreeModel implements TreeModel, EventListener {
     private void fireTreeStructureChanged(TreePath path) {
         TreeModelEvent e = new TreeModelEvent(this, path);
         //System.out.println(" ---------- structure ---------- " + e);
-        for (TreeModelListener l : listeners) {
-            l.treeStructureChanged(e);
+        synchronized (listeners) {
+            for (TreeModelListener l : listeners) {
+                l.treeStructureChanged(e);
+            }
         }
     }
     

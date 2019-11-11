@@ -27,7 +27,7 @@ import java.awt.Point;
 import java.awt.Shape;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.Vector;
+import java.util.ArrayList;
 import javax.swing.tree.TreePath;
 import treemodel.XMLTreeNode;
 
@@ -38,7 +38,7 @@ import treemodel.XMLTreeNode;
 public class PointObjectOperations implements ObjectOperations {
     
     private final Point point = new Point();
-    private final Vector<XMLTreeNode> currentPath = new Vector<>();
+    private final ArrayList<XMLTreeNode> currentPath = new ArrayList<>();
     private TreePath pointedPath;
     private int depth = 0;
     
@@ -87,7 +87,7 @@ public class PointObjectOperations implements ObjectOperations {
     }
     
     /**
-     * Icrements the depth by one.
+     * Increments the depth by one.
      */
     @Override
     public void incDepth() {

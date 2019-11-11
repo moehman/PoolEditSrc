@@ -30,9 +30,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JFrame;
 import javax.swing.ListCellRenderer;
 import javax.swing.SpinnerNumberModel;
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import treemodel.XMLTreeNode;
 
 /**
  *
@@ -42,10 +40,10 @@ public class MeterWizard extends javax.swing.JPanel {
     //this is called when model has to be updated
     private MeterGenerator meterGenerator;
     
-    private String[] colors = ColorPalette.getAllColorNames();
-    private DefaultComboBoxModel<String> colorModel1 = new DefaultComboBoxModel<>(colors);
-    private DefaultComboBoxModel<String> colorModel2 = new DefaultComboBoxModel<>(colors);
-    private ListCellRenderer colorRenderer = AttributeTable.createColorListRenderer();
+    private final String[] colors = ColorPalette.getAllColorNames();
+    private final DefaultComboBoxModel<String> colorModel1 = new DefaultComboBoxModel<>(colors);
+    private final DefaultComboBoxModel<String> colorModel2 = new DefaultComboBoxModel<>(colors);
+    private final ListCellRenderer colorRenderer = AttributeTable.createColorListRenderer();
     private DefaultComboBoxModel<String> fillModel;
     private DefaultComboBoxModel<String> fontModel;
     private DefaultComboBoxModel<String> lineModel;
@@ -517,7 +515,6 @@ public class MeterWizard extends javax.swing.JPanel {
         try {
             value = Double.valueOf(text);
         } catch (NumberFormatException ex) {
-            value = 1.0f;
         }
         jTextField1.setText(Double.toString(value));
     }//GEN-LAST:event_jTextField1FocusLost
@@ -530,7 +527,8 @@ public class MeterWizard extends javax.swing.JPanel {
         // OK
         if (meterGenerator != null) {
             meterGenerator.update();
-            ((JFrame) this.getParent().getParent().getParent().getParent()).setVisible(false);    //FIXME is this best way to close the window?
+            //FIXME is this best way to close the window?
+            ((JFrame) this.getParent().getParent().getParent().getParent()).setVisible(false);
         }
     }//GEN-LAST:event_jButton4ActionPerformed
     

@@ -50,6 +50,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.ButtonGroup;
 import javax.swing.Icon;
 import javax.swing.JButton;
@@ -105,6 +108,7 @@ import objecttree.ObjectTree;
 import objectview.ObjectView;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import poolimporter.PoolImportDialog;
 import treemodel.XMLTreeModel;
 import treemodel.XMLTreeNode;
 import wizard.LineTrendGenerator;
@@ -175,6 +179,8 @@ public class Main {
             return getDynamicView(in.readInt());
         }
     });
+    /** Import dialog */
+    private JFrame importFrame;
     
     /** The one and only root window */
     private final RootWindow rootWindow = DockingUtil.createRootWindow(viewMap, handler, true);
@@ -206,7 +212,7 @@ public class Main {
     private static final String LIBRARY = "library.xml";
     private static final String TEMPLATE = "template.xml";
     
-    /** 
+    /**
      * Constructor 
      */
     public Main() {
@@ -219,7 +225,7 @@ public class Main {
         System.setOut(msgOutput);
         System.setErr(msgOutput);
     }    
-    
+        
     /**
      * Creates a view component containing the specified text.
      * @param text the text
@@ -744,6 +750,7 @@ public class Main {
                     MeterGenerator generator = new MeterGenerator(wizard, node, name);
                     wizardFrame.getContentPane().add(wizard);
                     wizardFrame.pack();
+                    wizardFrame.setLocationRelativeTo(frame);
                     wizardFrame.setVisible(true);
                 }
             }
@@ -762,6 +769,7 @@ public class Main {
                     TableGenerator generator = new TableGenerator(wizard, node, name);
                     wizardFrame.getContentPane().add(wizard);
                     wizardFrame.pack();
+                    wizardFrame.setLocationRelativeTo(frame);
                     wizardFrame.setVisible(true);
                 }
             }
@@ -780,6 +788,7 @@ public class Main {
                     TrendGenerator generator = new TrendGenerator(wizard, node, name);
                     wizardFrame.getContentPane().add(wizard);
                     wizardFrame.pack();
+                    wizardFrame.setLocationRelativeTo(frame);
                     wizardFrame.setVisible(true);
                 }
             }
@@ -798,6 +807,7 @@ public class Main {
                     LineTrendGenerator generator = new LineTrendGenerator(wizard, node, name);
                     wizardFrame.getContentPane().add(wizard);
                     wizardFrame.pack();
+                    wizardFrame.setLocationRelativeTo(frame);
                     wizardFrame.setVisible(true);
                 }
             }
@@ -842,7 +852,7 @@ public class Main {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    JFileChooser fc = new JFileChooser();
+                    JFileChooser fc = FileTools.getNewFileChooser();
                     fc.setSelectedFile(new File(TEMPLATE));
                     SingleDOM singleDom = multidom.loadDocument(fc.getSelectedFile().toURI().getPath());
                     singleDom.setJFileChooser(fc);
@@ -856,17 +866,23 @@ public class Main {
             }
         });
         
-        layoutMenu.add("Open...").addActionListener(new ActionListener() {
-            @Override
+        Action openAction = new AbstractAction("Open...") {
             public void actionPerformed(ActionEvent e) {
+                // Creating a new file chooser (not using the current active)
+                JFileChooser fc = FileTools.getNewFileChooser();
+                fc.setFileFilter(new FileNameExtensionFilter("XML-file", "xml"));
                 
-                // Creating a new JFileChooser (not using the current active)
-                JFileChooser fc = new JFileChooser();
-                fc.setFileFilter(new FileNameExtensionFilter("XML-file", "xml") );
-                
-                int rv = fc.showOpenDialog(frame);
-                if (rv != JFileChooser.APPROVE_OPTION) {
-                    return;
+                String cmd = e.getActionCommand();
+                if (cmd.startsWith("PATH:")) {
+                    /* special case: we already know the file */
+                    fc.setSelectedFile(new File(cmd.substring(5)));
+                }
+                else {
+                    /* normal case: ask for the file */
+                    int rv = fc.showOpenDialog(frame);
+                    if (rv != JFileChooser.APPROVE_OPTION) {
+                        return;
+                    }
                 }
                 File file = fc.getSelectedFile();
                 if (!file.exists()) {
@@ -892,7 +908,29 @@ public class Main {
                     ex.printStackTrace();
                 }
             }
+        };
+        /*
+        layoutMenu.add("Open...").addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            }
         });
+        */
+        layoutMenu.add(openAction);
+        
+        layoutMenu.add("Import...").addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                /* lazy initialization */
+                if (importFrame == null) {
+                    importFrame = new JFrame("Import dialog");
+                    importFrame.getContentPane().add(new PoolImportDialog(openAction));
+                }
+                importFrame.pack();
+                importFrame.setLocationRelativeTo(frame);
+                importFrame.setVisible(true);
+            }
+        }); 
         
         layoutMenu.addSeparator();
         
@@ -985,7 +1023,7 @@ public class Main {
             }
         });
         
-        layoutMenu.add("Export to ISOAgLib XML").addActionListener(new ActionListener() {
+        layoutMenu.add("Export to ISOAgLib XML...").addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                
@@ -998,7 +1036,7 @@ public class Main {
                 }
                 
                 String testName = doc.getName().replace(".xml", "_export.xml");
-                JFileChooser fc = new JFileChooser();
+                JFileChooser fc = FileTools.getNewFileChooser();
                 fc.setSelectedFile(new File(testName));
                 
                 // show dialog
@@ -1028,7 +1066,7 @@ public class Main {
             }
         });
         
-        layoutMenu.add("Export to Embedded XML").addActionListener(new ActionListener() {
+        layoutMenu.add("Export to Embedded XML...").addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 
@@ -1041,7 +1079,7 @@ public class Main {
                 }
                 
                 String testName = doc.getName().replace(".xml", "_export.xml");
-                JFileChooser fc = new JFileChooser( );
+                JFileChooser fc = FileTools.getNewFileChooser();
                 fc.setSelectedFile(new File(testName));
                 
                 // show dialog
@@ -1353,6 +1391,9 @@ public class Main {
      * @throws java.lang.Exception
      */
     public static void main(String[] args) throws Exception {
+        // Avoid locate related grief?
+        Locale.setDefault(Locale.ROOT);
+    
         // Set InfoNode Look and Feel
         UIManager.setLookAndFeel(new InfoNodeLookAndFeel());
         
@@ -1379,7 +1420,7 @@ public class Main {
                     "PoolEdit",
                     "Version 1.5",
                     " ",
-                    "Copyright (C) 2015 Automation technology laboratory,",
+                    "Copyright (C) 2007-2019 Automation technology laboratory,",
                     "Helsinki University of Technology",
                     " ",
                     "Visit automation.tkk.fi for information about the automation",

@@ -22,7 +22,7 @@
  */
 package attributetable;
 
-import java.util.Vector;
+import java.util.ArrayList;
 import javax.swing.JTable;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
@@ -221,15 +221,17 @@ public class AttributeTableModel extends AbstractTableModel implements EventList
 
     //------------------------------------------------------------//
     
-    private final Vector<TreeSelectionListener> listeners = new Vector<>();
+    private final ArrayList<TreeSelectionListener> listeners = new ArrayList<>();
     
     /**
      * Adds listener.
      * @param l
      */
     public void addTreeSelectionListener(TreeSelectionListener l) {
-        if (!listeners.contains(l)) {
-            listeners.add(l);
+        synchronized (listeners) {
+            if (!listeners.contains(l)) {
+                listeners.add(l);
+            }
         }
     }
 
@@ -239,7 +241,9 @@ public class AttributeTableModel extends AbstractTableModel implements EventList
      * @return true if listeners contained the specified listener
      */
     public boolean removeTreeSelectionListener(TreeSelectionListener l) {
-        return listeners.remove(l);
+        synchronized (listeners) {
+            return listeners.remove(l);
+        }
     }
     
     /**
@@ -252,9 +256,10 @@ public class AttributeTableModel extends AbstractTableModel implements EventList
                           newPath.equals(path),
                           path,
                           newPath);
-
-        for (TreeSelectionListener l : listeners) {
-            l.valueChanged(e);
+        synchronized (listeners) {
+            for (TreeSelectionListener l : listeners) {
+                l.valueChanged(e);
+            }
         }
     }
 

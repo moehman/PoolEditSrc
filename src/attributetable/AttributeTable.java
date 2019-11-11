@@ -360,40 +360,41 @@ public class AttributeTable extends JTable {
         }
         // NOTE: font_attributes is a name of an attribute, fontattributes
         // is a name of an ISOBUS object
-        else if(Utils.equals(attr, FONT_ATTRIBUTES, BLOCK_FONT) || 
+        else if (Utils.equals(attr, FONT_ATTRIBUTES, BLOCK_FONT) || 
                 (Utils.equals(type, INPUTBOOLEAN) && Utils.equals(attr, FOREGROUND_COLOUR))) {
             return createEditor(findElements(doc, false, FONTATTRIBUTES));     
         }
-        else if (Utils.equals(attr, VARIABLE_REFERENCE) || Utils.equals(attr, TARGET_VALUE_VARIABLE_REFERENCE)) {
+        else if (Utils.equals(attr, VARIABLE_REFERENCE, TARGET_VALUE_VARIABLE_REFERENCE)) {
             if (Utils.equals(type, OUTPUTSTRING, INPUTSTRING)) {
                 return createEditor(findElements(doc, true, STRINGVARIABLE)); 
             }
-            else if (Utils.equals(type, INPUTBOOLEAN, INPUTNUMBER, INPUTLIST, OUTPUTNUMBER, METER, LINEARBARGRAPH, ARCHEDBARGRAPH)) {
+            else if (Utils.equals(type, INPUTBOOLEAN, INPUTNUMBER, INPUTLIST,
+                    OUTPUTNUMBER, METER, LINEARBARGRAPH, ARCHEDBARGRAPH)) {
                 return createEditor(findElements(doc, true, NUMBERVARIABLE));     
             }
             else {
                 return super.getCellEditor(row, col);
             }
         }
-        else if(Utils.equals(attr, ACTIVE_MASK)) {
+        else if (Utils.equals(attr, ACTIVE_MASK)) {
             return createEditor(findElements(doc, true, DATAMASK, ALARMMASK));
         }
-        else if(Utils.equals(attr, SOFT_KEY_MASK)) {
+        else if (Utils.equals(attr, SOFT_KEY_MASK)) {
             return createEditor(findElements(doc, true, SOFTKEYMASK));
         }
-        else if(Utils.equals(attr, LINE_ATTRIBUTES)) {
+        else if (Utils.equals(attr, LINE_ATTRIBUTES)) {
             return createEditor(findElements(doc, true, LINEATTRIBUTES));     
         }
-        else if(Utils.equals(attr, FILL_ATTRIBUTES)) {
+        else if (Utils.equals(attr, FILL_ATTRIBUTES)) {
             return createEditor(findElements(doc, true, FILLATTRIBUTES));     
         }
-        else if(Utils.equals(attr, FILL_PATTERN)) {
+        else if (Utils.equals(attr, FILL_PATTERN)) {
             return createEditor(findElements(doc, true, PICTUREGRAPHIC));     
         }
-        else if(Utils.equals(attr, FILE, FILE1, FILE4, FILE8)){
+        else if (Utils.equals(attr, FILE, FILE1, FILE4, FILE8)){
             return fileEditor;
         }
-        else if(Utils.equals(attr, "parents")){
+        else if (Utils.equals(attr, "parents")){
             return createEditor(findLinkingElements(elem));
         }
 	else {

@@ -93,8 +93,8 @@ public class MeterGenerator {
                 (wiz.getTotalHeight() - wiz.getMeterWidth()) / 2);
         
         // create numbers
-        if(startAng > endAng) startAng -= 360;
-        if( wiz.isClockwise() ) {
+        if (startAng > endAng) startAng -= 360;
+        if (wiz.isClockwise()) {
             int temp = startAng;
             startAng = endAng;
             endAng = temp;

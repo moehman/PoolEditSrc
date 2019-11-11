@@ -738,6 +738,9 @@ public class Tools {
     
     /**
      * Checks if all attributes, included objects are ok     
+     * @param out
+     * @param doc
+     * @return 
      */
     public static boolean validateDocument(PrintStream out, Document doc) {
         ByteArrayOutputStream bff = new ByteArrayOutputStream();
@@ -1417,7 +1420,7 @@ public class Tools {
      * @param attributes
      */
     static public void copyAttributes(Element src, Element trg, String ... attributes) {
-         for (int i = 0; i < attributes.length; i++) { 
+         for (int i = 0, n = attributes.length; i < n; i++) { 
              if (src.hasAttribute(attributes[i])) {
                 trg.setAttribute(attributes[i], src.getAttribute(attributes[i]));
              }
@@ -1901,19 +1904,19 @@ public class Tools {
         
         NodeList docElements = doc.getDocumentElement().getChildNodes( );
         
-        //itarate all types of attribute-elements
-        for(int i = 0; i < attributes.length; i++) {
-            NodeList attributeElements = parent.getElementsByTagName( attributes[i] );            
+        //iterate all types of attribute-elements
+        for (int i = 0; i < attributes.length; i++) {
+            NodeList attributeElements = parent.getElementsByTagName(attributes[i]);            
             
             //iterate all child elements of the parent
-            for(int j = 0; j < attributeElements.getLength(); j++)
-                if( attributeElements.item(j).getNodeType() == Node.ELEMENT_NODE ) {
+            for (int j = 0; j < attributeElements.getLength(); j++)
+                if (attributeElements.item(j).getNodeType() == Node.ELEMENT_NODE) {
                 Element element1 = (Element) attributeElements.item(j);
                 boolean equalIsFound = false;
                 
                 //iterate all elements in the root of the document
-                for(int k = 0; k < docElements.getLength() && !equalIsFound; k++)
-                    if(( docElements.item(k).getNodeType() == Node.ELEMENT_NODE ) &&
+                for (int k = 0; k < docElements.getLength() && !equalIsFound; k++)
+                    if (( docElements.item(k).getNodeType() == Node.ELEMENT_NODE ) &&
                         ( elementsAreEqual( element1, ( Element) docElements.item(k) ) )) {
                     
                         Element element2 = ( Element) docElements.item(k);
@@ -1940,7 +1943,7 @@ public class Tools {
      * FIXME: can be removed?
     private static boolean elementsAreEqual( Element element1, Element element2) {
         //First check node name
-        if( ! element1.getNodeName().equals( element2.getNodeName()) )
+        if ( !element1.getNodeName().equals( element2.getNodeName()) )
             return false;
         
         //compare all wanted attributes
@@ -1949,8 +1952,8 @@ public class Tools {
             "line_art", "line_colour", "line_width",                //line attributes
             "fill_colour", "fill_pattern", "fill_type"};            //fill attributes
         
-        for(int i = 0; i < attributes.length; i++)
-            if( ! element1.getAttribute( attributes[i] ).equals(element2.getAttribute( attributes[i] ) ))
+        for (int i = 0; i < attributes.length; i++)
+            if ( !element1.getAttribute( attributes[i] ).equals(element2.getAttribute( attributes[i] ) ))
                 return false;     
         
         return true;

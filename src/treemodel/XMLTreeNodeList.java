@@ -58,7 +58,7 @@ class XMLTreeNodeList extends ArrayList<XMLTreeNode> {
 	int index;
         
         // parent is root -> create category nodes
-	if ((index = Utils.indexEquals(type, OBJECTPOOL)) >= 0) {
+	if (Utils.indexEquals(type, OBJECTPOOL) >= 0) {
 	    for (int i = 0, n = CATEGORIES.length; i < n; i++) {
                 XMLTreeNode node = model.CATEGORY_NODES[i];
                 add(node);
