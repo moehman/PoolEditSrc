@@ -343,7 +343,7 @@ public class Tools {
     }    
      
     /**
-     * Exports the document using the XML format specified in ISOAbLib.
+     * Exports the document using the XML format specified in ISOAgLib.
      * <ul>
      * <li> roles are converted back to attributes
      * <li> start and end angles are converted to "double degrees" (divided by two)
@@ -462,7 +462,7 @@ public class Tools {
             }
         }
         
-        // set output string lengths
+        // set input string lengths
         NodeList inputstrings = clone.getElementsByTagName(INPUTSTRING); 
         for (int i = 0, n = inputstrings.getLength(); i < n; i++) {
             Element inputstring = (Element) inputstrings.item(i);
@@ -893,14 +893,17 @@ public class Tools {
         return root.getAttribute(STD_BITMAP_PATH);
     }
     
-    private static BufferedImage getImageFile(Element element, String attrib, String imagepath) throws IOException {
+    private static BufferedImage getImageFile(Element element, String attrib,
+            String imagepath) throws IOException
+    {
         String s = element.getAttribute(attrib);
         File f = null;
         if (s.isEmpty()) {
             return null;
         }
         try {
-            f = new File(imagepath + s);
+            String fullname = FileTools.joinPaths(imagepath, s);
+            f = new File(fullname);
             return ImageIO.read(f);
         }
         catch (IOException ex) {

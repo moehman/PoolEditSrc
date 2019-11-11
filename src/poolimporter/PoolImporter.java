@@ -2784,15 +2784,86 @@ public class PoolImporter {
 	}
     }
 
+    public void processHeaderFile(File file, Document doc) {
+        try {
+	    BufferedReader input = // new BufferedReader(new FileReader(file));
+		new BufferedReader(new InputStreamReader(new FileInputStream(file), "8859_1")); 
+
+            List<String> objs = new ArrayList<>();
+            Map<Integer, String> map1 = new HashMap<>();
+            
+	    List<VTObject> list = new ArrayList<>();
+	    Map<Integer, String> map2 = new HashMap<>();
+	    Set<String> set = new HashSet<>();
+            
+            String line;
+            int mode = 0;
+	    while ((line = input.readLine()) != null) {
+		switch (mode) {
+		    /* find start of the array */
+                    case 0: {
+                        if (line.equals("unsigned char *pool = {"))
+                            mode = 1;
+                        break;
+                    }
+		    /* collect objects until the end of the array */
+                    case 1: {
+                        if (line.equals("};")) {
+                            mode = 2;
+                            break;
+                        }
+                        objs.add(line);
+                        break;
+                    }
+		    /* collect object names from the definitions */
+                    case 2: {
+                        if (line.startsWith("#define")) {
+                            // e.g.: #define RearAdjAuxFun 642
+                            Scanner sc = new Scanner(line);
+                            sc.useDelimiter("[\\s]+");
+                            String define = sc.next();
+                            String name = sc.next();
+                            int id = Integer.parseInt(sc.next());
+                            map1.put(id, name);
+                        }
+                        break;
+                    }
+                } /* switch */
+	    }
+	    input.close();
+            
+            for (String obj : objs) {
+                System.out.println(obj);
+                Scanner sc = new Scanner(obj);
+                sc.useDelimiter("[\\s,]+");
+                CArrayReader br = new CArrayReader(sc);
+                while (sc.hasNext()) {
+                    int id = br.readId();
+                    VTObject vto = createVTO(br);
+                    String name = map1.get(id);
+                    if (name == null)
+                        name = ""; // not suppose to happen!
+                    name = createUniqueName(name, vto.getType(), set);
+                    set.add(name);
+                    map2.put(id, name);
+                    
+                    vto.setName(name);
+                    vto.setId(id);
+                    vto.read(br);
+                    list.add(vto);
+                }
+            }
+	    for (VTObject vto : list) {
+		vto.appendDoc(map2, doc);
+	    }
+	}
+	catch (IOException ex){
+	    ex.printStackTrace();
+	}
+    }
+    
     /**
      * This used to be the main method of a separate program.
-     * @param inputFile
-     * @param dimension
-     * @param sk_width
-     * @param sk_height
-     * @param fixBitmapPath
-     * @param stdBitmapPath
-     * @param outputFile 
      */
     public void poolImport() {
     
@@ -2820,6 +2891,9 @@ public class PoolImporter {
             }
             else if (inputFile.getName().endsWith(".iop")) {
                 processIOPFile(inputFile, doc);
+            }
+            else if (inputFile.getName().endsWith(".h")) {
+                processHeaderFile(inputFile, doc);
             }
 
             TransformerFactory tf = TransformerFactory.newInstance();

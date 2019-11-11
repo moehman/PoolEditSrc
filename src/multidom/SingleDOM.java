@@ -30,6 +30,7 @@ import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.tree.TreePath;
 import org.w3c.dom.Document;
+import pooledit.FileTools;
 import pooledit.Tools;
 import pooledit.Utils;
 import treemodel.XMLTreeModel;
@@ -41,7 +42,7 @@ import treemodel.XMLTreeModel;
  */
 public class SingleDOM {
     
-    private  JFileChooser fc = new JFileChooser();
+    private  JFileChooser fc = FileTools.getNewFileChooser();
     private final XMLTreeModel treeModel = new XMLTreeModel();
         
     private final MultiDOM multidom;

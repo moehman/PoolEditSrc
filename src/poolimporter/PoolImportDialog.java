@@ -36,7 +36,7 @@ public class PoolImportDialog extends javax.swing.JPanel {
         jSpinner2.setValue(60);
         jSpinner3.setValue(32);
         INPUT_FC.setFileFilter(new FileNameExtensionFilter(
-                "Object pool file", "sav", "iop"));
+                "Object pool file", "sav", "iop", "h"));
         BITMAP_FC.setDialogTitle("Choose directory");
         BITMAP_FC.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         OUTPUT_FC.setFileFilter(new FileNameExtensionFilter("XML-file", "xml"));
