@@ -425,12 +425,16 @@ public class ObjectTreeDropTargetListener implements DropTargetListener {
             }
              */
         }
-            // if parent is not a real object (or a command), user root instead
-            if (!otherNode.isType(OBJECTS) && !otherNode.getType().startsWith(COMMAND)) {
-                otherNode = (XMLTreeNode) otherNode.getModel().getRoot();
-                asSibling = false;
-            }
         
+        // if parent is not a real object (or a command), user root instead
+        if (!otherNode.isType(OBJECTS) &&
+            !otherNode.isType(POINT) &&
+            !otherNode.getType().startsWith(COMMAND))
+        {
+            //System.out.println("SUBSTITUTING: " + otherNode);
+            otherNode = (XMLTreeNode) otherNode.getModel().getRoot();
+            asSibling = false;
+        }
         
         Document doc = otherNode.getModel().getDocument();
         

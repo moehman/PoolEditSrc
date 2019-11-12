@@ -382,7 +382,7 @@ public class XMLTreeNode {
     
     /**
      * This method returns the value of the "actual_width" attribute.
-     * FIXME: this is never used, actual witdh is read from the file?
+     * FIXME: this is never used, actual width is read from the file?
      * @return
      */
     public Integer getActualWidth() {
@@ -664,29 +664,47 @@ public class XMLTreeNode {
         return null;
     }
     
+    /**
+     * Returns red image with yellow text saying "MISSING IMAGE".
+     * @return 
+     */
+    private BufferedImage getMissingImage() {
+        // the width is given as an attribute but without the image,
+        // the height is unknown (h = w * imageH / imageW)
+        int w = Math.max(40, getWidth());
+        int h = w * 40 / 64; // 64x40 drawing coordinates
+        double k = w / 64.0; // scaling factor
+        BufferedImage img = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D gfx = (Graphics2D) img.getGraphics();
+        gfx.scale(k, k);
+        gfx.setColor(Color.YELLOW);
+        gfx.fillRect(0, 0, 64, 40);
+        gfx.setColor(Color.RED);
+        gfx.fillRect(1, 1, 62, 38);
+        gfx.setColor(Color.YELLOW);
+        gfx.drawString("MISSING", 7, 15);
+        gfx.drawString("IMAGE", 12, 35);
+        return img;
+    }
+    
+    /**
+     * Reads the specified image from disk.
+     * @param fileAttr
+     * @param imagepath
+     * @return
+     * @throws IOException 
+     */
     private BufferedImage getImageFile(String fileAttr, String imagepath) throws IOException {
         String s = actual.getAttribute(fileAttr);
-        File f;
         if (s.isEmpty()) {
             return null;
         }
         try {
-            //all \ are converted to / on a unix system and vice versa
             String fullname = FileTools.joinPaths(imagepath, s);
-            f = new File(fullname);
-            return ImageIO.read(f);
+            return ImageIO.read(new File(fullname));
         }
         catch (IOException ex) {
-            BufferedImage img = new BufferedImage(64, 40, BufferedImage.TYPE_INT_ARGB);
-            Graphics2D gfx = (Graphics2D) img.getGraphics();
-            gfx.setColor(Color.RED);
-            gfx.fillRect(0, 0, 64, 40);
-            gfx.setColor(Color.YELLOW);
-            gfx.drawRect(0, 0, 63, 39);
-            gfx.drawString("MISSING", 5, 15);
-            gfx.drawString("IMAGE", 5, 35);
-            return img;
-            //throw new IOException(ex.getMessage() + " " + f);
+            return getMissingImage();
         }
     }
       
@@ -1290,7 +1308,7 @@ public class XMLTreeNode {
     /**
      * Returns the size of this node.For example the size of a container
      * is obtained by calling getWidth() and getHeight() methods, but the
-     * size of a meter is its width times width.The sizes of picture graphic
+     * size of a meter is its width times width. The sizes of picture graphic
      * and object pointer objects are more difficult to calculate.
      * @param dim
      * @return 

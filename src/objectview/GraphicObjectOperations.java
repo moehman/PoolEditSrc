@@ -151,6 +151,14 @@ public class GraphicObjectOperations implements ObjectOperations {
         return this.flash;
     }
 
+    private void drawMissingAttributes(Graphics2D gfx, int w, int h) {
+        gfx.setColor(Color.RED);
+        gfx.fillRect(0, 0, w, h);
+        gfx.setColor(Color.YELLOW);
+        gfx.drawLine(0, 0, w, h);
+        gfx.drawLine(0, h, w, 0);
+    }
+    
     /**
      * Draws borders.
      * @param gfx
@@ -273,6 +281,12 @@ public class GraphicObjectOperations implements ObjectOperations {
     public void opInputBoolean(Graphics2D gfx, XMLTreeNode node) {
         int w = node.getWidth();
         
+        XMLTreeNode fas = node.getFontAttributes();
+        if (fas == null) {
+            drawMissingAttributes(gfx, w, w);
+            drawBorders(gfx, w, w);
+            return;
+        }
         // fill background
         if (!node.isOptionsTransparent()) {
             gfx.setColor(node.getBackgroundColor(colorDepth));
@@ -281,7 +295,7 @@ public class GraphicObjectOperations implements ObjectOperations {
         
         // paint mark (V)
         if (node.getEffectiveValue() != 0) {
-            gfx.setColor(node.getFontAttributes().getFontColor(colorDepth));
+            gfx.setColor(fas.getFontColor(colorDepth));
             gfx.fillPolygon(new int[] {w / 8, w / 10, w / 2, w - w / 10, w - w / 8, w / 2},
                     new int[] {w / 10, w / 8, w - w / 8, w / 8, w / 10, w / 2}, 6);
         }
@@ -295,6 +309,11 @@ public class GraphicObjectOperations implements ObjectOperations {
         int h = node.getHeight();
                         
         XMLTreeNode fas = node.getFontAttributes();
+        if (fas == null) {
+            drawMissingAttributes(gfx, w, h);
+            drawBorders(gfx, w, h);
+            return;
+        }
         BitmapFont font = fas.getFont(colorDepth);        
         Color backgroundColor = node.getBackgroundColor(colorDepth);
         
@@ -332,6 +351,11 @@ public class GraphicObjectOperations implements ObjectOperations {
         int h = node.getHeight();
         
         XMLTreeNode fas = node.getFontAttributes();
+        if (fas == null) {
+            drawMissingAttributes(gfx, w, h);
+            drawBorders(gfx, w, h);
+            return;
+        }
         BitmapFont font = fas.getFont(colorDepth);
         Color backgroundColor = node.getBackgroundColor(colorDepth);
         
@@ -399,6 +423,11 @@ public class GraphicObjectOperations implements ObjectOperations {
         int h = node.getHeight();
         
         XMLTreeNode fas = node.getFontAttributes();
+        if (fas == null) {
+            drawMissingAttributes(gfx, w, h);
+            drawBorders(gfx, w, h);
+            return;
+        }
         BitmapFont font = fas.getFont(colorDepth);
         Color backgroundColor = node.getBackgroundColor(colorDepth); 
                 
@@ -439,6 +468,11 @@ public class GraphicObjectOperations implements ObjectOperations {
         int h = node.getHeight();
         
         XMLTreeNode fas = node.getFontAttributes();
+        if (fas == null) {
+            drawMissingAttributes(gfx, w, h);
+            drawBorders(gfx, w, h);
+            return;
+        }
         BitmapFont font = fas.getFont(colorDepth);
         Color backgroundColor = node.getBackgroundColor(colorDepth); 
                 
@@ -531,6 +565,11 @@ public class GraphicObjectOperations implements ObjectOperations {
         int h = node.getHeight();
         
         LineAttributes latt = node.getLineAttributes(colorDepth);
+        if (latt == null) {
+            drawMissingAttributes(gfx, w, h);
+            drawBorders(gfx, w, h);
+            return;
+        }
         Paint paint = node.getFillAttributesPaint(latt.getColor(), imagepath, PAINT, reduceImages, colorDepth);
         
         // fill rectangle
@@ -584,6 +623,11 @@ public class GraphicObjectOperations implements ObjectOperations {
         Integer ellipseType = node.getEllipseType();
         
         LineAttributes latt = node.getLineAttributes(colorDepth);
+        if (latt == null) {
+            drawMissingAttributes(gfx, w, h);
+            drawBorders(gfx, w, h);
+            return;
+        }
         Paint paint = node.getFillAttributesPaint(latt.getColor(), imagepath, PAINT, reduceImages, colorDepth);
         
         float lw = ((BasicStroke) gfx.getStroke()).getLineWidth();
@@ -636,6 +680,11 @@ public class GraphicObjectOperations implements ObjectOperations {
         int h = node.getHeight();
         
         LineAttributes latt = node.getLineAttributes(colorDepth);
+        if (latt == null) {
+            drawMissingAttributes(gfx, w, h);
+            drawBorders(gfx, w, h);
+            return;
+        }
         Paint paint = node.getFillAttributesPaint(latt.getColor(), imagepath, PAINT, reduceImages, colorDepth);
         Polygon p = node.getPolygon();
         

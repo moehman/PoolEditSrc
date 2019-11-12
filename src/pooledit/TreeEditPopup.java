@@ -252,7 +252,12 @@ public abstract class TreeEditPopup {
                     }
                     int length = value.length();
                     // we do not really care about the color palette (color reduction etc)
-                    Dimension fontdim = node.getFontAttributes().getFont(ColorPalette.COLOR_8BIT).getDimension();
+                    XMLTreeNode fas = node.getFontAttributes();
+                    if (fas == null) {
+                        System.err.println("*** NORMALIZING IS NOT POSSIBLE WITHOUT FONT ATTRIBUTES ***");
+                        return;
+                    }    
+                    Dimension fontdim = fas.getFont(ColorPalette.COLOR_8BIT).getDimension();
                     int width = fontdim.width * length;
                     int height = fontdim.height;
                     Element element = node.actual();

@@ -1017,7 +1017,8 @@ public class Tools {
     public static boolean insertFragment(Element fragment, Element actual,
             Element link, boolean asSibling) {
 
-        // System.out.println("OTHER NODE: " + otherElement + ", ITS PARENT: " + otherElement.getParentNode());
+        //System.out.println("insertFragment(fragment: " + fragment + ", actual: "
+        //      + actual + ", link: " + link + ", asSibling: " + asSibling + ")");
         String trgName;
         if (asSibling) {
             Node parent;
