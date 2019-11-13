@@ -28,9 +28,16 @@ which:
 * generates the ISO 11783 binary presentation
 * and load it to the virtual terminal.
 
-Because the XML file is parsed at runtime when the VT properties are
+Because the XML file is parsed at run-time when the VT properties are
 known, the PoolEdit parser can resize the GUI objects and reduce the
 number of colors accordingly. Another benefit of the XML format is
 that it allows the use of symbolic names for referencing the GUI
-objects.  The symbolic names are easier to remember than numetic IDs
+objects.  The symbolic names are easier to remember than numeric IDs
 used in the binary object pool format.
+
+Current development environment:
+* OS: Windows 7
+* IDE: Dev-C++ 5.11 (2015-04-27)
+* Expat: expat-win32bin-2.2.9.exe
+
+

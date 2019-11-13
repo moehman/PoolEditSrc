@@ -2582,33 +2582,22 @@ public class PoolImporter {
      * @return
      */
     public String createUniqueName(String name, String type, Set<String> set) {
-	int nro = 1;
-	int i = name.length();
-	while (i > 0) {
-	    if (!Character.isDigit(name.charAt(i - 1))) {
-		break;
-	    }
-	    i--;
-	}
-	if (i <= 0) {
-	    name = type;
-	}
-	else if (i < name.length()) {
-	    String s = name.substring(i);
-	    System.out.println("s: \"" + s + "\"");
-	    nro = Integer.parseInt(s);
-	    name = name.substring(0, i);
-	}
-
-	if (!set.contains(name))
+        if (!set.contains(name))
 	    return name;
 
-	while (true) {
-	    String s = name + nro;
-	    if (!set.contains(s))
-		return s;
-	    nro++;
+        int i = name.length() - 1;
+	while (i >= 0 && Character.isDigit((name.charAt(i)))) i--;
+        String basename = name.substring(0, i + 1);
+	String digits = name.substring(i + 1);
+	if (basename.isEmpty()) {
+	    basename = type;
 	}
+	int n = digits.isEmpty() ? 0 : Integer.parseInt(digits);
+
+	//go through names until free name is found
+	String result;
+        while (set.contains(result = basename + n)) n++;
+        return result;
     }
 
     /**

@@ -359,7 +359,11 @@ public class Tools {
             throws FileNotFoundException, IOException
     {
         removeEmptyTextNodes(doc.getDocumentElement());
-        
+        /*
+        // this seems to work as well:
+        DOMImplementationLS ls = (DOMImplementationLS) doc.getImplementation().getFeature("LS", "3.0");
+        LSSerializer dom3Writer = ls.createLSSerializer();
+        */
         LSSerializer dom3Writer = IMPL_LS.createLSSerializer();
         DOMConfiguration config = dom3Writer.getDomConfig();
         config.setParameter("format-pretty-print", Boolean.TRUE);
@@ -370,7 +374,7 @@ public class Tools {
         output.setByteStream(outputStream);
         dom3Writer.write(doc, output);
         outputStream.close(); // remember to close the output stream!
-    }    
+    }
      
     /**
      * Exports the document using the XML format specified in ISOAgLib.
