@@ -283,6 +283,30 @@ public class Tools {
     */
 
     /**
+     * 
+     * @param parent 
+     */
+    public static void removeEmptyTextNodes(Node parent) {
+        //System.out.println(parent.getNodeName());
+        NodeList nodeList = parent.getChildNodes();
+        for (int i = nodeList.getLength() - 1; i >= 0; i--) {
+            Node child = nodeList.item(i);
+            int type = child.getNodeType();
+            if (type == Node.ELEMENT_NODE) {
+                removeEmptyTextNodes(child); // recursion
+            }
+            else if (type == Node.TEXT_NODE) {
+                String val = child.getNodeValue();
+                if (val.trim().length() > 0) {
+                    System.err.println("*** REMOVED NON-EMPTY TEXT NODE '" +
+                            val + "' ***");
+                }
+                parent.removeChild(child);
+            }
+        }
+    }
+    
+    /**
      * Parses document.
      * @param text
      * @param schema
@@ -300,8 +324,9 @@ public class Tools {
         
         LSInput input = IMPL_LS.createLSInput();
         input.setStringData(text);
-        return parser.parse(input);    
-                   
+        Document doc = parser.parse(input);
+        removeEmptyTextNodes(doc.getDocumentElement());
+        return doc;
     }
     
     public static Document loadDocument(String name, String schema) {
@@ -324,12 +349,17 @@ public class Tools {
         //config.setParameter("schema-type",
         //"http://www.w3.org/2001/XMLSchema");
         //config.setParameter("validate-if-schema", Boolean.TRUE);
-        //config.setParameter("schema-location", "catalog.xsd");            
-        return parser.parseURI(name);
+        //config.setParameter("schema-location", "catalog.xsd");
+        Document doc = parser.parseURI(name);
+        removeEmptyTextNodes(doc.getDocumentElement());
+        return doc;
     }
-        
+    
     public static void saveDocument(String name, Document doc) 
-            throws FileNotFoundException, IOException {
+            throws FileNotFoundException, IOException
+    {
+        removeEmptyTextNodes(doc.getDocumentElement());
+        
         LSSerializer dom3Writer = IMPL_LS.createLSSerializer();
         DOMConfiguration config = dom3Writer.getDomConfig();
         config.setParameter("format-pretty-print", Boolean.TRUE);
@@ -358,6 +388,7 @@ public class Tools {
             throws FileNotFoundException, IOException {
         // the whole document is cloned (this copies all attributes too!)
         Document clone = (Document) doc.cloneNode(true);
+        removeEmptyTextNodes(clone.getDocumentElement());
         
         removeRoles(clone.getDocumentElement());        
         divAngles(clone.getDocumentElement());
@@ -395,6 +426,7 @@ public class Tools {
         
         // the document is cloned (this copies all attributes too!)
         Document clone = (Document) doc.cloneNode(true);
+        removeEmptyTextNodes(clone.getDocumentElement());
         
         // check the validity of document
         if (validateDocument(out, clone)) {

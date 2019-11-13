@@ -12,6 +12,13 @@ the IsoAgLib format with some minor changes.
 
 ![Screenshot](screenshot.png)
 
+Please read the manual for more information!
+
+Current development environment:
+* OS: Windows 7 (but should work on Windows 10 as well)
+* IDE: NetBeans 11.2
+* Java: jdk-13.0.1
+
 
 # PoolEdit Parser
 
