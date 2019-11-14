@@ -28,6 +28,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.LinkedList;
 import java.awt.image.BufferedImage;
+import java.io.BufferedWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeSet;
@@ -37,8 +38,17 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
 import org.w3c.dom.Attr;
 import org.w3c.dom.DOMConfiguration;
 import org.w3c.dom.Document;
@@ -355,25 +365,76 @@ public class Tools {
         return doc;
     }
     
+    /**
+     * 
+     * @param doc
+     * @param os
+     * @throws IOException 
+     */
+    private static void writeXML_old(Document doc, OutputStream os)
+            throws IOException
+    {
+    /*
+        // this seems to work as well:
+        DOMImplementationLS ls = (DOMImplementationLS) doc.getImplementation().getFeature("LS", "3.0");
+        LSSerializer dom3Writer = ls.createLSSerializer();
+    */
+        LSSerializer dom3Writer = IMPL_LS.createLSSerializer();
+        DOMConfiguration config = dom3Writer.getDomConfig();
+        config.setParameter("format-pretty-print", Boolean.TRUE);
+        LSOutput output = IMPL_LS.createLSOutput();
+        output.setEncoding("UTF-8");
+        output.setByteStream(os);
+        dom3Writer.write(doc, output);
+        os.close(); // remember to close the output stream!
+    }
+    
+    private static String writeXMLString(Node doc, String encoding)
+            throws IOException
+    {
+        try {
+            TransformerFactory tf = TransformerFactory.newInstance();
+            tf.setAttribute("indent-number", Integer.valueOf(2));
+            Transformer transformer = tf.newTransformer();
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+            transformer.setOutputProperty(OutputKeys.ENCODING, encoding);
+
+            // initialize StreamResult with File object to save to file
+            StreamResult result = new StreamResult(new StringWriter());
+            DOMSource source = new DOMSource(doc);
+            transformer.transform(source, result);
+            return result.getWriter().toString();
+        }
+        catch (TransformerConfigurationException e) {
+            throw new IOException(e.getMessage());
+        }
+        catch (TransformerException e) {
+            throw new IOException(e.getMessage());
+        }
+    }
+    
+    /**
+     * 
+     * @param doc
+     * @param os
+     * @throws IOException 
+     */
+    private static void writeXML(Document doc, OutputStream os, String encoding)
+            throws IOException
+    {
+        BufferedWriter out = new BufferedWriter
+                (new OutputStreamWriter(os));
+//              (new OutputStreamWriter(os, encoding /*"8859_1"*/));
+        out.write(writeXMLString(doc, encoding));
+        out.close();
+    }
+    
     public static void saveDocument(String name, Document doc) 
             throws FileNotFoundException, IOException
     {
         removeEmptyTextNodes(doc.getDocumentElement());
-        /*
-        // this seems to work as well:
-        DOMImplementationLS ls = (DOMImplementationLS) doc.getImplementation().getFeature("LS", "3.0");
-        LSSerializer dom3Writer = ls.createLSSerializer();
-        */
-        LSSerializer dom3Writer = IMPL_LS.createLSSerializer();
-        DOMConfiguration config = dom3Writer.getDomConfig();
-        config.setParameter("format-pretty-print", Boolean.TRUE);
-
-        OutputStream outputStream = new FileOutputStream(new File(name));
-        LSOutput output = IMPL_LS.createLSOutput();
-        output.setEncoding("UTF-8");
-        output.setByteStream(outputStream);
-        dom3Writer.write(doc, output);
-        outputStream.close(); // remember to close the output stream!
+        OutputStream os = new FileOutputStream(new File(name));
+        writeXML(doc, os, "UTF-8");
     }
      
     /**
@@ -398,17 +459,9 @@ public class Tools {
         divAngles(clone.getDocumentElement());
         
         // remove empty attributes? (at least file1 file4 file8... ?)
-                
-        LSSerializer dom3Writer = IMPL_LS.createLSSerializer();
-        DOMConfiguration config = dom3Writer.getDomConfig();
-        config.setParameter("format-pretty-print", Boolean.TRUE);
-
-        OutputStream outputStream = new FileOutputStream(new File(name));
-        LSOutput output = IMPL_LS.createLSOutput();
-        output.setEncoding("UTF-8");
-        output.setByteStream(outputStream);
-        dom3Writer.write(clone, output);
-        outputStream.close(); // remember to close the output stream!
+        
+        OutputStream os = new FileOutputStream(new File(name));
+        writeXML(clone, os, "UTF-8");
     }
     
     /**
@@ -683,17 +736,8 @@ public class Tools {
         }
         */
         
-        // write to file
-        LSSerializer dom3Writer = IMPL_LS.createLSSerializer();
-        DOMConfiguration config = dom3Writer.getDomConfig();
-        config.setParameter("format-pretty-print", Boolean.TRUE);
-
-        OutputStream outputStream = new FileOutputStream(new File(fileName));
-        LSOutput output = IMPL_LS.createLSOutput();
-        output.setEncoding("UTF-8");
-        output.setByteStream(outputStream);
-        dom3Writer.write(clone, output);
-        outputStream.close(); // remember to close the output stream!
+        OutputStream os = new FileOutputStream(new File(fileName));
+        writeXML(clone, os, "ISO-8859-1"); //"UTF-8");
     }
     
     private static void markChildrenMask(PrintStream out, Element element, Map<String, Element> nameMap) {
@@ -951,22 +995,38 @@ public class Tools {
         if (node == null) { 
             return "null"; 
         }
+        /*
         LSSerializer dom3Writer = IMPL_LS.createLSSerializer();
         DOMConfiguration config = dom3Writer.getDomConfig();
         config.setParameter("format-pretty-print", Boolean.TRUE);
         return dom3Writer.writeToString(node);
+        */
+        try {
+            return writeXMLString(node, "UTF-8");
+        }
+        catch (IOException e) {
+            return null;
+        }
     }    
       
     public static String writeToStringNoDec(Node node) {
         if (node == null) { 
             return "null"; 
         }
+        /*
         LSSerializer dom3Writer = IMPL_LS.createLSSerializer();
         DOMConfiguration config = dom3Writer.getDomConfig();
         config.setParameter("format-pretty-print", Boolean.TRUE);
         config.setParameter("xml-declaration", Boolean.FALSE);
         config.setParameter("discard-default-content", Boolean.FALSE);        
         return dom3Writer.writeToString(node);
+        */
+        try {
+            return writeXMLString(node, "UTF-8");
+        }
+        catch (IOException e) {
+            return null;
+        }
     }        
     
     /*  OLD not recursion
@@ -1465,7 +1525,22 @@ public class Tools {
                 trg.setAttribute(attributes[i], src.getAttribute(attributes[i]));
              }
          }
-    }  
+    }
+    
+    /**
+     * Checks whether two points (or other elements with POS_X and POS_Y
+     * attributes) are at the same position.
+     * @param trg
+     * @param src
+     * @return 
+     */
+    static public boolean equalPositions(Element trg, Element src) {
+        int trg_x = Integer.parseInt(trg.getAttribute(POS_X));
+        int trg_y = Integer.parseInt(trg.getAttribute(POS_Y));
+        int src_x = Integer.parseInt(src.getAttribute(POS_X));
+        int src_y = Integer.parseInt(src.getAttribute(POS_Y));
+        return trg_x == src_x && trg_y == src_y;
+    }
     
     /**
      * Checks whether the target element can be replaced by a link to the 

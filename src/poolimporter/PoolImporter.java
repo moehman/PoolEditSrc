@@ -101,6 +101,7 @@ public class PoolImporter {
     static public final String MACRO = "macro";
     static public final String AUXILIARYFUNCTION = "auxiliaryfunction";
     static public final String AUXILIARYINPUT = "auxiliaryinput";
+    static public final String POINT_OBJECT = "point";
 
     static public final String DIMENSION = "dimension";
     static public final String FIX_BITMAP_PATH = "fix_bitmap_path";
@@ -1920,8 +1921,8 @@ public class PoolImporter {
 		    width = br.readWord();
 		    height = br.readWord();
 		    ellipsetype = br.readByte();
-		    startangle = br.readByte();
-		    endangle = br.readByte();
+		    startangle = 2 * br.readByte(); // unit conversion from
+		    endangle = 2 * br.readByte();   // 0-180 to 0-360
 		    fillattrib = br.readRef();
 		    int nroMacros = br.readByte();
 		    macros = br.readBytes(nroMacros);
@@ -1942,8 +1943,8 @@ public class PoolImporter {
 		    ellipse.setAttribute(WIDTH, Integer.toString(width));
 		    ellipse.setAttribute(HEIGHT, Integer.toString(height));
 		    ellipse.setAttribute(ELLIPSE_TYPE, getEllipseType(ellipsetype));
-		    ellipse.setAttribute(START_ANGLE, Integer.toString(2 * startangle)); // unit conversion
-		    ellipse.setAttribute(END_ANGLE, Integer.toString(2 * endangle));     // unit conversion
+		    ellipse.setAttribute(START_ANGLE, Integer.toString(startangle));
+		    ellipse.setAttribute(END_ANGLE, Integer.toString(endangle));
 		    if (map.containsKey(fillattrib)) {
 			Element fillattr = doc.createElement(INCLUDE_OBJECT);
 			fillattr.setAttribute(NAME, map.get(fillattrib));
@@ -2001,6 +2002,12 @@ public class PoolImporter {
 			polygon.appendChild(fillattr);
 		    }
 		    polygon.setAttribute(POLYGON_TYPE, getPolygonType(polygontype));
+                    for (PointXY pnt : points) {
+                        Element child = doc.createElement(POINT_OBJECT);
+			child.setAttribute(POS_X, Integer.toString(pnt.x));
+                        child.setAttribute(POS_Y, Integer.toString(pnt.y));
+			polygon.appendChild(child);
+                    }
 		    for (Integer mac : macros) {
 			Element child = doc.createElement(INCLUDE_OBJECT);
 			child.setAttribute(NAME, map.get(mac));
@@ -2032,8 +2039,8 @@ public class PoolImporter {
 		    tickcol = br.readColor();
 		    options = br.readByte();
 		    nroTicks = br.readByte();
-		    startangle = br.readByte();
-		    endangle = br.readByte();
+		    startangle = 2 * br.readByte(); // unit conversion from
+		    endangle = 2 * br.readByte();   // 0-180 to 0-360
 		    minvalue = br.readWord();
 		    maxvalue = br.readWord();
 		    varref = br.readRef();
@@ -2054,8 +2061,8 @@ public class PoolImporter {
 		    meter.setAttribute(ARC_AND_TICK_COLOUR, getColor(tickcol));
 		    meter.setAttribute(OPTIONS, getMeterOptions(options));
 		    meter.setAttribute(NUMBER_OF_TICKS, Integer.toString(nroTicks));
-		    meter.setAttribute(START_ANGLE, Integer.toString(2 * startangle)); // unit conversion
-		    meter.setAttribute(END_ANGLE, Integer.toString(2 * endangle));     // unit conversion
+		    meter.setAttribute(START_ANGLE, Integer.toString(startangle));
+		    meter.setAttribute(END_ANGLE, Integer.toString(endangle));
 		    meter.setAttribute(MIN_VALUE, Integer.toString(minvalue));
 		    meter.setAttribute(MAX_VALUE, Integer.toString(maxvalue));
 		    if (map.containsKey(varref)) {
@@ -2172,8 +2179,8 @@ public class PoolImporter {
 		    col = br.readColor();
 		    targetcol = br.readColor();
 		    options = br.readByte();
-		    startangle = br.readByte();
-		    endangle = br.readByte();
+		    startangle = 2 * br.readByte(); // unit conversion from
+		    endangle = 2 * br.readByte();   // 0-180 to 0-360
 		    barwidth = br.readWord();
 		    minvalue = br.readWord();
 		    maxvalue = br.readWord();
@@ -2582,7 +2589,7 @@ public class PoolImporter {
      * @return
      */
     public String createUniqueName(String name, String type, Set<String> set) {
-        if (!set.contains(name))
+        if (!name.isEmpty() && !set.contains(name))
 	    return name;
 
         int i = name.length() - 1;
@@ -2889,7 +2896,7 @@ public class PoolImporter {
             tf.setAttribute("indent-number", Integer.valueOf(2));
             Transformer transformer = tf.newTransformer();
             transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-            transformer.setOutputProperty(OutputKeys.ENCODING, "ISO-8859-1");
+            transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8"); //"ISO-8859-1");
 
             //initialize StreamResult with File object to save to file
             StreamResult result = new StreamResult(new StringWriter());
@@ -2898,9 +2905,12 @@ public class PoolImporter {
             String xmlString = result.getWriter().toString();
             //System.out.println(xmlString);
             try {
+                // java.nio API java.lang API
+                // ISO-8859-1 	ISO8859_1
+                // UTF-8 	UTF8
                 BufferedWriter out = new BufferedWriter
                     (new OutputStreamWriter
-                     (new FileOutputStream(outputFile), "8859_1"));
+                     (new FileOutputStream(outputFile), "UTF-8")); //ISO8859_1"));
                 out.write(xmlString);
                 out.close();
             }

@@ -589,6 +589,16 @@ public abstract class TreeEditPopup {
     }
 
     /**
+     * FIXME: this is probably useful in wider context, should be moved to a
+     * more appropriate place.
+     * @param actual
+     * @return 
+     */
+    static private boolean parentIsRoot(Element actual) {
+        return actual.getParentNode() == actual.getOwnerDocument().getDocumentElement();
+    }
+    
+    /**
      * Renames the specified object.
      * FIXME: maybe this should be in Tools.java?
      * @param child
@@ -611,13 +621,18 @@ public abstract class TreeEditPopup {
         if  (newName.equals(oldName)) {
             return;
         }
-        
-        // the name already exists
-        // if (getXMLTreeModel().getNameMap().containsKey(newName)) {
-        if (child.getModel().getNameMap().containsKey(newName)) {
-            throw new IllegalStateException("the name already exists");
-        }
 
+        Element link = child.link();
+        
+        // for links and top level elements...
+        if (link != null || parentIsRoot(actual)) {
+            
+            // check, if the name already exists
+            if (child.getModel().getNameMap().containsKey(newName)) {
+                throw new IllegalStateException("the name already exists");
+            }
+        }
+        
         System.out.println("Renaming, old name: " + oldName + " new name: " + newName);
         // System.err.println("RENAME NEEDS A LOT OF FIXING!");
         // NOTE: block_font must also be changed even though it is
@@ -631,7 +646,6 @@ public abstract class TreeEditPopup {
         // the user wants to rename one of them, both names will change!
 
         Document doc = child.getModel().getDocument();
-        Element link = child.link();
         
         // working link
         if (link != null) {
@@ -758,8 +772,14 @@ public abstract class TreeEditPopup {
         int n = alist.size();
 
         boolean isOptimized = true;
+        boolean hasPoints = false;
         for (int i = 0; i < n; i++) {
             Element nd = alist.get(i);
+            if (nd.getNodeName().equals(POINT)) {
+//              System.out.println("HAS POINTS!");
+                hasPoints = true;
+                continue;
+            }
             Element md = nameMap.get(nd.getAttribute(NAME));
             if (!optimize(nd, md, nameMap)) {
                 isOptimized = false;
@@ -772,12 +792,11 @@ public abstract class TreeEditPopup {
             return false;
         }
 
-        String cname = actual.getAttribute(NAME);
+        String cname = candidate.getAttribute(NAME);
         if (!Tools.equalAttributes(actual, candidate)) {
             System.err.println("attributes do not match: " + aname + " <-> " + cname);
             return false;
         }
-
 
         List<Element> clist = Tools.getChildElementList(candidate);
         int m = clist.size();
@@ -787,6 +806,31 @@ public abstract class TreeEditPopup {
             return false;
         }
 
+        /* special check for polygons */
+        if (hasPoints) {
+            for (int i = 0; i < n; i++) {
+                Element a = alist.get(i);
+                Element c = clist.get(i);
+                int pts = (a.getNodeName().equals(POINT) ? 1 : 0) +
+                        (c.getNodeName().equals(POINT) ? 1 : 0);
+//              System.out.println("POINTS: " + pts);
+                switch (pts) {
+                    case 0:
+                        /* not points - do nothing */
+                        break;
+                    case 1: 
+                        System.err.println("points are not in the same indices");
+                        return false;
+                    case 2:
+                        if (!Tools.equalPositions(a, c)) {
+                            System.err.println("points do not match");
+                            return false;
+                        }
+                        break;
+                }
+            }
+        }
+        
         if (!isOptimized) {
             System.err.println("children could not be optimized: " + aname + " <-> " + cname);
             return false;
