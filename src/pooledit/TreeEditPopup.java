@@ -881,7 +881,11 @@ public abstract class TreeEditPopup {
             XMLTreeNode root = (XMLTreeNode) node.getModel().getRoot();
             width = root.getSKWidth();
             height = root.getSKHeight();
-        } 
+        }
+        else if (Utils.equals(type, OBJECTPOINTER)) {
+            width = 0;
+            height = 0;
+        }
         else if (node.getWidth() != null) {
             width = node.getWidth();
             height = (node.getHeight() != null) ? node.getHeight() : width;            
@@ -974,13 +978,13 @@ public abstract class TreeEditPopup {
             if (startAngle < 0) {
                 startAngle += 360;
             }
-            if (startAngle > 360) {
+            if (startAngle >= 360) {
                 startAngle -= 360;
             }
             if (endAngle < 0) {
                 endAngle += 360;
             }
-            if (endAngle > 360) {
+            if (endAngle >= 360) {
                 endAngle -= 360;
             }
             node.setStartAngle(startAngle);
@@ -1011,21 +1015,38 @@ public abstract class TreeEditPopup {
                     (xform == ROTATE_180)) {
                 node.changeOptionsGrowPositive(!node.isOptionsGrowPositive());
             }
-
+            
             if (xform == ROTATE_90_CW || xform == ROTATE_90_CCW) {
                 node.changeOptionsHorizontal(!node.isOptionsHorizontal());
             }
         }
 
         if (Utils.equals(type, CONTAINER, BUTTON, DATAMASK, ALARMMASK, KEY,
-                AUXILIARYFUNCTION, AUXILIARYINPUT, WORKINGSET)) {
+                AUXILIARYFUNCTION, AUXILIARYINPUT, WORKINGSET, OBJECTPOINTER)) {
             // search through all childs and apply transformation for them
             XMLTreeModel model = node.getModel();
             for (int i = 0,  n = node.getModel().getChildCount(node); i < n; i++) {
-                XMLTreeNode nd = (XMLTreeNode) model.getChild(node, i);
-
+                
+                // the idea here is that the X-Y position can be in a different
+                // node (= OBJECTPOINTER) separate from the actual object
+                XMLTreeNode xy = (XMLTreeNode) model.getChild(node, i);
+                XMLTreeNode nd;
+                
+                // object pointer is a special case
+                if (Utils.equals(xy.getType(), OBJECTPOINTER)) {
+                    if (xy.getModel().getChildCount(xy) == 0)
+                        continue; /* pointer is not pointing to an object */
+                    nd = (XMLTreeNode) model.getChild(xy, 0);
+                }
+                else {
+                    nd = xy; // the actual node and X-Y node are the same
+                }
+                String tp = nd.getType();
+                
                 // e.g. data masks and alarm masks do not have widths 
-                if (nd.getWidth() == null) {
+//              if (nd.getWidth() == null) {
+                if (Utils.equals(tp, DATAMASK, ALARMMASK, SOFTKEYMASK)) {    
+                    System.out.println("SKIPPING: " + nd.getName());
                     continue;
                 }
                 
@@ -1047,16 +1068,16 @@ public abstract class TreeEditPopup {
                         midYNew = midX;
                     }
                 }
-
+                
                 // if object is a button, the inside width and height are 8 pixels smaller than outside
                 if (Utils.equals(type, BUTTON)) {
                     midXNew -= 4;
                     midYNew -= 4;
                 }
-
+                
                 int width = nd.getWidth();
                 int height = (nd.getHeight() != null) ? nd.getHeight() : width;
-                            
+                
                 // magic...
                 if (visitedElements.contains(nd.actual()) && 
                         (xform == ROTATE_90_CW || xform == ROTATE_90_CCW)) {
@@ -1064,24 +1085,25 @@ public abstract class TreeEditPopup {
                     width = height;
                     height = temp;
                 }
-                
-                int newmidX = xformX(xform, midXNew, midYNew, nd.getX() + width / 2, nd.getY() + height / 2);
-                int newmidY = xformY(xform, midXNew, midYNew, nd.getX() + width / 2, nd.getY() + height / 2);
+
+                int x = xy.getX();
+                int y = xy.getY();
+                int newmidX = xformX(xform, midXNew, midYNew, x + width / 2, y + height / 2);
+                int newmidY = xformY(xform, midXNew, midYNew, x + width / 2, y + height / 2);
                 
                 // apply the transformation only if the child has not yet been visited
                 if (!visitedElements.contains(nd.actual())) {
                     geometricTransformationRecursive(nd, xform, width / 2, height / 2, visitedElements);
                 }
-                                
-                int newHeight = (nd.getHeight() != null) ? nd.getHeight() : nd.getWidth();
+
                 int newWidth = nd.getWidth();
-                
+                int newHeight = (nd.getHeight() != null) ? nd.getHeight() : newWidth;
+
                 // transform position
-                nd.setX(newmidX - newWidth / 2);
-                nd.setY(newmidY - newHeight / 2);
+                xy.setX(newmidX - newWidth / 2);
+                xy.setY(newmidY - newHeight / 2);
             }
         }
-
 
         // swap the width and height attributes, if transformation is a 
         // rotation, object can be rotated and it has width and height
