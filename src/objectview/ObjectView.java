@@ -69,7 +69,7 @@ public class ObjectView extends JComponent implements TreeModelListener,
      * THIS MUST BE GREATER THAN ZERO! 
      */
     static private final int EXTRA_SPACE = 8; 
-    static private final int DEPTH_LIMIT = 20;
+    static private final int DEPTH_LIMIT = 30;
     
     //static private final AffineTransform IDENTITY = new AffineTransform();
     static private final GraphicObjectOperations GFXOP = new GraphicObjectOperations();
@@ -338,7 +338,7 @@ public class ObjectView extends JComponent implements TreeModelListener,
 
     /**
      * Sets the flashing feature on and off. When flashing is
-     * enabled a new timer (thread) is created. When flasing is
+     * enabled a new timer (thread) is created. When flashing is
      * disabled this timer is stopped. Flashing effect is created
      * by periodically toggling the flash attribute in the graphics
      * object.
@@ -426,7 +426,18 @@ public class ObjectView extends JComponent implements TreeModelListener,
 	if (start == null) {
 	    return null;
 	}
-        Graphics2D gfx = (Graphics2D) this.getGraphics();
+        // For some unknown reason this.getGraphics().getTransform() 
+        // returns a transform with a strange scale factor:
+        // AffineTransform[[1.25, 0.0, 0.5], [0.0, 1.25, 0.5]]
+        //
+        // This could be fixed by making a copy and then resetting 
+        // the transform:
+        // Graphics2D gfx = (Graphics2D) this.getGraphics().create();
+        // gfx.setTransform(new AffineTransform());
+        //
+        // However, it is easier to take the graphics object from the 
+        // image buffer as it is not used for drawing anyways:
+        Graphics2D gfx = (Graphics2D) bff.getGraphics();
         gfx.scale(zoom, zoom);
         gfx.translate(EXTRA_SPACE / 2, EXTRA_SPACE / 2);
         PointObjectOperations op = new PointObjectOperations(x, y);
@@ -518,7 +529,11 @@ public class ObjectView extends JComponent implements TreeModelListener,
     public void paintComponent(Graphics g) {
 	dmsg("paintComponent");               
         Graphics2D gfx = (Graphics2D) g;
-
+        
+        // The graphics object has a strange scaling factor of 1.25
+        // but apparently that is not a problem for the drawing code.
+        // System.out.println("FRESH=" + gfx.getTransform());
+        
 	// FIXME: this is test code to get something meaningful to
 	// draw, real code should use current selected path to find
 	// out the proper starting point
@@ -832,7 +847,7 @@ public class ObjectView extends JComponent implements TreeModelListener,
 		gfx.translate(dimension, 0);
 		processNode(gfx, nd, oper);
 		gfx.setTransform(oldx);
-		gfx.clipRect(0, 0, dimension - 1, dimension - 1);
+		gfx.clipRect(0, 0, dimension, dimension);
 	    }
             else if (nd.isType(MACRO)) {
                 // do nothing?                

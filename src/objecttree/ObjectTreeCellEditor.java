@@ -108,14 +108,14 @@ class ObjectTreeCellEditor extends DefaultTreeCellEditor {
             MouseEvent e = (MouseEvent) event;
             p = tree.getClosestPathForLocation(e.getX(), e.getY());            
         }
-        // check if the node should be editable (i.e. it has a name)
-        XMLTreeNode n = (XMLTreeNode) p.getLastPathComponent();
-        Element actual = n.actual();
-        if (actual == null || !actual.hasAttribute(NAME)) {
-            return false;
+        if (p != null) {
+            // check if the node should be editable (i.e. it has a name)
+            XMLTreeNode n = (XMLTreeNode) p.getLastPathComponent();
+            Element actual = n.actual();
+            if (actual != null && actual.hasAttribute(NAME)) {
+                return super.isCellEditable(event);
+            }
         }
-        else {
-            return super.isCellEditable(event);
-        }
+        return false;
     }
 }

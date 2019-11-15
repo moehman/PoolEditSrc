@@ -48,7 +48,7 @@ public class PointObjectOperations implements ObjectOperations {
      * @param y
      */
     public PointObjectOperations(int x, int y) {
-       point.setLocation(x, y);
+        point.setLocation(x, y);
     }
 
     /**
@@ -69,9 +69,9 @@ public class PointObjectOperations implements ObjectOperations {
             currentPath.remove(i);
         }
         currentPath.add(node);
-        
+
         Shape clip = gfx.getClip();
-        if (gfx.getTransform().createTransformedShape(clip).contains(point)) {            
+        if (gfx.getTransform().createTransformedShape(clip).contains(point)) {           
             pointedPath = new TreePath(currentPath.toArray());
         }
         //System.out.println("checking node: " + node + "(" + pointedNode + ")");
