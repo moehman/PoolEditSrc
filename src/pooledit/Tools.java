@@ -315,7 +315,43 @@ public class Tools {
             }
         }
     }
-    
+    /**
+     * 
+     * @param elem 
+     */
+    public static void removeXYAttribs(Element elem) {
+        elem.removeAttribute(POS_X);
+        elem.removeAttribute(POS_Y);
+        elem.removeAttribute(BLOCK_COL);
+        elem.removeAttribute(BLOCK_ROW);    
+        elem.removeAttribute(BLOCK_FONT);
+    }
+    /**
+     * 
+     * @param parent 
+     */
+    public static void removeXYAttribsFromTopNodes(Node parent) {
+        NodeList nodeList = parent.getChildNodes();
+        for (int i = 0, n = nodeList.getLength(); i < n; i++) {
+            Node child = nodeList.item(i);
+            if (child.getNodeType() == Node.ELEMENT_NODE) {
+                removeXYAttribs((Element) child);
+            }
+        }
+    }
+    /**
+     * 
+     * @param doc 
+     */
+    public static void remoteXYAttribsFromInputLists(Document doc) {
+        NodeList nodeList = doc.getElementsByTagName(INPUTLIST);
+        for (int i = 0, n = nodeList.getLength(); i < n; i++) {
+            Node child = nodeList.item(i);
+            if (child.getNodeType() == Node.ELEMENT_NODE) {
+                removeXYAttribsFromTopNodes(child);
+            }
+        }
+    }
     /**
      * Parses document.
      * @param text
@@ -362,6 +398,8 @@ public class Tools {
         //config.setParameter("schema-location", "catalog.xsd");
         Document doc = parser.parseURI(name);
         removeEmptyTextNodes(doc.getDocumentElement());
+        removeXYAttribsFromTopNodes(doc.getDocumentElement());
+        remoteXYAttribsFromInputLists(doc);
         return doc;
     }
     

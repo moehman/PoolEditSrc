@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<objectpool dimension="200" fix_bitmap_path="import/images/" sk_height="32" sk_width="60" std_bitmap_path="import/images/">
+<objectpool dimension="200" fix_bitmap_path="examples/harrow/images/" sk_height="32" sk_width="60" std_bitmap_path="examples/harrow/images/">
   <workingset background_colour="white" name="WorkingSet" selectable="yes">
     <include_object name="MainDM" role="active_mask"/>
     <include_object name="PotilaPIC" pos_x="0" pos_y="0"/>
@@ -383,9 +383,9 @@
   <lineattributes line_art="1111111111111111" line_colour="silver" line_width="1" name="MASKLIGHTGRAYLA"/>
   <lineattributes line_art="1111111111111111" line_colour="grey" line_width="1" name="MASKDARKGRAYLA"/>
   <lineattributes line_art="1111111111111111" line_colour="green" line_width="1" name="MASKDARKGREENLA"/>
-  <fillattributes fill_colour="silver" fill_pattern="" fill_type="fillcolour" name="MASKLIGHTGRAYFA"/>
-  <fillattributes fill_colour="red" fill_pattern="" fill_type="fillcolour" name="MASKREDFA"/>
-  <fillattributes fill_colour="lime" fill_pattern="" fill_type="fillcolour" name="MASKGREENFA"/>
+  <fillattributes fill_colour="silver" fill_type="fillcolour" name="MASKLIGHTGRAYFA"/>
+  <fillattributes fill_colour="red" fill_type="fillcolour" name="MASKREDFA"/>
+  <fillattributes fill_colour="lime" fill_type="fillcolour" name="MASKGREENFA"/>
   <auxiliaryfunction background_colour="silver" function_type="analog" name="DragAF">
     <include_object name="BlueArrowDragUpDownPIC" pos_x="0" pos_y="0"/>
   </auxiliaryfunction>

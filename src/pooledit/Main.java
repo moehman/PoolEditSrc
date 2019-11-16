@@ -208,7 +208,7 @@ public class Main {
     private final JFrame frame = new JFrame("PoolEdit");
     
     /** Filenames */
-    private static final String TESTPOOL = "test.xml";
+    private static final String EXAMPLEPOOL = "example.xml";
     private static final String LIBRARY = "library.xml";
     private static final String TEMPLATE = "template.xml";
     
@@ -567,7 +567,7 @@ public class Main {
         
         //TabWindow tabWindow = new TabWindow(views);
         try {
-            View pool = createNewObjectTreeView(multidom.loadDocument(TESTPOOL)); // FIXME: should not be hard coded!
+            View pool = createNewObjectTreeView(multidom.loadDocument(EXAMPLEPOOL)); // FIXME: should not be hard coded!
             libdoc = multidom.loadDocument(LIBRARY);
             View lib = createNewObjectTreeView(libdoc); // FIXME: should not be hard coded!
             rootWindow.setWindow(

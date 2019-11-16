@@ -252,6 +252,7 @@
   <xs:complexType name="elemWorkingset">
     <xs:sequence>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="container"                             type="elemContainer"/>
         <xs:element name="outputstring"                          type="elemOutputString"/>
         <xs:element name="outputnumber"                          type="elemOutputNumber"/>   
         <xs:element name="line" 	  			 type="elemLine"/>
@@ -264,11 +265,11 @@
         <xs:element name="include_object"                        type="elemIncludeObject"/>
       </xs:choice>
     </xs:sequence>
-    <xs:attribute use="optional" name="name"                     type="xs:string" default=""/>
-    <xs:attribute use="optional" name="id"                       type="attrObjectId" default=""/>
-    <xs:attribute use="optional" name="background_colour"        type="attrColour" default="black"/>
-    <xs:attribute use="optional" name="selectable"               type="attrTruthValue" default="no"/>
-    <xs:attribute use="optional" name="active_mask"              type="xs:string" default=""/>
+    <xs:attribute use="optional" name="name"                     type="xs:string"      default=""/>
+    <xs:attribute use="optional" name="id"                       type="attrObjectId"   default=""/>
+    <xs:attribute                name="background_colour"        type="attrColour"     default="black"/>
+    <xs:attribute                name="selectable"               type="attrTruthValue" default="no"/>
+    <xs:attribute                name="active_mask"              type="xs:string"      default=""/>
   </xs:complexType>
 
   <xs:complexType name="elemDatamask">
@@ -296,11 +297,11 @@
         <xs:element name="include_object"                        type="elemIncludeObject"/>        
       </xs:choice>
     </xs:sequence>
-    <xs:attribute use="optional" name="name"                     type="xs:string" default=""/>
+    <xs:attribute use="optional" name="name"                     type="xs:string"    default=""/>
     <xs:attribute use="optional" name="id"                       type="attrObjectId" default=""/>
-    <xs:attribute use="optional" name="background_colour"        type="attrColour" default="black"/>
-    <xs:attribute use="optional" name="soft_key_mask"            type="xs:string" default=""/>
-    <xs:attribute use="optional" name="role"                     type="xs:string"/>
+    <xs:attribute                name="background_colour"        type="attrColour"   default="black"/>
+    <xs:attribute                name="soft_key_mask"            type="xs:string"    default=""/>
+    <xs:attribute use="optional" name="role"                     type="xs:string"    default=""/>
   </xs:complexType>
 
   <xs:complexType name="elemAlarmMask">
@@ -323,13 +324,13 @@
         <xs:element name="include_object"                        type="elemIncludeObject"/>        
       </xs:choice>
     </xs:sequence>
-    <xs:attribute use="optional" name="name"                     type="xs:string" default=""/>
-    <xs:attribute use="optional" name="id"                       type="attrObjectId" default=""/>
-    <xs:attribute use="optional" name="background_colour"        type="attrColour" default="black"/>
-    <xs:attribute use="optional" name="soft_key_mask"            type="xs:string" default=""/>
-    <xs:attribute use="optional" name="acoustic_signal"          type="attrAcousticSignal" default="high"/>
-    <xs:attribute use="optional" name="priority"                 type="attrPriority" default="high"/>
-    <xs:attribute use="optional" name="role"                     type="xs:string"/>
+    <xs:attribute use="optional" name="name"                     type="xs:string"          default=""/>
+    <xs:attribute use="optional" name="id"                       type="attrObjectId"       default=""/>
+    <xs:attribute                name="background_colour"        type="attrColour"         default="black"/>
+    <xs:attribute                name="soft_key_mask"            type="xs:string"          default=""/>
+    <xs:attribute                name="acoustic_signal"          type="attrAcousticSignal" default="high"/>
+    <xs:attribute                name="priority"                 type="attrPriority"       default="high"/>
+    <xs:attribute use="optional" name="role"                     type="xs:string"          default=""/>
   </xs:complexType>
 
   <xs:complexType name="elemContainer">
@@ -358,14 +359,14 @@
     </xs:sequence>
     <xs:attribute use="optional" name="name"                     type="xs:string"          default=""/>
     <xs:attribute use="optional" name="id"                       type="attrObjectId"       default=""/>
-    <xs:attribute use="optional" name="width"                    type="xs:positiveInteger" default="1"/>
-    <xs:attribute use="optional" name="height"                   type="xs:positiveInteger" default="1"/>
-    <xs:attribute use="optional" name="hidden"                   type="attrTruthValue"     default="no"/>
-    <xs:attribute use="optional" name="pos_x"                    type="positiveInteger0"/>
-    <xs:attribute use="optional" name="pos_y"                    type="positiveInteger0"/>   
-    <xs:attribute use="optional" name="block_col"                type="positiveInteger0"/>
-    <xs:attribute use="optional" name="block_row"                type="positiveInteger0"/>
-    <xs:attribute use="optional" name="block_font"               type="xs:string"/>  
+    <xs:attribute                name="width"                    type="xs:positiveInteger" default="1"/>
+    <xs:attribute                name="height"                   type="xs:positiveInteger" default="1"/>
+    <xs:attribute                name="hidden"                   type="attrTruthValue"     default="no"/>
+    <xs:attribute                name="pos_x"                    type="positiveInteger0"   default="0"/>
+    <xs:attribute                name="pos_y"                    type="positiveInteger0"   default="0"/>   
+    <xs:attribute                name="block_col"                type="positiveInteger0"   default="0"/>
+    <xs:attribute                name="block_row"                type="positiveInteger0"   default="0"/>
+    <xs:attribute                name="block_font"               type="xs:string"          default=""/>  
   </xs:complexType>
   
   
@@ -379,10 +380,10 @@
         <xs:element name="include_object"                        type="elemIncludeObject"/>	  
       </xs:choice>
     </xs:sequence>
-    <xs:attribute use="optional" name="name"                     type="xs:string" default=""/>
+    <xs:attribute use="optional" name="name"                     type="xs:string"    default=""/>
     <xs:attribute use="optional" name="id"                       type="attrObjectId" default=""/>
-    <xs:attribute use="optional" name="background_colour"        type="attrColour" default="black"/>
-    <xs:attribute use="optional" name="role"                     type="xs:string"/>
+    <xs:attribute                name="background_colour"        type="attrColour"   default="black"/>
+    <xs:attribute use="optional" name="role"                     type="xs:string"    default=""/>
   </xs:complexType>
   
   <xs:complexType name="elemKey">
@@ -401,10 +402,10 @@
         <xs:element name="include_object"                        type="elemIncludeObject"/>	  
       </xs:choice>
     </xs:sequence>
-    <xs:attribute use="optional" name="name"                     type="xs:string" default=""/>
+    <xs:attribute use="optional" name="name"                     type="xs:string"    default=""/>
     <xs:attribute use="optional" name="id"                       type="attrObjectId" default=""/>
-    <xs:attribute use="optional" name="background_colour"        type="attrColour" default="black"/>
-    <xs:attribute use="optional" name="key_code"                 type="attrKeyCode" default="1"/> 
+    <xs:attribute                name="background_colour"        type="attrColour"   default="black"/>
+    <xs:attribute                name="key_code"                 type="attrKeyCode"  default="1"/> 
   </xs:complexType>
   
   <xs:complexType name="elemButton">
@@ -423,19 +424,19 @@
         <xs:element name="include_object"                        type="elemIncludeObject"/>
       </xs:choice>
     </xs:sequence>
-    <xs:attribute use="optional" name="name"                     type="xs:string" default=""/>
-    <xs:attribute use="optional" name="id"                       type="attrObjectId" default=""/>
-    <xs:attribute use="optional" name="width"                    type="xs:positiveInteger" default="1"/>
-    <xs:attribute use="optional" name="height"                   type="xs:positiveInteger" default="1"/>
-    <xs:attribute use="optional" name="background_colour"        type="attrColour" default="black"/>
-    <xs:attribute use="optional" name="border_colour"      	 type="attrColour" default="black"/>
-    <xs:attribute use="optional" name="latchable"                type="attrTruthValue" default="no"/>
-    <xs:attribute use="optional" name="key_code"                 type="attrKeyCode" default="1"/>
-    <xs:attribute use="optional" name="pos_x"                    type="positiveInteger0"/>
-    <xs:attribute use="optional" name="pos_y"                    type="positiveInteger0"/>   
-    <xs:attribute use="optional" name="block_col"                type="positiveInteger0"/>
-    <xs:attribute use="optional" name="block_row"                type="positiveInteger0"/>
-    <xs:attribute use="optional" name="block_font"               type="xs:string"/>
+    <xs:attribute use="optional" name="name"                     type="xs:string"          default=""/>
+    <xs:attribute use="optional" name="id"                       type="attrObjectId"       default=""/>
+    <xs:attribute                name="width"                    type="xs:positiveInteger" default="1"/>
+    <xs:attribute                name="height"                   type="xs:positiveInteger" default="1"/>
+    <xs:attribute                name="background_colour"        type="attrColour"         default="black"/>
+    <xs:attribute                name="border_colour"      	 type="attrColour"         default="black"/>
+    <xs:attribute                name="latchable"                type="attrTruthValue"     default="no"/>
+    <xs:attribute                name="key_code"                 type="attrKeyCode"        default="1"/>
+    <xs:attribute                name="pos_x"                    type="positiveInteger0"   default="0"/>
+    <xs:attribute                name="pos_y"                    type="positiveInteger0"   default="0"/>   
+    <xs:attribute                name="block_col"                type="positiveInteger0"   default="0"/>
+    <xs:attribute                name="block_row"                type="positiveInteger0"   default="0"/>
+    <xs:attribute                name="block_font"               type="xs:string"          default=""/>
   </xs:complexType>
   
   
@@ -449,19 +450,19 @@
         <xs:element name="include_object"                        type="elemIncludeObject"/>
       </xs:choice>
     </xs:sequence>
-    <xs:attribute use="optional" name="value"                    type="positiveInteger0" default="0"/>
     <xs:attribute use="optional" name="name"                     type="xs:string" default=""/>
     <xs:attribute use="optional" name="id"                       type="attrObjectId" default=""/>
-    <xs:attribute use="optional" name="width"                    type="xs:positiveInteger" default="1"/>              	            
-    <xs:attribute use="optional" name="foreground_colour"        type="xs:string" default=""/>
-    <xs:attribute use="optional" name="background_colour"        type="attrColour" default="black"/>
-    <xs:attribute use="optional" name="variable_reference"       type="xs:string" default=""/>
-    <xs:attribute use="optional" name="enabled"                  type="attrTruthValue" default="yes"/>	                
-    <xs:attribute use="optional" name="pos_x"                    type="positiveInteger0"/>
-    <xs:attribute use="optional" name="pos_y"                    type="positiveInteger0"/>   
-    <xs:attribute use="optional" name="block_col"                type="positiveInteger0"/>
-    <xs:attribute use="optional" name="block_row"                type="positiveInteger0"/>
-    <xs:attribute use="optional" name="block_font"               type="xs:string"/> 
+    <xs:attribute                name="value"                    type="positiveInteger0" default="0"/>
+    <xs:attribute                name="width"                    type="xs:positiveInteger" default="1"/>              	            
+    <xs:attribute                name="foreground_colour"        type="xs:string" default=""/>
+    <xs:attribute                name="background_colour"        type="attrColour" default="black"/>
+    <xs:attribute                name="variable_reference"       type="xs:string" default=""/>
+    <xs:attribute                name="enabled"                  type="attrTruthValue" default="yes"/>	                
+    <xs:attribute                name="pos_x"                    type="positiveInteger0" default="0"/>
+    <xs:attribute                name="pos_y"                    type="positiveInteger0" default="0"/>   
+    <xs:attribute                name="block_col"                type="positiveInteger0" default="0"/>
+    <xs:attribute                name="block_row"                type="positiveInteger0" default="0"/>
+    <xs:attribute                name="block_font"               type="xs:string" default=""/> 
   </xs:complexType>
   
   <xs:complexType name="elemInputString">
@@ -475,22 +476,22 @@
     </xs:sequence>
     <xs:attribute use="optional" name="name"                     type="xs:string" default=""/>
     <xs:attribute use="optional" name="id"                       type="attrObjectId" default=""/>
-    <xs:attribute use="optional" name="background_colour"        type="attrColour" default="black"/>
-    <xs:attribute use="optional" name="width"                    type="xs:positiveInteger" default="1"/>
-    <xs:attribute use="optional" name="height"                   type="xs:positiveInteger" default="1"/>
-    <xs:attribute use="optional" name="variable_reference"       type="xs:string" default=""/>    
-    <xs:attribute use="optional" name="font_attributes"          type="xs:string" default=""/>
-    <xs:attribute use="optional" name="input_attributes"         type="xs:string" default=""/>
-    <xs:attribute use="optional" name="options"                  type="attrOptionsOutputString" default=""/>
-    <xs:attribute use="optional" name="length"                   type="positiveInteger0" default="0"/>
-    <xs:attribute use="optional" name="value"                    type="xs:string" default=""/>
-    <xs:attribute use="optional" name="horizontal_justification" type="attrHorizontalJustification" default="left"/>
-    <xs:attribute use="optional" name="enabled"                  type="xs:boolean" default="true"/>
-    <xs:attribute use="optional" name="pos_x"                    type="positiveInteger0"/>
-    <xs:attribute use="optional" name="pos_y"                    type="positiveInteger0"/>   
-    <xs:attribute use="optional" name="block_col"                type="positiveInteger0"/>
-    <xs:attribute use="optional" name="block_row"                type="positiveInteger0"/>
-    <xs:attribute use="optional" name="block_font"               type="xs:string"/>
+    <xs:attribute                name="background_colour"        type="attrColour" default="black"/>
+    <xs:attribute                name="width"                    type="xs:positiveInteger" default="1"/>
+    <xs:attribute                name="height"                   type="xs:positiveInteger" default="1"/>
+    <xs:attribute                name="variable_reference"       type="xs:string" default=""/>    
+    <xs:attribute                name="font_attributes"          type="xs:string" default=""/>
+    <xs:attribute                name="input_attributes"         type="xs:string" default=""/>
+    <xs:attribute                name="options"                  type="attrOptionsOutputString" default=""/>
+    <xs:attribute                name="length"                   type="positiveInteger0" default="0"/>
+    <xs:attribute                name="value"                    type="xs:string" default=""/>
+    <xs:attribute                name="horizontal_justification" type="attrHorizontalJustification" default="left"/>
+    <xs:attribute                name="enabled"                  type="xs:boolean" default="true"/>
+    <xs:attribute                name="pos_x"                    type="positiveInteger0" default="0"/>
+    <xs:attribute                name="pos_y"                    type="positiveInteger0" default="0"/>   
+    <xs:attribute                name="block_col"                type="positiveInteger0" default="0"/>
+    <xs:attribute                name="block_row"                type="positiveInteger0" default="0"/>
+    <xs:attribute                name="block_font"               type="xs:string" default=""/>
   </xs:complexType>
 
   <xs:complexType name="elemInputNumber">
@@ -504,27 +505,27 @@
     </xs:sequence>
     <xs:attribute use="optional" name="name"                     type="xs:string" default=""/>
     <xs:attribute use="optional" name="id"                       type="attrObjectId" default=""/>
-    <xs:attribute use="optional" name="options"                  type="attrOptionsOutputNumber" default=""/>
-    <xs:attribute use="optional" name="width"                    type="xs:positiveInteger" default="1"/>
-    <xs:attribute use="optional" name="height"                   type="xs:positiveInteger" default="1"/>
-    <xs:attribute use="optional" name="offset"                   type="xs:integer" default="0"/>
-    <xs:attribute use="optional" name="scale"                    type="xs:decimal" default="1"/>    
-    <xs:attribute use="optional" name="number_of_decimals"       type="positiveInteger0" default="0"/>
-    <xs:attribute use="optional" name="background_colour"        type="attrColour" default="black"/>	            
-    <xs:attribute use="optional" name="font_attributes"          type="xs:string" default=""/>
-    <xs:attribute use="optional" name="horizontal_justification" type="attrHorizontalJustification" default="left"/>
-    <xs:attribute use="optional" name="enabled" 		 type="attrTruthValue" default="yes"/>
-    <xs:attribute use="optional" name="min_value"                type="positiveInteger0" default="0"/>
-    <xs:attribute use="optional" name="max_value"                type="positiveInteger0" default="1000"/>
-    <xs:attribute use="optional" name="format" 		         type="attrFormatNumber" default="fixed"/>
-    <xs:attribute use="optional" name="variable_reference"       type="xs:string" default=""/>
-    <xs:attribute use="optional" name="value"                    type="xs:integer" default="0"/>
+    <xs:attribute                name="options"                  type="attrOptionsOutputNumber" default=""/>
+    <xs:attribute                name="width"                    type="xs:positiveInteger" default="1"/>
+    <xs:attribute                name="height"                   type="xs:positiveInteger" default="1"/>
+    <xs:attribute                name="offset"                   type="xs:integer" default="0"/>
+    <xs:attribute                name="scale"                    type="xs:decimal" default="1"/>    
+    <xs:attribute                name="number_of_decimals"       type="positiveInteger0" default="0"/>
+    <xs:attribute                name="background_colour"        type="attrColour" default="black"/>	            
+    <xs:attribute                name="font_attributes"          type="xs:string" default=""/>
+    <xs:attribute                name="horizontal_justification" type="attrHorizontalJustification" default="left"/>
+    <xs:attribute                name="enabled" 		 type="attrTruthValue" default="yes"/>
+    <xs:attribute                name="min_value"                type="positiveInteger0" default="0"/>
+    <xs:attribute                name="max_value"                type="positiveInteger0" default="1000"/>
+    <xs:attribute                name="format" 		         type="attrFormatNumber" default="fixed"/>
+    <xs:attribute                name="variable_reference"       type="xs:string" default=""/>
+    <xs:attribute                name="value"                    type="xs:integer" default="0"/>
 
-    <xs:attribute use="optional" name="pos_x"                    type="positiveInteger0"/>
-    <xs:attribute use="optional" name="pos_y"                    type="positiveInteger0"/>   
-    <xs:attribute use="optional" name="block_col"                type="positiveInteger0"/>
-    <xs:attribute use="optional" name="block_row"                type="positiveInteger0"/>
-    <xs:attribute use="optional" name="block_font"               type="xs:string"/>
+    <xs:attribute                name="pos_x"                    type="positiveInteger0" default="0"/>
+    <xs:attribute                name="pos_y"                    type="positiveInteger0" default="0"/>   
+    <xs:attribute                name="block_col"                type="positiveInteger0" default="0"/>
+    <xs:attribute                name="block_row"                type="positiveInteger0" default="0"/>
+    <xs:attribute                name="block_font"               type="xs:string" default=""/>
   </xs:complexType>
 
   <xs:complexType name="elemInputList">
@@ -545,16 +546,16 @@
     </xs:sequence>
     <xs:attribute use="optional" name="name"                     type="xs:string" default=""/>
     <xs:attribute use="optional" name="id"                       type="attrObjectId" default=""/> 
-    <xs:attribute use="optional" name="width"                    type="xs:positiveInteger" default="1"/>
-    <xs:attribute use="optional" name="height"                   type="xs:positiveInteger" default="1"/>
-    <xs:attribute use="optional" name="variable_reference"       type="xs:string" default=""/>
-    <xs:attribute use="optional" name="value"                    type="xs:integer" default="0"/>
-    <xs:attribute use="optional" name="enabled" 		 type="attrTruthValue" default="yes"/>
-    <xs:attribute use="optional" name="pos_x"                    type="positiveInteger0"/>
-    <xs:attribute use="optional" name="pos_y"                    type="positiveInteger0"/>   
-    <xs:attribute use="optional" name="block_col"                type="positiveInteger0"/>
-    <xs:attribute use="optional" name="block_row"                type="positiveInteger0"/>
-    <xs:attribute use="optional" name="block_font"               type="xs:string"/>
+    <xs:attribute                name="width"                    type="xs:positiveInteger" default="1"/>
+    <xs:attribute                name="height"                   type="xs:positiveInteger" default="1"/>
+    <xs:attribute                name="variable_reference"       type="xs:string" default=""/>
+    <xs:attribute                name="value"                    type="xs:integer" default="0"/>
+    <xs:attribute                name="enabled" 		 type="attrTruthValue" default="yes"/>
+    <xs:attribute                name="pos_x"                    type="positiveInteger0" default="0"/>
+    <xs:attribute                name="pos_y"                    type="positiveInteger0" default="0"/>   
+    <xs:attribute                name="block_col"                type="positiveInteger0" default="0"/>
+    <xs:attribute                name="block_row"                type="positiveInteger0" default="0"/>
+    <xs:attribute                name="block_font"               type="xs:string" default=""/>
   </xs:complexType>
 
   
@@ -570,21 +571,21 @@
     </xs:sequence>
     <xs:attribute use="optional" name="name"                     type="xs:string" default=""/>
     <xs:attribute use="optional" name="id"                       type="attrObjectId" default=""/>
-    <xs:attribute use="optional" name="background_colour"        type="attrColour" default="black"/>    
-    <xs:attribute use="optional" name="width"                    type="xs:positiveInteger" default="1"/>
-    <xs:attribute use="optional" name="height"                   type="xs:positiveInteger" default="1"/>
-    <xs:attribute use="optional" name="variable_reference"       type="xs:string" default=""/>    
-    <xs:attribute use="optional" name="font_attributes"          type="xs:string"/>
-    <xs:attribute use="optional" name="options"                  type="attrOptionsOutputString" default=""/>
-    <xs:attribute use="optional" name="length"                   type="positiveInteger0" default="0"/>
-    <xs:attribute use="optional" name="value"                    type="xs:string" default=""/>
-    <xs:attribute use="optional" name="horizontal_justification" type="attrHorizontalJustification" default="left"/>
-    <xs:attribute use="optional" name="language"                 type="attrLanguageCode" default=""/>
-    <xs:attribute use="optional" name="pos_x"                    type="positiveInteger0"/>
-    <xs:attribute use="optional" name="pos_y"                    type="positiveInteger0"/>   
-    <xs:attribute use="optional" name="block_col"                type="positiveInteger0"/>
-    <xs:attribute use="optional" name="block_row"                type="positiveInteger0"/>
-    <xs:attribute use="optional" name="block_font"               type="xs:string"/>
+    <xs:attribute                name="background_colour"        type="attrColour" default="black"/>    
+    <xs:attribute                name="width"                    type="xs:positiveInteger" default="1"/>
+    <xs:attribute                name="height"                   type="xs:positiveInteger" default="1"/>
+    <xs:attribute                name="variable_reference"       type="xs:string" default=""/>    
+    <xs:attribute                name="font_attributes"          type="xs:string"/>
+    <xs:attribute                name="options"                  type="attrOptionsOutputString" default=""/>
+    <xs:attribute                name="length"                   type="positiveInteger0" default="0"/>
+    <xs:attribute                name="value"                    type="xs:string" default=""/>
+    <xs:attribute                name="horizontal_justification" type="attrHorizontalJustification" default="left"/>
+    <xs:attribute                name="language"                 type="attrLanguageCode" default=""/>
+    <xs:attribute                name="pos_x"                    type="positiveInteger0" default="0"/>
+    <xs:attribute                name="pos_y"                    type="positiveInteger0" default="0"/>   
+    <xs:attribute                name="block_col"                type="positiveInteger0" default="0"/>
+    <xs:attribute                name="block_row"                type="positiveInteger0" default="0"/>
+    <xs:attribute                name="block_font"               type="xs:string" default=""/>
   </xs:complexType>
 
   <xs:complexType name="elemOutputNumber">
@@ -597,26 +598,26 @@
       </xs:choice>
     </xs:sequence>
     <xs:attribute use="optional" name="name"                     type="xs:string" default=""/>
-    <xs:attribute use="optional" name="options"                  type="attrOptionsOutputNumber" default=""/>
-    <xs:attribute use="optional" name="variable_reference"       type="xs:string" default=""/>
     <xs:attribute use="optional" name="id"                       type="attrObjectId" default=""/>
-    <xs:attribute use="optional" name="width"                    type="xs:positiveInteger" default="1"/>
-    <xs:attribute use="optional" name="height"                   type="xs:positiveInteger" default="1"/>
-    <xs:attribute use="optional" name="offset"                   type="xs:integer" default="0"/>
-    <xs:attribute use="optional" name="value"	                 type="positiveInteger0" default="0"/>
-    <xs:attribute use="optional" name="scale"                    type="xs:decimal" default="1"/>
-    <xs:attribute use="optional" name="number_of_decimals"       type="positiveInteger0" default="0"/>
-    <xs:attribute use="optional" name="background_colour"        type="attrColour" default="black"/>	            
-    <xs:attribute use="optional" name="font_attributes"          type="xs:string" default=""/>
-    <xs:attribute use="optional" name="horizontal_justification" type="attrHorizontalJustification" default="left"/>
-    <xs:attribute use="optional" name="min_value"                type="positiveInteger0" default="0"/>
-    <xs:attribute use="optional" name="max_value"                type="positiveInteger0" default="1000"/>
-    <xs:attribute use="optional" name="format"                   type="attrFormatNumber" default="fixed"/>
-    <xs:attribute use="optional" name="pos_x"                    type="positiveInteger0"/>
-    <xs:attribute use="optional" name="pos_y"                    type="positiveInteger0"/>   
-    <xs:attribute use="optional" name="block_col"                type="positiveInteger0"/>
-    <xs:attribute use="optional" name="block_row"                type="positiveInteger0"/>
-    <xs:attribute use="optional" name="block_font"               type="xs:string"/>
+    <xs:attribute                name="options"                  type="attrOptionsOutputNumber" default=""/>
+    <xs:attribute                name="variable_reference"       type="xs:string" default=""/>
+    <xs:attribute                name="width"                    type="xs:positiveInteger" default="1"/>
+    <xs:attribute                name="height"                   type="xs:positiveInteger" default="1"/>
+    <xs:attribute                name="offset"                   type="xs:integer" default="0"/>
+    <xs:attribute                name="value"	                 type="positiveInteger0" default="0"/>
+    <xs:attribute                name="scale"                    type="xs:decimal" default="1"/>
+    <xs:attribute                name="number_of_decimals"       type="positiveInteger0" default="0"/>
+    <xs:attribute                name="background_colour"        type="attrColour" default="black"/>	            
+    <xs:attribute                name="font_attributes"          type="xs:string" default=""/>
+    <xs:attribute                name="horizontal_justification" type="attrHorizontalJustification" default="left"/>
+    <xs:attribute                name="min_value"                type="positiveInteger0" default="0"/>
+    <xs:attribute                name="max_value"                type="positiveInteger0" default="1000"/>
+    <xs:attribute                name="format"                   type="attrFormatNumber" default="fixed"/>
+    <xs:attribute                name="pos_x"                    type="positiveInteger0" default="0"/>
+    <xs:attribute                name="pos_y"                    type="positiveInteger0" default="0"/>   
+    <xs:attribute                name="block_col"                type="positiveInteger0" default="0"/>
+    <xs:attribute                name="block_row"                type="positiveInteger0" default="0"/>
+    <xs:attribute                name="block_font"               type="xs:string" default=""/>
   </xs:complexType>
 
   <!-- ### SHAPE OBJECTS ### -->
@@ -630,15 +631,15 @@
     </xs:sequence>
     <xs:attribute use="optional" name="name"                     type="xs:string" default=""/>
     <xs:attribute use="optional" name="id"                       type="attrObjectId" default=""/>
-    <xs:attribute use="optional" name="line_attributes"          type="xs:string" default=""/>
-    <xs:attribute use="optional" name="width"                    type="xs:positiveInteger" default="1"/>
-    <xs:attribute use="optional" name="height"                   type="xs:positiveInteger" default="1"/>	        
-    <xs:attribute use="optional" name="line_direction"           type="attrLineDirection" default="toplefttobottomright"/>
-    <xs:attribute use="optional" name="pos_x"                    type="positiveInteger0"/>
-    <xs:attribute use="optional" name="pos_y"                    type="positiveInteger0"/>   
-    <xs:attribute use="optional" name="block_col"                type="positiveInteger0"/>
-    <xs:attribute use="optional" name="block_row"                type="positiveInteger0"/>
-    <xs:attribute use="optional" name="block_font"               type="xs:string"/>
+    <xs:attribute                name="line_attributes"          type="xs:string" default=""/>
+    <xs:attribute                name="width"                    type="xs:positiveInteger" default="1"/>
+    <xs:attribute                name="height"                   type="xs:positiveInteger" default="1"/>	        
+    <xs:attribute                name="line_direction"           type="attrLineDirection" default="toplefttobottomright"/>
+    <xs:attribute                name="pos_x"                    type="positiveInteger0" default="0"/>
+    <xs:attribute                name="pos_y"                    type="positiveInteger0" default="0"/>   
+    <xs:attribute                name="block_col"                type="positiveInteger0" default="0"/>
+    <xs:attribute                name="block_row"                type="positiveInteger0" default="0"/>
+    <xs:attribute                name="block_font"               type="xs:string" default=""/>
   </xs:complexType>
   
   <!-- line supression attribute is missing-->
@@ -653,16 +654,16 @@
     </xs:sequence>
     <xs:attribute use="optional" name="name"                     type="xs:string" default=""/>
     <xs:attribute use="optional" name="id"                       type="attrObjectId"  default=""/>    
-    <xs:attribute use="optional" name="width"                    type="xs:positiveInteger" default="1"/>
-    <xs:attribute use="optional" name="height"                   type="xs:positiveInteger" default="1"/>        
-    <xs:attribute use="optional" name="line_attributes"          type="xs:string" default=""/>
-    <xs:attribute use="optional" name="fill_attributes"          type="xs:string" default=""/>
-    <xs:attribute use="optional" name="line_suppression"         type="attrLineSuppression" default=""/>
-    <xs:attribute use="optional" name="pos_x"                    type="positiveInteger0"/>
-    <xs:attribute use="optional" name="pos_y"                    type="positiveInteger0"/>   
-    <xs:attribute use="optional" name="block_col"                type="positiveInteger0"/>
-    <xs:attribute use="optional" name="block_row"                type="positiveInteger0"/>
-    <xs:attribute use="optional" name="block_font"               type="xs:string"/>
+    <xs:attribute                name="width"                    type="xs:positiveInteger" default="1"/>
+    <xs:attribute                name="height"                   type="xs:positiveInteger" default="1"/>        
+    <xs:attribute                name="line_attributes"          type="xs:string" default=""/>
+    <xs:attribute                name="fill_attributes"          type="xs:string" default=""/>
+    <xs:attribute                name="line_suppression"         type="attrLineSuppression" default=""/>
+    <xs:attribute                name="pos_x"                    type="positiveInteger0" default="0"/>
+    <xs:attribute                name="pos_y"                    type="positiveInteger0" default="0"/>   
+    <xs:attribute                name="block_col"                type="positiveInteger0" default="0"/>
+    <xs:attribute                name="block_row"                type="positiveInteger0" default="0"/>
+    <xs:attribute                name="block_font"               type="xs:string" default=""/>
   </xs:complexType>
 
   <xs:complexType name="elemEllipse">
@@ -676,18 +677,18 @@
     </xs:sequence>
     <xs:attribute use="optional" name="name"                     type="xs:string" default=""/>
     <xs:attribute use="optional" name="id"                       type="attrObjectId" default=""/>    
-    <xs:attribute use="optional" name="width"                    type="xs:positiveInteger" default="1"/>
-    <xs:attribute use="optional" name="height"                   type="xs:positiveInteger" default="1"/>        
-    <xs:attribute use="optional" name="line_attributes"          type="xs:string" default=""/>
-    <xs:attribute use="optional" name="ellipse_type"             type="attrEllipseType" default="closed"/>
-    <xs:attribute use="optional" name="fill_attributes"          type="xs:string" default=""/>
-    <xs:attribute use="optional" name="start_angle"              type="positiveInteger0" default="0"/>
-    <xs:attribute use="optional" name="end_angle"                type="positiveInteger0" default="0"/>
-    <xs:attribute use="optional" name="pos_x"                    type="positiveInteger0"/>
-    <xs:attribute use="optional" name="pos_y"                    type="positiveInteger0"/>   
-    <xs:attribute use="optional" name="block_col"                type="positiveInteger0"/>
-    <xs:attribute use="optional" name="block_row"                type="positiveInteger0"/>
-    <xs:attribute use="optional" name="block_font"               type="xs:string"/>
+    <xs:attribute                name="width"                    type="xs:positiveInteger" default="1"/>
+    <xs:attribute                name="height"                   type="xs:positiveInteger" default="1"/>        
+    <xs:attribute                name="line_attributes"          type="xs:string" default=""/>
+    <xs:attribute                name="ellipse_type"             type="attrEllipseType" default="closed"/>
+    <xs:attribute                name="fill_attributes"          type="xs:string" default=""/>
+    <xs:attribute                name="start_angle"              type="positiveInteger0" default="0"/>
+    <xs:attribute                name="end_angle"                type="positiveInteger0" default="0"/>
+    <xs:attribute                name="pos_x"                    type="positiveInteger0" default="0"/>
+    <xs:attribute                name="pos_y"                    type="positiveInteger0" default="0"/>   
+    <xs:attribute                name="block_col"                type="positiveInteger0" default="0"/>
+    <xs:attribute                name="block_row"                type="positiveInteger0" default="0"/>
+    <xs:attribute                name="block_font"               type="xs:string" default=""/>
   </xs:complexType>
   
   <xs:complexType name="elemPolygon">
@@ -702,16 +703,16 @@
     </xs:sequence>
     <xs:attribute use="optional" name="name"                     type="xs:string" default=""/>
     <xs:attribute use="optional" name="id"                       type="attrObjectId" default=""/>    
-    <xs:attribute use="optional" name="width"                    type="xs:positiveInteger" default="1"/>
-    <xs:attribute use="optional" name="height"                   type="xs:positiveInteger" default="1"/>        
-    <xs:attribute use="optional" name="line_attributes"          type="xs:string" default=""/>
-    <xs:attribute use="optional" name="polygon_type"             type="attrPolygonType" default="convex"/>
-    <xs:attribute use="optional" name="fill_attributes"          type="xs:string" default=""/>
-    <xs:attribute use="optional" name="pos_x"                    type="positiveInteger0"/>
-    <xs:attribute use="optional" name="pos_y"                    type="positiveInteger0"/>   
-    <xs:attribute use="optional" name="block_col"                type="positiveInteger0"/>
-    <xs:attribute use="optional" name="block_row"                type="positiveInteger0"/>
-    <xs:attribute use="optional" name="block_font"               type="xs:string"/>
+    <xs:attribute                name="width"                    type="xs:positiveInteger" default="1"/>
+    <xs:attribute                name="height"                   type="xs:positiveInteger" default="1"/>        
+    <xs:attribute                name="line_attributes"          type="xs:string" default=""/>
+    <xs:attribute                name="polygon_type"             type="attrPolygonType" default="convex"/>
+    <xs:attribute                name="fill_attributes"          type="xs:string" default=""/>
+    <xs:attribute                name="pos_x"                    type="positiveInteger0" default="0"/>
+    <xs:attribute                name="pos_y"                    type="positiveInteger0" default="0"/>   
+    <xs:attribute                name="block_col"                type="positiveInteger0" default="0"/>
+    <xs:attribute                name="block_row"                type="positiveInteger0" default="0"/>
+    <xs:attribute                name="block_font"               type="xs:string" default=""/>
   </xs:complexType>
   
   
@@ -726,23 +727,23 @@
     </xs:sequence>
     <xs:attribute use="optional" name="name"                     type="xs:string" default=""/>
     <xs:attribute use="optional" name="id"                       type="attrObjectId" default=""/>
-    <xs:attribute use="optional" name="width"                    type="xs:positiveInteger" default="1"/>
-    <xs:attribute use="optional" name="needle_colour"		 type="attrColour" default="black"/>
-    <xs:attribute use="optional" name="border_colour"      	 type="attrColour" default="black"/>
-    <xs:attribute use="optional" name="arc_and_tick_colour"    	 type="attrColour" default="black"/>
-    <xs:attribute use="optional" name="options"                  type="attrOptionsMeter" default=""/>
-    <xs:attribute use="optional" name="variable_reference"       type="xs:string" default=""/>
-    <xs:attribute use="optional" name="value"                    type="positiveInteger0" default="0"/>
-    <xs:attribute use="optional" name="min_value"                type="positiveInteger0" default="0"/>
-    <xs:attribute use="optional" name="max_value"                type="positiveInteger0" default="1000"/>
-    <xs:attribute use="optional" name="start_angle"              type="positiveInteger0" default="0"/>
-    <xs:attribute use="optional" name="end_angle"                type="positiveInteger0" default="0"/>
-    <xs:attribute use="optional" name="number_of_ticks"          type="positiveInteger0" default="0"/>
-    <xs:attribute use="optional" name="pos_x"                    type="positiveInteger0"/>
-    <xs:attribute use="optional" name="pos_y"                    type="positiveInteger0"/>   
-    <xs:attribute use="optional" name="block_col"                type="positiveInteger0"/>
-    <xs:attribute use="optional" name="block_row"                type="positiveInteger0"/>
-    <xs:attribute use="optional" name="block_font"               type="xs:string"/>
+    <xs:attribute                name="width"                    type="xs:positiveInteger" default="1"/>
+    <xs:attribute                name="needle_colour"		 type="attrColour" default="black"/>
+    <xs:attribute                name="border_colour"      	 type="attrColour" default="black"/>
+    <xs:attribute                name="arc_and_tick_colour"    	 type="attrColour" default="black"/>
+    <xs:attribute                name="options"                  type="attrOptionsMeter" default=""/>
+    <xs:attribute                name="variable_reference"       type="xs:string" default=""/>
+    <xs:attribute                name="value"                    type="positiveInteger0" default="0"/>
+    <xs:attribute                name="min_value"                type="positiveInteger0" default="0"/>
+    <xs:attribute                name="max_value"                type="positiveInteger0" default="1000"/>
+    <xs:attribute                name="start_angle"              type="positiveInteger0" default="0"/>
+    <xs:attribute                name="end_angle"                type="positiveInteger0" default="0"/>
+    <xs:attribute                name="number_of_ticks"          type="positiveInteger0" default="0"/>
+    <xs:attribute                name="pos_x"                    type="positiveInteger0" default="0"/>
+    <xs:attribute                name="pos_y"                    type="positiveInteger0" default="0"/>   
+    <xs:attribute                name="block_col"                type="positiveInteger0" default="0"/>
+    <xs:attribute                name="block_row"                type="positiveInteger0" default="0"/>
+    <xs:attribute                name="block_font"               type="xs:string" default=""/>
   </xs:complexType>
 
   <xs:complexType name="elemLinearBarGraph">
@@ -755,23 +756,23 @@
     </xs:sequence>
     <xs:attribute use="optional" name="name"                     type="xs:string" default=""/>
     <xs:attribute use="optional" name="id"                       type="attrObjectId" default=""/>
-    <xs:attribute use="optional" name="width"                    type="xs:positiveInteger" default="1"/>
-    <xs:attribute use="optional" name="height"                   type="xs:positiveInteger" default="1"/>
-    <xs:attribute use="optional" name="colour"			 type="attrColour" default="black"/>
-    <xs:attribute use="optional" name="target_line_colour"       type="attrColour" default="black"/>
-    <xs:attribute use="optional" name="options"		         type="attrOptionsLinearBarGraph" default=""/>
-    <xs:attribute use="optional" name="number_of_ticks"          type="positiveInteger0" default="0"/>
-    <xs:attribute use="optional" name="min_value"                type="positiveInteger0" default="0"/>
-    <xs:attribute use="optional" name="max_value"                type="positiveInteger0" default="1000"/>
-    <xs:attribute use="optional" name="variable_reference"       type="xs:string" default=""/>
-    <xs:attribute use="optional" name="value"               	 type="positiveInteger0" default="0"/>
-    <xs:attribute use="optional" name="target_value_variable_reference"       type="xs:string" default=""/>
-    <xs:attribute use="optional" name="target_value"           	 type="positiveInteger0" default="0"/>
-    <xs:attribute use="optional" name="pos_x"                    type="positiveInteger0"/>
-    <xs:attribute use="optional" name="pos_y"                    type="positiveInteger0"/>   
-    <xs:attribute use="optional" name="block_col"                type="positiveInteger0"/>
-    <xs:attribute use="optional" name="block_row"                type="positiveInteger0"/>
-    <xs:attribute use="optional" name="block_font"               type="xs:string"/>
+    <xs:attribute                name="width"                    type="xs:positiveInteger" default="1"/>
+    <xs:attribute                name="height"                   type="xs:positiveInteger" default="1"/>
+    <xs:attribute                name="colour"			 type="attrColour" default="black"/>
+    <xs:attribute                name="target_line_colour"       type="attrColour" default="black"/>
+    <xs:attribute                name="options"		         type="attrOptionsLinearBarGraph" default=""/>
+    <xs:attribute                name="number_of_ticks"          type="positiveInteger0" default="0"/>
+    <xs:attribute                name="min_value"                type="positiveInteger0" default="0"/>
+    <xs:attribute                name="max_value"                type="positiveInteger0" default="1000"/>
+    <xs:attribute                name="variable_reference"       type="xs:string" default=""/>
+    <xs:attribute                name="value"               	 type="positiveInteger0" default="0"/>
+    <xs:attribute                name="target_value_variable_reference"       type="xs:string" default=""/>
+    <xs:attribute                name="target_value"           	 type="positiveInteger0" default="0"/>
+    <xs:attribute                name="pos_x"                    type="positiveInteger0" default="0"/>
+    <xs:attribute                name="pos_y"                    type="positiveInteger0" default="0"/>   
+    <xs:attribute                name="block_col"                type="positiveInteger0" default="0"/>
+    <xs:attribute                name="block_row"                type="positiveInteger0" default="0"/>
+    <xs:attribute                name="block_font"               type="xs:string" default=""/>
   </xs:complexType>
 
   <xs:complexType name="elemArchedBarGraph">
@@ -784,25 +785,25 @@
     </xs:sequence>
     <xs:attribute use="optional" name="name"                     type="xs:string" default=""/>
     <xs:attribute use="optional" name="id"                       type="attrObjectId" default=""/>
-    <xs:attribute use="optional" name="width"                    type="xs:positiveInteger" default="1"/>
-    <xs:attribute use="optional" name="height"                   type="xs:positiveInteger" default="1"/>
-    <xs:attribute use="optional" name="options"		         type="attrOptionsArchedBarGraph" default=""/>
-    <xs:attribute use="optional" name="variable_reference"       type="xs:string" default=""/>
-    <xs:attribute use="optional" name="value"               	 type="positiveInteger0" default="0"/>
-    <xs:attribute use="optional" name="min_value"                type="positiveInteger0" default="0"/>
-    <xs:attribute use="optional" name="max_value"                type="positiveInteger0" default="1000"/>
-    <xs:attribute use="optional" name="colour"			 type="attrColour" default="black"/>
-    <xs:attribute use="optional" name="target_line_colour"       type="attrColour" default="black"/>	
-    <xs:attribute use="optional" name="target_value_variable_reference"       type="xs:string" default=""/>
-    <xs:attribute use="optional" name="target_value"           	 type="positiveInteger0" default="0"/>
-    <xs:attribute use="optional" name="start_angle"              type="positiveInteger0" default="0"/>
-    <xs:attribute use="optional" name="end_angle"                type="positiveInteger0" default="0"/>
-    <xs:attribute use="optional" name="bar_graph_width"          type="xs:positiveInteger" default="1"/>
-    <xs:attribute use="optional" name="pos_x"                    type="positiveInteger0"/>
-    <xs:attribute use="optional" name="pos_y"                    type="positiveInteger0"/>   
-    <xs:attribute use="optional" name="block_col"                type="positiveInteger0"/>
-    <xs:attribute use="optional" name="block_row"                type="positiveInteger0"/>
-    <xs:attribute use="optional" name="block_font"               type="xs:string"/>
+    <xs:attribute                name="width"                    type="xs:positiveInteger" default="1"/>
+    <xs:attribute                name="height"                   type="xs:positiveInteger" default="1"/>
+    <xs:attribute                name="options"		         type="attrOptionsArchedBarGraph" default=""/>
+    <xs:attribute                name="variable_reference"       type="xs:string" default=""/>
+    <xs:attribute                name="value"               	 type="positiveInteger0" default="0"/>
+    <xs:attribute                name="min_value"                type="positiveInteger0" default="0"/>
+    <xs:attribute                name="max_value"                type="positiveInteger0" default="1000"/>
+    <xs:attribute                name="colour"			 type="attrColour" default="black"/>
+    <xs:attribute                name="target_line_colour"       type="attrColour" default="black"/>	
+    <xs:attribute                name="target_value_variable_reference"       type="xs:string" default=""/>
+    <xs:attribute                name="target_value"           	 type="positiveInteger0" default="0"/>
+    <xs:attribute                name="start_angle"              type="positiveInteger0" default="0"/>
+    <xs:attribute                name="end_angle"                type="positiveInteger0" default="0"/>
+    <xs:attribute                name="bar_graph_width"          type="xs:positiveInteger" default="1"/>
+    <xs:attribute                name="pos_x"                    type="positiveInteger0" default="0"/>
+    <xs:attribute                name="pos_y"                    type="positiveInteger0" default="0"/>   
+    <xs:attribute                name="block_col"                type="positiveInteger0" default="0"/>
+    <xs:attribute                name="block_row"                type="positiveInteger0" default="0"/>
+    <xs:attribute                name="block_font"               type="xs:string" default=""/>
   </xs:complexType>
 
   
@@ -817,46 +818,46 @@
     </xs:sequence>
     <xs:attribute use="optional" name="name"                     type="xs:string" default=""/>
     <xs:attribute use="optional" name="id"                       type="attrObjectId" default=""/>
-    <xs:attribute use="optional" name="transparency_colour"      type="attrColour" default="black"/>
-    <xs:attribute use="optional" name="width"                    type="xs:positiveInteger" default="1"/>    
-    <xs:attribute use="optional" name="format"                   type="attrFormatPictureGraphicFixedBitmap" default="8bit"/>
-    <xs:attribute use="optional" name="options"                  type="attrOptionsPictureGraphic" default=""/>
-    <xs:attribute use="optional" name="file"                     type="xs:string" default=""/>
-    <xs:attribute use="optional" name="file1"                    type="xs:string" default=""/>
-    <xs:attribute use="optional" name="file4"                    type="xs:string" default=""/>
-    <xs:attribute use="optional" name="file8"                    type="xs:string" default=""/>
-    <xs:attribute use="optional" name="rle"                      type="attrRle" default="auto"/>
-    <xs:attribute use="optional" name="pos_x"                    type="positiveInteger0"/>
-    <xs:attribute use="optional" name="pos_y"                    type="positiveInteger0"/>   
-    <xs:attribute use="optional" name="block_col"                type="positiveInteger0"/>
-    <xs:attribute use="optional" name="block_row"                type="positiveInteger0"/>
-    <xs:attribute use="optional" name="block_font"               type="xs:string"/>
+    <xs:attribute                name="transparency_colour"      type="attrColour" default="black"/>
+    <xs:attribute                name="width"                    type="xs:positiveInteger" default="1"/>    
+    <xs:attribute                name="format"                   type="attrFormatPictureGraphicFixedBitmap" default="8bit"/>
+    <xs:attribute                name="options"                  type="attrOptionsPictureGraphic" default=""/>
+    <xs:attribute                name="file"                     type="xs:string" default=""/>
+    <xs:attribute                name="file1"                    type="xs:string" default=""/>
+    <xs:attribute                name="file4"                    type="xs:string" default=""/>
+    <xs:attribute                name="file8"                    type="xs:string" default=""/>
+    <xs:attribute                name="rle"                      type="attrRle" default="auto"/>
+    <xs:attribute                name="pos_x"                    type="positiveInteger0" default="0"/>
+    <xs:attribute                name="pos_y"                    type="positiveInteger0" default="0"/>   
+    <xs:attribute                name="block_col"                type="positiveInteger0" default="0"/>
+    <xs:attribute                name="block_row"                type="positiveInteger0" default="0"/>
+    <xs:attribute                name="block_font"               type="xs:string" default=""/>
   </xs:complexType>
 
   <xs:complexType name="elemFixedBitmap">
-    <xs:attribute use="optional" name="format"                   type="attrFormatPictureGraphicFixedBitmap" default=""/>
-    <xs:attribute use="optional" name="file"                     type="xs:string" default=""/>
-    <xs:attribute use="optional" name="file1"                    type="xs:string" default=""/>
-    <xs:attribute use="optional" name="file4"                    type="xs:string" default=""/>
-    <xs:attribute use="optional" name="file8"                    type="xs:string" default=""/>
-    <xs:attribute use="optional" name="rle"                      type="attrRle" default="auto"/>
+    <xs:attribute                name="format"                   type="attrFormatPictureGraphicFixedBitmap" default=""/>
+    <xs:attribute                name="file"                     type="xs:string" default=""/>
+    <xs:attribute                name="file1"                    type="xs:string" default=""/>
+    <xs:attribute                name="file4"                    type="xs:string" default=""/>
+    <xs:attribute                name="file8"                    type="xs:string" default=""/>
+    <xs:attribute                name="rle"                      type="attrRle"   default="auto"/>
   </xs:complexType>
   
  
   <!-- ### VARIABLE OBJECTS ### -->
   <xs:complexType name="elemNumberVariable">
-    <xs:attribute use="optional" name="name"                     type="xs:string" default=""/>
+    <xs:attribute use="optional" name="name"                     type="xs:string"    default=""/>
     <xs:attribute use="optional" name="id"                       type="attrObjectId" default=""/>
-    <xs:attribute use="optional" name="value"                    type="xs:integer" default="0"/> 
-    <xs:attribute use="optional" name="role"                     type="xs:string"/>   
+    <xs:attribute                name="value"                    type="xs:integer"   default="0"/> 
+    <xs:attribute use="optional" name="role"                     type="xs:string"    default=""/>   
   </xs:complexType>
 
   <xs:complexType name="elemStringVariable">
-    <xs:attribute use="optional" name="name"                     type="xs:string" default=""/>
-    <xs:attribute use="optional" name="id"                       type="attrObjectId" default=""/>
-    <xs:attribute use="optional" name="language"                 type="attrLanguageCode" default=""/>
-    <xs:attribute use="optional" name="value"                    type="xs:string" default=""/>    
-    <xs:attribute use="optional" name="role"                     type="xs:string"/>
+    <xs:attribute use="optional" name="name"                     type="xs:string"        default=""/>
+    <xs:attribute use="optional" name="id"                       type="attrObjectId"     default=""/>
+    <xs:attribute                name="language"                 type="attrLanguageCode" default=""/>
+    <xs:attribute                name="value"                    type="xs:string"        default=""/>    
+    <xs:attribute use="optional" name="role"                     type="xs:string"        default=""/>
   </xs:complexType>
   
   
@@ -867,14 +868,14 @@
         <xs:element name="macro"                                 type="elemMacro"/>
       </xs:choice>
     </xs:sequence>
-    <xs:attribute use="optional" name="name"                     type="xs:string" default=""/>
-    <xs:attribute use="optional" name="id"                       type="attrObjectId" default=""/>
-    <xs:attribute use="optional" name="font_colour"              type="attrColour" default="black"/>
-    <xs:attribute use="optional" name="font_size"                type="attrFontSize" default="6x8"/>
-    <xs:attribute use="optional" name="font_type"                type="attrFontType" default="0"/>
-    <xs:attribute use="optional" name="font_style"               type="attrFontStyle" default="normal"/>
-    <xs:attribute use="optional" name="language"                 type="attrLanguageCode" default=""/>
-    <xs:attribute use="optional" name="role"                     type="xs:string"/>
+    <xs:attribute use="optional" name="name"                     type="xs:string"        default=""/>
+    <xs:attribute use="optional" name="id"                       type="attrObjectId"     default=""/>
+    <xs:attribute                name="font_colour"              type="attrColour"       default="black"/>
+    <xs:attribute                name="font_size"                type="attrFontSize"     default="6x8"/>
+    <xs:attribute                name="font_type"                type="attrFontType"     default="0"/>
+    <xs:attribute                name="font_style"               type="attrFontStyle"    default="normal"/>
+    <xs:attribute                name="language"                 type="attrLanguageCode" default=""/>
+    <xs:attribute use="optional" name="role"                     type="xs:string"        default=""/>
   </xs:complexType>
 
   <xs:complexType name="elemLineAttributes">
@@ -883,28 +884,28 @@
         <xs:element name="macro"                                 type="elemMacro"/>
       </xs:choice>
     </xs:sequence>
-    <xs:attribute use="optional" name="name"                     type="xs:string" default=""/>
-    <xs:attribute use="optional" name="id"                       type="attrObjectId" default=""/>
-    <xs:attribute use="optional" name="line_colour"              type="attrColour" default="black"/>
-    <xs:attribute use="optional" name="line_width"               type="xs:positiveInteger" default="1"/>
-    <xs:attribute use="optional" name="line_art"                 type="xs:string" default=""/>
-    <xs:attribute use="optional" name="role"                     type="xs:string"/>
+    <xs:attribute use="optional" name="name"                     type="xs:string"          default=""/>
+    <xs:attribute use="optional" name="id"                       type="attrObjectId"       default=""/>
+    <xs:attribute                name="line_colour"              type="attrColour"         default="black"/>
+    <xs:attribute                name="line_width"               type="xs:positiveInteger" default="1"/>
+    <xs:attribute                name="line_art"                 type="xs:string"          default=""/>
+    <xs:attribute use="optional" name="role"                     type="xs:string"          default=""/>
   </xs:complexType>
 
   <xs:complexType name="elemFillAttributes">
     <xs:sequence>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element name="picturegraphic"                        type="elemPictureGraphic"/>
+        <xs:element name="picturegraphic"                        type="elemPictureGraphic"/><!-- fill_pattern -->
         <xs:element name="macro"                                 type="elemMacro"/>
         <xs:element name="include_object"                        type="elemIncludeObject"/>
       </xs:choice>
     </xs:sequence>
-    <xs:attribute use="optional" name="name"                     type="xs:string" default=""/>
+    <xs:attribute use="optional" name="name"                     type="xs:string"    default=""/>
     <xs:attribute use="optional" name="id"                       type="attrObjectId" default=""/>
-    <xs:attribute use="optional" name="fill_type"                type="attrFillType" default="nofill"/>
-    <xs:attribute use="optional" name="fill_colour"              type="attrColour" default="black"/>
-    <xs:attribute use="optional" name="fill_pattern"             type="xs:string" default=""/>
-    <xs:attribute use="optional" name="role"                     type="xs:string"/>
+    <xs:attribute                name="fill_type"                type="attrFillType" default="nofill"/>
+    <xs:attribute                name="fill_colour"              type="attrColour"   default="black"/>
+<!--<xs:attribute                name="fill_pattern"             type="xs:string"    default=""/>-->
+    <xs:attribute use="optional" name="role"                     type="xs:string"    default=""/>
    </xs:complexType>
 
   <xs:complexType name="elemInputAttributes">
@@ -913,12 +914,12 @@
         <xs:element name="macro"                                 type="elemMacro"/>
       </xs:choice>
     </xs:sequence>
-    <xs:attribute use="optional" name="name"                     type="xs:string" default=""/>
-    <xs:attribute use="optional" name="id"                       type="attrObjectId" default=""/>
-    <xs:attribute use="optional" name="validation_type"          type="attrValidationType" default="validcharacters"/>
-    <xs:attribute use="optional" name="length"                   type="positiveInteger0" default="0"/>
-    <xs:attribute use="optional" name="validation_string"        type="xs:string" default="abcdefghijklmnopqrstuvwxyz"/> 
-    <xs:attribute use="optional" name="role"                     type="xs:string"/> 
+    <xs:attribute use="optional" name="name"                     type="xs:string"          default=""/>
+    <xs:attribute use="optional" name="id"                       type="attrObjectId"       default=""/>
+    <xs:attribute                name="validation_type"          type="attrValidationType" default="validcharacters"/>
+    <xs:attribute                name="length"                   type="positiveInteger0"   default="0"/>
+    <xs:attribute                name="validation_string"        type="xs:string"          default="abcdefghijklmnopqrstuvwxyz"/> 
+    <xs:attribute use="optional" name="role"                     type="xs:string"          default=""/> 
   </xs:complexType>
 
 
@@ -926,17 +927,36 @@
   <xs:complexType name="elemObjectPointer">
     <xs:sequence>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
+	<xs:element name="container"                             type="elemContainer"/>
+        <xs:element name="button"                                type="elemButton"/>
+        <xs:element name="inputboolean"                          type="elemInputBoolean"/>
+        <xs:element name="inputstring"                           type="elemInputString"/>
+        <xs:element name="inputnumber"                           type="elemInputNumber"/>
+        <xs:element name="inputlist"                             type="elemInputList"/>
+        <xs:element name="outputstring"                          type="elemOutputString"/>           
+        <xs:element name="outputnumber"                          type="elemOutputNumber"/>
+        <xs:element name="line"                                  type="elemLine"/>
+        <xs:element name="rectangle"                             type="elemRectangle"/>
+        <xs:element name="ellipse"                               type="elemEllipse"/>
+        <xs:element name="polygon"                               type="elemPolygon"/>
+        <xs:element name="meter"                                 type="elemMeter"/>
+        <xs:element name="linearbargraph"                        type="elemLinearBarGraph"/>
+        <xs:element name="archedbargraph"                        type="elemArchedBarGraph"/>
+        <xs:element name="picturegraphic"                        type="elemPictureGraphic"/>
+        <xs:element name="objectpointer"                         type="elemObjectPointer"/>        
+        <xs:element name="softkeymask"                           type="elemSoftKeyMask"/>
+        <xs:element name="macro"                                 type="elemMacro"/>
         <xs:element name="include_object"                        type="elemIncludeObject"/>
       </xs:choice>
     </xs:sequence>
     <xs:attribute use="optional" name="name"                     type="xs:string" default=""/>
-    <xs:attribute use="optional" name="value"                    type="xs:string" default=""/>
     <xs:attribute use="optional" name="id"                       type="attrObjectId" default=""/>
-    <xs:attribute use="optional" name="pos_x"                    type="positiveInteger0"/>
-    <xs:attribute use="optional" name="pos_y"                    type="positiveInteger0"/>   
-    <xs:attribute use="optional" name="block_col"                type="positiveInteger0"/>
-    <xs:attribute use="optional" name="block_row"                type="positiveInteger0"/>
-    <xs:attribute use="optional" name="block_font"               type="xs:string"/>  
+    <xs:attribute                name="value"                    type="xs:string" default=""/>
+    <xs:attribute                name="pos_x"                    type="positiveInteger0" default="0"/>
+    <xs:attribute                name="pos_y"                    type="positiveInteger0" default="0"/>   
+    <xs:attribute                name="block_col"                type="positiveInteger0" default="0"/>
+    <xs:attribute                name="block_row"                type="positiveInteger0" default="0"/>
+    <xs:attribute                name="block_font"               type="xs:string" default=""/>  
   </xs:complexType>
 
   
@@ -966,10 +986,10 @@
         <xs:element name="command_change_list_item"              type="elemCommandChangeListItem"/>
       </xs:choice>
     </xs:sequence>
-    <xs:attribute use="optional" name="name"                     type="xs:string" default=""/>
-    <xs:attribute use="optional" name="id"                       type="attrObjectId" default=""/>
-    <xs:attribute use="optional" name="number_of_bytes"          type="xs:positiveInteger" default="1"/>
-    <xs:attribute use="optional" name="role"                     type="xs:string"/>
+    <xs:attribute use="optional" name="name"                     type="xs:string"          default=""/>
+    <xs:attribute use="optional" name="id"                       type="attrObjectId"       default=""/>
+    <xs:attribute                name="number_of_bytes"          type="xs:positiveInteger" default="1"/>
+    <xs:attribute use="optional" name="role"                     type="xs:string"          default=""/>
   </xs:complexType>
   
 
@@ -989,10 +1009,10 @@
         <xs:element name="include_object"                        type="elemIncludeObject"/>  
       </xs:choice>
     </xs:sequence>
-    <xs:attribute use="optional" name="name"                     type="xs:string" default=""/>
-    <xs:attribute use="optional" name="id"                       type="attrObjectId" default=""/>
-    <xs:attribute use="optional" name="background_colour"        type="attrColour" default="black"/>
-    <xs:attribute use="optional" name="function_type"            type="attrFunctionType" default="boolean"/>    
+    <xs:attribute use="optional" name="name"                     type="xs:string"        default=""/>
+    <xs:attribute use="optional" name="id"                       type="attrObjectId"     default=""/>
+    <xs:attribute                name="background_colour"        type="attrColour"       default="black"/>
+    <xs:attribute                name="function_type"            type="attrFunctionType" default="boolean"/>    
   </xs:complexType>
 
 <xs:complexType name="elemAuxiliaryInput">
@@ -1010,15 +1030,12 @@
         <xs:element name="include_object"                        type="elemIncludeObject"/>  
       </xs:choice>
     </xs:sequence>
-    <xs:attribute use="optional" name="name"                     type="xs:string" default=""/>
-    <xs:attribute use="optional" name="id"                       type="attrObjectId" default=""/>
-    <xs:attribute use="optional" name="background_colour"        type="attrColour" default="black"/>
-    <xs:attribute use="optional" name="function_type"            type="attrFunctionType" default="boolean"/>  
-    <xs:attribute use="optional" name="input_id"                 type="attrInputId" default="0"/>
-  
-
+    <xs:attribute use="optional" name="name"                     type="xs:string"        default=""/>
+    <xs:attribute use="optional" name="id"                       type="attrObjectId"     default=""/>
+    <xs:attribute                name="background_colour"        type="attrColour"       default="black"/>
+    <xs:attribute                name="function_type"            type="attrFunctionType" default="boolean"/>  
+    <xs:attribute                name="input_id"                 type="attrInputId"      default="0"/>
   </xs:complexType>
-
 
 
   <!-- ### COMMAND OBJECTS ### -->
@@ -1232,11 +1249,11 @@
 
         </xs:choice>
       </xs:sequence>
-      <xs:attribute use="optional" name="dimension"              type="xs:positiveInteger" />
-      <xs:attribute use="optional" name="std_bitmap_path"        type="xs:string"/>
-      <xs:attribute use="optional" name="fix_bitmap_path"        type="xs:string"/>
-      <xs:attribute use="optional" name="sk_width"               type="xs:positiveInteger"/>
-      <xs:attribute use="optional" name="sk_height"              type="xs:positiveInteger"/>
+      <xs:attribute                name="dimension"              type="xs:positiveInteger"  default="200"/>
+      <xs:attribute                name="std_bitmap_path"        type="xs:string"           default=""/>
+      <xs:attribute                name="fix_bitmap_path"        type="xs:string"           default=""/>
+      <xs:attribute                name="sk_width"               type="xs:positiveInteger"  default="60"/>
+      <xs:attribute                name="sk_height"              type="xs:positiveInteger"  default="32"/>
     </xs:complexType>
   </xs:element>
 
