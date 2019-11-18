@@ -1418,7 +1418,7 @@ public class Main {
                 JOptionPane.showMessageDialog(frame,
                         new String[] {
                     "PoolEdit",
-                    "Version 1.5",
+                    "Version 1.5.0",
                     " ",
                     "Copyright (C) 2007-2019 Automation technology laboratory,",
                     "Helsinki University of Technology",
