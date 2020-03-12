@@ -23,6 +23,7 @@
 package objecttree;
 
 import static pooledit.Definitions.*;
+import pooledit.ObjectType;
 import org.w3c.dom.Document;
 import java.awt.Color;
 import java.awt.Component;
@@ -41,6 +42,7 @@ import java.io.StringReader;
 import javax.swing.JTree;
 import javax.swing.tree.TreePath;
 import org.w3c.dom.Element;
+import pooledit.Definitions;
 import pooledit.PoolException;
 import pooledit.Tools;
 import treemodel.XMLTreeNode;
@@ -427,7 +429,7 @@ public class ObjectTreeDropTargetListener implements DropTargetListener {
         }
         
         // if parent is not a real object (or a command), user root instead
-        if (!otherNode.isType(OBJECTS) &&
+        if (!otherNode.isType(Definitions.getTypes()) &&
             !otherNode.isType(POINT) &&
             !otherNode.getType().startsWith(COMMAND))
         {

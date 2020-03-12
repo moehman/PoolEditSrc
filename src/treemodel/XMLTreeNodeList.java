@@ -80,7 +80,7 @@ class XMLTreeNodeList extends ArrayList<XMLTreeNode> {
             for (int i = 0, n = elements.getLength(); i < n; i++) {
                 Node node = elements.item(i);
                 if (node.getNodeType() == Node.ELEMENT_NODE &&
-                        node.getNodeName().equals(OBJECTS[index])) {
+                        node.getNodeName().equals(OBJECTS[index].type)) {
 
                     add(parent.createChildNode((Element) node));
                 }

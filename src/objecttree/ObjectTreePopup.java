@@ -26,6 +26,7 @@ import static pooledit.Definitions.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import javax.swing.tree.TreePath;
+import pooledit.Definitions;
 import pooledit.TreeEditPopup;
 import treemodel.XMLTreeModel;
 import treemodel.XMLTreeNode;
@@ -104,7 +105,7 @@ public class ObjectTreePopup extends TreeEditPopup implements MouseListener {
             // the popup is shown only for real isobus objects (and some other pseudo objects)
             // FIXME: how about commands?
             XMLTreeNode node = (XMLTreeNode) path.getLastPathComponent();
-            if (node.isType(OBJECTS) || 
+            if (node.isType(Definitions.getTypes()) || 
                     node.isType(LANGUAGE, POINT, FIXEDBITMAP, INCLUDE_OBJECT) ||
                     node.getType().startsWith(COMMAND)) {                
                 super.showPopup(e);

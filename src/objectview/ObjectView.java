@@ -51,6 +51,7 @@ import java.util.TimerTask;
 import javax.swing.JComponent;
 import javax.swing.Scrollable;
 import javax.swing.event.TreeModelListener;
+import pooledit.Definitions;
 import pooledit.Utils;
 import treemodel.XMLTreeModel;
 import treemodel.XMLTreeNode;
@@ -506,13 +507,13 @@ public class ObjectView extends JComponent implements TreeModelListener,
         // no proper object selected
         Object[] p = path.getPath();         
         XMLTreeNode node = (XMLTreeNode) p[p.length - 1];
-        if (!node.isType(OBJECTS) && !node.isType(POINT) && !node.isType(FIXEDBITMAP)) {
+        if (!node.isType(Definitions.getTypes()) && !node.isType(POINT) && !node.isType(FIXEDBITMAP)) {
             return null;
         }
         // find last drawable node
         for (int i = p.length - 2; i >= 0; i--) {
             node = (XMLTreeNode) p[i];
-            if (!node.isType(OBJECTS) && !node.isType(POINT)) {
+            if (!node.isType(Definitions.getTypes()) && !node.isType(POINT)) {
                 GFXOP.setDepth(i + 1);
                 return (XMLTreeNode) p[i + 1];
             }
@@ -816,7 +817,7 @@ public class ObjectView extends JComponent implements TreeModelListener,
             }
             // this could be more specific, the main idea is to prevent 
             // processing of bogus nodes such as broken links
-	    else if (nd.isType(OBJECTS)) {
+	    else if (nd.isType(Definitions.getTypes())) {
 		// paint children
 		AffineTransform oldx = gfx.getTransform();
 		gfx.translate(nd.getX(), nd.getY());
@@ -853,7 +854,7 @@ public class ObjectView extends JComponent implements TreeModelListener,
                 // do nothing?                
             }
 	    // this could be more specific
-	    else if (nd.isType(OBJECTS)) {
+	    else if (nd.isType(Definitions.getTypes())) {
 		// paint children
 		AffineTransform oldx = gfx.getTransform();
 		gfx.translate(nd.getX(), nd.getY());
@@ -891,7 +892,7 @@ public class ObjectView extends JComponent implements TreeModelListener,
                 // do nothing?                
             }
 	    // this could be more specific
-	    else if (nd.isType(OBJECTS)) {
+	    else if (nd.isType(Definitions.getTypes())) {
 		// paint children
 		AffineTransform oldx = gfx.getTransform();
 		gfx.translate(nd.getX(), nd.getY());
@@ -919,7 +920,7 @@ public class ObjectView extends JComponent implements TreeModelListener,
                     // do nothing?                
                 }
                 // this could be more specific
-                else if (nd.isType(OBJECTS)) {
+                else if (nd.isType(Definitions.getTypes())) {
                     AffineTransform oldx = gfx.getTransform();
                     gfx.translate(nd.getX(), nd.getY());
                     processNode(gfx, nd, oper);
@@ -947,7 +948,7 @@ public class ObjectView extends JComponent implements TreeModelListener,
                 // do nothing?                
             }
             // these should all be softkeys
-            else if (nd.isType(OBJECTS)) {
+            else if (nd.isType(Definitions.getTypes())) {
                 // draw each softkey below the previous softkey
                 AffineTransform oldx = gfx.getTransform();
                 gfx.translate(0, sk_height * i);
@@ -974,7 +975,7 @@ public class ObjectView extends JComponent implements TreeModelListener,
                 // do nothing?                
             }
             // this could be more specific
-            else if (nd.isType(OBJECTS)) {
+            else if (nd.isType(Definitions.getTypes())) {
                 AffineTransform oldx = gfx.getTransform();
                 gfx.translate(nd.getX(), nd.getY());
                 processNode(gfx, nd, oper);
@@ -1004,7 +1005,7 @@ public class ObjectView extends JComponent implements TreeModelListener,
                 // do nothing?                
             }
             // this could be more specific
-            else if (nd.isType(OBJECTS)) {
+            else if (nd.isType(Definitions.getTypes())) {
                 AffineTransform oldx = gfx.getTransform();
                 gfx.translate(nd.getX() + 4, nd.getY() + 4);
                 processNode(gfx, nd, oper);
@@ -1244,7 +1245,7 @@ public class ObjectView extends JComponent implements TreeModelListener,
                 // do nothing?                
             }
             // this could be more specific
-            else if (nd.isType(OBJECTS)) {
+            else if (nd.isType(Definitions.getTypes())) {
                 AffineTransform oldx = gfx.getTransform();
                 gfx.translate(nd.getX(), nd.getY());
                 processNode(gfx, nd, oper);
@@ -1270,7 +1271,7 @@ public class ObjectView extends JComponent implements TreeModelListener,
                 // do nothing?                
             }
             // this could be more specific
-            else if (nd.isType(OBJECTS)) {
+            else if (nd.isType(Definitions.getTypes())) {
                 AffineTransform oldx = gfx.getTransform();
                 gfx.translate(nd.getX(), nd.getY());
                 processNode(gfx, nd, oper);

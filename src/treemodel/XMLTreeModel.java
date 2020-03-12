@@ -26,6 +26,7 @@ import static pooledit.Definitions.*;
 import java.util.Arrays;
 import java.util.BitSet;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javax.swing.SwingUtilities;
 import org.w3c.dom.events.Event;
@@ -40,6 +41,7 @@ import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import pooledit.Definitions;
 import pooledit.Tools;
 
 /**
@@ -60,11 +62,16 @@ public class XMLTreeModel implements TreeModel, EventListener {
     
     private final Map<XMLTreeNode, XMLTreeNodeList> childMap;
     
+    private int nextId;
+    private ArrayList<Integer> availableIds;
+    
     /**
      * Default constructor.
      */
     public XMLTreeModel() {
         childMap = new HashMap<>();
+        nextId = 0;
+        availableIds = new ArrayList<>();
     }
     
     /**
@@ -77,6 +84,8 @@ public class XMLTreeModel implements TreeModel, EventListener {
         this.nameMap = nameMap;
         childMap = new HashMap<>();
         root = createRootAndCategoryNodes();
+        nextId = 0;
+        availableIds = new ArrayList<>();
     }
     
     /**
@@ -103,6 +112,8 @@ public class XMLTreeModel implements TreeModel, EventListener {
         
         root = createRootAndCategoryNodes();
         fireTreeStructureChanged(new TreePath(root));
+
+        fixIds();
     }
     
     private XMLTreeNode createRootAndCategoryNodes() {
@@ -479,11 +490,11 @@ public class XMLTreeModel implements TreeModel, EventListener {
         
         // insert nodes
         if (toBeInserted.size() > 0) {
-            
             int[] insertedIndices = new int[toBeInserted.size()];
             Map<Integer, XMLTreeNode> insertMap = new HashMap<>();
             for (int i = 0, n = insertedIndices.length; i < n; i++) {
                 XMLTreeNode object = toBeInserted.get(i);
+                addId(object);
                 int index = newChildren.indexOf(object);
                 insertedIndices[i] = index;
                 insertMap.put(index, object);
@@ -509,6 +520,88 @@ public class XMLTreeModel implements TreeModel, EventListener {
         for (int i = 0, n = oldChildren.size(); i < n; i++) {
             Object child = oldChildren.get(i);
             fixModel(newModel, parentPath.pathByAddingChild(child));
+        }
+    }
+    
+    private void addAvailableId(int id) {
+        if (id == nextId - 1) {
+            nextId--;
+        } else if (id < nextId){
+            availableIds.add(id);
+            Collections.sort(availableIds);
+        }
+    }
+    
+    private int getNextId() {
+        if (availableIds.isEmpty()) {
+            return nextId++;
+        } else {
+            int id = availableIds.get(0);
+            availableIds.remove(0);
+            return id;
+        }
+    }
+    
+    private void addId(XMLTreeNode node) {
+        node.setId(getNextId());
+        List<XMLTreeNode> nodes = getXMLTreeNodeList(node);
+        
+        for (XMLTreeNode obj : nodes) {
+            addId(obj);
+        }
+    }
+    
+    private void removeId(XMLTreeNode node) {
+        addAvailableId(node.getId());
+        List<XMLTreeNode> nodes = getXMLTreeNodeList(node);
+        
+        for (XMLTreeNode obj : nodes) {
+            removeId(obj);
+        }
+    }
+    
+    private void fixIds() {
+        availableIds = new ArrayList<>();
+        nextId = 0;
+        
+        TreePath path = new TreePath(root);
+        
+        XMLTreeNode parent = (XMLTreeNode) path.getLastPathComponent();
+        
+        List<XMLTreeNode> nodes = getXMLTreeNodeList(parent);
+        
+        for (XMLTreeNode node : nodes) {
+            fixIds(node);
+        }
+    }
+    
+    private void fixIds(XMLTreeNode node) {
+        List<XMLTreeNode> nodes = getXMLTreeNodeList(node);
+        
+        for (XMLTreeNode obj : nodes) {
+            if (obj.link() == null) {
+                if (obj.isType(Definitions.getTypes())) {
+                    Integer id = obj.getId();
+                    if (id != null) {
+                        if (id >= nextId) {
+                            int tempNextId = nextId;
+                            nextId = id + 1;
+                            for (int i = tempNextId; i < id; i++) {
+                                addAvailableId(i);
+                            }
+                        } else {
+                            if (availableIds.contains(id)) {
+                                availableIds.remove(id);
+                            } else {
+                                obj.setId(getNextId());
+                            }
+                        }
+                    } else {
+                        obj.setId(getNextId());
+                    }
+                }
+                fixIds(obj);
+            }
         }
     }
     
@@ -585,6 +678,7 @@ public class XMLTreeModel implements TreeModel, EventListener {
                 // to remove the node and create a new one (it is done
                 // automatically in fixModel())
                 if (name.equals(NAME)) {
+                    removeId(nd);
                     c.remove(nd);
                     fireTreeNodesRemoved(path, new int[] {i}, new Object[] {nd});
                 } else {
@@ -1007,7 +1101,7 @@ public class XMLTreeModel implements TreeModel, EventListener {
         XMLTreeNode node = (XMLTreeNode) path.getLastPathComponent();
         XMLTreeNodeList c = getXMLTreeNodeList(node);
         for (XMLTreeNode n : c) {
-            if (n.isType(OBJECTS)) {
+            if (n.isType(Definitions.getTypes())) {
                 // real object has a name and it must match
                 if (n.getName().equals(beginning)) {                    
                     return findPathByPath(ending, path.pathByAddingChild(n));

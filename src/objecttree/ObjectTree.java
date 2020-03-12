@@ -43,6 +43,7 @@ import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeCellEditor;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreePath;
+import pooledit.Definitions;
 import pooledit.Utils;
 import treemodel.XMLTreeModel;
 import treemodel.XMLTreeNode;
@@ -200,7 +201,7 @@ public class ObjectTree extends JTree implements KeyListener {
                 Element link = node.link();
                 
                 // not all nodes can be deleted
-                if (node.isType(OBJECTS) ||
+                if (node.isType(Definitions.getTypes()) ||
                         node.isType(LANGUAGE, POINT, FIXEDBITMAP, INCLUDE_OBJECT) ||
                         node.getType().startsWith(COMMAND)) {
                     

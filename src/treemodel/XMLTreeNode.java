@@ -212,6 +212,26 @@ public class XMLTreeNode {
         return link != null ? link.getAttribute(ROLE) : 
             actual != null ? actual.getAttribute(ROLE) : "N/A";
     }
+    
+/**
+     * This method returns the value of the "id" attribute.
+     * @return 
+     */
+    public Integer getId() {
+        String id = actual.getAttribute(ID);
+        return id.isEmpty() ? null : parseInt(id);
+    }
+    
+    /**
+     * This method changes the id attribute
+     * FIXME should this be corrected somehow
+     * @param id
+     */
+    public void setId(int id) {   
+        Element src = (link == null) ? actual : link;        
+        src.setAttribute(ID, Integer.toString(id));        
+    }
+    
     /**
      * This method returns the value of the "pos_x" attribute corrected by
      * other attributes that affect it (such as block_col).

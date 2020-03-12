@@ -136,7 +136,7 @@ public class Tools {
                 Element element = (Element) node;
 
                 // is interesting and has a name?
-                if (Utils.equals(element.getTagName(), OBJECTS)) {
+                if (Utils.equals(element.getTagName(), Definitions.getTypes())) {
 
                     String name = element.getAttribute(NAME);
                     if (!name.isEmpty()) {
@@ -639,7 +639,7 @@ public class Tools {
             Element element = (Element) nodes.item(i);
             String id = element.getAttribute("id");
             // if a real isobus objects has no id, then create it one
-            if (id.isEmpty() && Utils.equals(element.getNodeName(), OBJECTS)) {
+            if (id.isEmpty() && Utils.equals(element.getNodeName(), Definitions.getTypes())) {
                 
                 // macro ids are [0..255]
                 if (element.getNodeName().equals(MACRO)) {
@@ -801,7 +801,7 @@ public class Tools {
             // the element is data / alarmmask and the child is
             // softkeymask
             String childType = e.getNodeName();
-            if (!Utils.equals(childType, OBJECTS) ||
+            if (!Utils.equals(childType, Definitions.getTypes()) ||
                     (Utils.equals(type, DATAMASK, ALARMMASK) &&
                     Utils.equals(childType, SOFTKEYMASK))) {
                 continue;
@@ -833,7 +833,7 @@ public class Tools {
             // the element is workingset and the child is
             // data / alarmmask
             String childType = e.getNodeName();
-            if (!Utils.equals(childType, OBJECTS) || 
+            if (!Utils.equals(childType, Definitions.getTypes()) || 
                     (Utils.equals(type, WORKINGSET) &&
                     Utils.equals(childType, DATAMASK, ALARMMASK))) {
                 continue;
@@ -872,7 +872,7 @@ public class Tools {
             Element element = (Element) elements.item(i);
             
             // validate element roles
-            if (Utils.equals(element.getNodeName(), OBJECTS)) {
+            if (Utils.equals(element.getNodeName(), Definitions.getTypes())) {
                 if (!validateElementRoles(tmp, element, nameMap)) {
                     out.println(getPath(element) + " (" +  element.getNodeName() + ")");
                     out.print(bff);
@@ -1181,7 +1181,7 @@ public class Tools {
         // of the linked object, not "include object"
         String frgName = fragment.getNodeName();
         if (Utils.equals(frgName, INCLUDE_OBJECT)) {
-            if (Utils.equals(trgName, OBJECTS)) {
+            if (Utils.equals(trgName, Definitions.getTypes())) {
                 Map<String, Element> nameMap = Tools.createNameMap(fragment.getOwnerDocument());
                 String name = fragment.getAttribute(NAME);
                 if (!name.isEmpty()) {
@@ -1341,7 +1341,7 @@ public class Tools {
         }
         // root level objects have to be real isobus objects
         else if (Utils.equals(trgName, OBJECTPOOL) &&
-                Utils.equals(frgName, OBJECTS)) {
+                Utils.equals(frgName, Definitions.getTypes())) {
             // && !Tools.equals(frgName, INCLUDE_OBJECT)) { // does not work as include_objects have already been replaced!
         
             removeAttributes(fragment, POS_X, POS_Y, BLOCK_COL, BLOCK_ROW, BLOCK_FONT, ROLE); 
@@ -1476,7 +1476,7 @@ public class Tools {
         }
         
         if (parent.getNodeType() == Element.ELEMENT_NODE &&
-                Utils.equals(parent.getNodeName(), OBJECTS)) {
+                Utils.equals(parent.getNodeName(), Definitions.getTypes())) {
             
             worklist.addLast((Element) parent);
         }
@@ -1509,7 +1509,7 @@ public class Tools {
         // look for real parent (the enclosing element)
         Node parent = elem.getParentNode();
         if (parent.getNodeType() == Element.ELEMENT_NODE &&
-                Utils.equals(parent.getNodeName(), OBJECTS)) {
+                Utils.equals(parent.getNodeName(), Definitions.getTypes())) {
             
             list.add((Element) parent);
         }

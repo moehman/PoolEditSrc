@@ -147,17 +147,56 @@ public class Definitions {
     static public final String AUXILIARYFUNCTION = "auxiliaryfunction";
     static public final String AUXILIARYINPUT = "auxiliaryinput";
     
-    static public final String[] OBJECTS = {
-	WORKINGSET, DATAMASK, ALARMMASK, CONTAINER, 
-	SOFTKEYMASK, KEY, BUTTON, 
-	INPUTBOOLEAN, INPUTSTRING, 
-	INPUTNUMBER, INPUTLIST, 
-	OUTPUTSTRING, OUTPUTNUMBER, 
-	LINE, RECTANGLE, ELLIPSE, POLYGON,
-	METER, LINEARBARGRAPH, ARCHEDBARGRAPH, PICTUREGRAPHIC,
-	NUMBERVARIABLE, STRINGVARIABLE,
-	FONTATTRIBUTES, LINEATTRIBUTES, FILLATTRIBUTES, INPUTATTRIBUTES,
-	OBJECTPOINTER, MACRO, AUXILIARYFUNCTION, AUXILIARYINPUT
+    // descriptions
+    static public final String WORKINGSET_DESC = "Working Set";
+    static public final String DATAMASK_DESC = "Data Mask";
+    static public final String ALARMMASK_DESC = "Alarm Mask";
+    static public final String CONTAINER_DESC = "Container";
+    static public final String SOFTKEYMASK_DESC = "Soft Key Mask";
+    static public final String KEY_DESC = "Key";
+    static public final String BUTTON_DESC = "Button";
+    static public final String INPUTBOOLEAN_DESC = "Input Boolean";
+    static public final String INPUTSTRING_DESC = "InputString";
+    static public final String INPUTNUMBER_DESC = "InputNumber";
+    static public final String INPUTLIST_DESC = "InputList";
+    static public final String OUTPUTSTRING_DESC = "Output String";
+    static public final String OUTPUTNUMBER_DESC = "Output Number";
+    static public final String LINE_DESC = "Line";
+    static public final String RECTANGLE_DESC = "Rectangle";
+    static public final String ELLIPSE_DESC = "Ellipse";
+    static public final String POLYGON_DESC = "Polygon";
+    static public final String METER_DESC = "Meter graph";
+    static public final String LINEARBARGRAPH_DESC = "Linear Bar Graph";
+    static public final String ARCHEDBARGRAPH_DESC = "Arched Bar Graph";
+    static public final String PICTUREGRAPHIC_DESC = "Picture Graphic";
+    static public final String NUMBERVARIABLE_DESC = "Number Variable";
+    static public final String STRINGVARIABLE_DESC = "String Variable";
+    static public final String FONTATTRIBUTES_DESC = "Font Attributes";
+    static public final String LINEATTRIBUTES_DESC = "Line Attributes";
+    static public final String FILLATTRIBUTES_DESC = "Fill Attributes";
+    static public final String INPUTATTRIBUTES_DESC = "Input Attributes";
+    static public final String OBJECTPOINTER_DESC = "Object Pointer";
+    static public final String MACRO_DESC = "Macro";
+    static public final String AUXILIARYFUNCTION_DESC = "Auxiliary Function";
+    static public final String AUXILIARYINPUT_DESC = "Auxiliary Input";
+
+    static public final ObjectType[] OBJECTS = {
+	new ObjectType(WORKINGSET, WORKINGSET_DESC), new ObjectType(DATAMASK, DATAMASK_DESC),
+        new ObjectType(ALARMMASK, ALARMMASK_DESC), new ObjectType(CONTAINER, CONTAINER_DESC),
+        new ObjectType(SOFTKEYMASK, SOFTKEYMASK_DESC), new ObjectType(KEY, KEY_DESC),
+        new ObjectType(BUTTON, BUTTON_DESC), new ObjectType(INPUTBOOLEAN, INPUTBOOLEAN_DESC),
+        new ObjectType(INPUTSTRING, INPUTSTRING_DESC), new ObjectType(INPUTNUMBER, INPUTNUMBER_DESC),
+        new ObjectType(INPUTLIST, INPUTLIST_DESC), new ObjectType(OUTPUTSTRING, OUTPUTSTRING_DESC),
+        new ObjectType(OUTPUTNUMBER, OUTPUTNUMBER_DESC), new ObjectType(LINE, LINE_DESC),
+        new ObjectType(RECTANGLE, RECTANGLE_DESC), new ObjectType(ELLIPSE, ELLIPSE_DESC),
+        new ObjectType(POLYGON, POLYGON_DESC), new ObjectType(METER, METER_DESC),
+        new ObjectType(LINEARBARGRAPH, LINEARBARGRAPH_DESC), new ObjectType(ARCHEDBARGRAPH, ARCHEDBARGRAPH_DESC),
+        new ObjectType(PICTUREGRAPHIC, PICTUREGRAPHIC_DESC), new ObjectType(NUMBERVARIABLE, NUMBERVARIABLE_DESC),
+        new ObjectType(STRINGVARIABLE, STRINGVARIABLE_DESC), new ObjectType(FONTATTRIBUTES, FONTATTRIBUTES_DESC),
+        new ObjectType(LINEATTRIBUTES, LINEATTRIBUTES_DESC), new ObjectType(FILLATTRIBUTES, FILLATTRIBUTES_DESC),
+        new ObjectType(INPUTATTRIBUTES, INPUTATTRIBUTES_DESC), new ObjectType(OBJECTPOINTER, OBJECTPOINTER_DESC),
+        new ObjectType(MACRO, MACRO_DESC), new ObjectType(AUXILIARYFUNCTION, AUXILIARYFUNCTION_DESC),
+        new ObjectType(AUXILIARYINPUT, AUXILIARYINPUT_DESC)
     };
   
     // pseudo objects
@@ -396,4 +435,14 @@ public class Definitions {
         COMMAND_CHANGE_SOFT_KEY_MASK, COMMAND_CHANGE_ATTRIBUTE,
         COMMAND_CHANGE_PRIORITY, COMMAND_CHANGE_LIST_ITEM
     };
+    
+    static public String[] getTypes() {
+        String [] types = new String[OBJECTS.length];
+        
+        for (int i = 0; i < OBJECTS.length; i++) {
+            types[i] = OBJECTS[i].type;
+        }
+        
+        return types;
+    }
 }

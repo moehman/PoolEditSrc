@@ -26,6 +26,7 @@ import static pooledit.Definitions.*;
 import static wizard.WizardTools.*;
 import font.BitmapFont;
 import org.w3c.dom.Element;
+import pooledit.Definitions;
 import treemodel.XMLTreeNode;
 
 /**
@@ -67,7 +68,7 @@ public class MeterGenerator {
         Element container = createContainer(root.actual(), name, 
                 wiz.getTotalWidth(), wiz.getTotalHeight());
         
-        if (root.isType(OBJECTS)) {
+        if (root.isType(Definitions.getTypes())) {
             setAttributeIfMissing(container, POS_X, "0");
             setAttributeIfMissing(container, POS_Y, "0");        
         }

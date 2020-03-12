@@ -395,6 +395,7 @@ public class Main {
         
         docArea.setDragEnabled(true);
         
+        @SuppressWarnings("unchecked")
         List<JButton> ovList = (List<JButton>) ovView.getCustomTabComponents();
         ovList.add(createButton(Icons.ZOOM_PLUS_ICON, "Zoom in", new ActionListener() {
             @Override
@@ -435,6 +436,7 @@ public class Main {
             }
         }));
         
+        @SuppressWarnings("unchecked")
         List<JButton> xmlList = (List<JButton>) xmlView.getCustomTabComponents();
         xmlList.add(createButton(Icons.XML_PARSE_ICON, "Parse XML", new ActionListener() {
             @Override
@@ -465,6 +467,7 @@ public class Main {
             }
         }));
         
+        @SuppressWarnings("unchecked")
         List<JButton> msgList = (List<JButton>) msgView.getCustomTabComponents();
         msgList.add(createButton(Icons.CLEAR_ICON, "Clear messages", new ActionListener() {
             @Override
@@ -624,11 +627,12 @@ public class Main {
             }
         };
         for (int i = 0, n = Definitions.OBJECTS.length; i < n; i++) {            
-            JLabel lbl = new DragLabel(Definitions.OBJECTS[i], libdoc);
+            JLabel lbl = new DragLabel(Definitions.OBJECTS[i].type, libdoc);
             lbl.setTransferHandler(hnd);
             lbl.addMouseListener(listener);
             Border bdr = BorderFactory.createRaisedBevelBorder();            
             lbl.setBorder(bdr);
+            lbl.setToolTipText(Definitions.OBJECTS[i].description);
             toolBar.add(lbl);
             toolBar.addSeparator(new Dimension(2, 1));
         }
@@ -828,7 +832,7 @@ public class Main {
             return null;
         }
         XMLTreeNode node = (XMLTreeNode) path.getLastPathComponent();
-        if (!node.isType(OBJECTS)) {
+        if (!node.isType(Definitions.getTypes())) {
             node = (XMLTreeNode) node.getModel().getRoot(); // -> OBJECTPOOL
         }
         
@@ -1432,7 +1436,7 @@ public class Main {
                     "3 of the License, or (at your option) any later version.",
                     " ",
                     "Authors:",
-                    "Matti Öhman (matti.ohman@aalto.fi)",
+                    "Matti Ohman (matti.ohman@aalto.fi)",
                     "Jouko Kalmari"},
                         "About PoolEdit", JOptionPane.INFORMATION_MESSAGE, Icons.POOLEDIT_LOGO);
             }

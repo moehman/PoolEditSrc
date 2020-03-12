@@ -77,7 +77,7 @@ public abstract class TreeEditPopup {
             @Override
             public void actionPerformed(ActionEvent e) {
                 XMLTreeNode node = (XMLTreeNode) getCurrentPath().getLastPathComponent();
-                if (node.isType(OBJECTS)) {
+                if (node.isType(Definitions.getTypes())) {
                     Element actual = node.actual();
                     Element link = node.link();
                     Map<String, Element> nameMap = node.getModel().getNameMap();
@@ -158,7 +158,7 @@ public abstract class TreeEditPopup {
 
                 // links can have identical names, but actual object should
                 // prefer to have (globally) unique names
-                if (link == null && node.isType(OBJECTS)) {
+                if (link == null && node.isType(Definitions.getTypes())) {
                     // setup unique name
                     String name = duplicate.getAttribute(NAME);
                     String newname = Tools.findFreeName(name, Tools.createNameMap(node.getModel().getDocument(), true));
@@ -184,7 +184,7 @@ public abstract class TreeEditPopup {
                     return;
                 }
 
-                if (!node.isType(OBJECTS)) {
+                if (!node.isType(Definitions.getTypes())) {
                     JOptionPane.showMessageDialog(null,
                             "The selected object (" + node.getType() +
                             ") cannot be made linkable!",
