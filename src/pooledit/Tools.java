@@ -487,14 +487,21 @@ public class Tools {
      * @throws FileNotFoundException
      * @throws IOException
      */
-    public static void exportToXML1(String name, Document doc) 
-            throws FileNotFoundException, IOException {
+    public static void exportToISOAgLibXML(PrintStream out, String name, Document doc) 
+            throws IOException, PoolException {
         // the whole document is cloned (this copies all attributes too!)
         Document clone = (Document) doc.cloneNode(true);
         removeEmptyTextNodes(clone.getDocumentElement());
         
         removeRoles(clone.getDocumentElement());        
         divAngles(clone.getDocumentElement());
+        
+        setAllOutputStringLengths(clone);
+        setAllInputStringLengths(clone);
+                
+        Map<String, Element> nameMap = Tools.createNameMap(clone);
+        createObjectIDs(out, clone);
+        createObjectIDsForIncludeObjects(out, clone, nameMap);
         
         // remove empty attributes? (at least file1 file4 file8... ?)
         
@@ -516,7 +523,7 @@ public class Tools {
      * @throws IOException
      * @throws PoolException
      */
-    public static void exportToXML3(PrintStream out, String fileName, Document doc)
+    public static void exportToEmbeddedXML(PrintStream out, String fileName, Document doc)
             throws IOException, PoolException {
         
         // the document is cloned (this copies all attributes too!)
@@ -535,244 +542,18 @@ public class Tools {
         
         //createRoles(clone.getDocumentElement()); //this shouldn't be necessary !!!
         
-        // find all picture elements
-        NodeList nodes = clone.getElementsByTagName(PICTUREGRAPHIC); 
-        for (int i = 0, n = nodes.getLength(); i < n; i++) {
-            Element element = (Element) nodes.item(i);
-            
-            // get image and convert it to base64
-            BufferedImage image = getImageFile(element, FILE, getStdBitmapPath(doc));
-            
-            // remove attributes that are no longer needed
-            removeAttributes(element, FILE, FILE1, FILE4, FILE8, FORMAT, RLE);
-            
-            // remove all children
-            NodeList childs = element.getChildNodes();
-            for (int j = childs.getLength() - 1; j >= 0; j--) {
-                element.removeChild(childs.item(j)); 
-            }
-            
-            // create image data element
-            Element dataElement = clone.createElement(IMAGE_DATA);
-            
-            // add image_width and image_height attributes
-            dataElement.setAttribute(IMAGE_WIDTH, Integer.toString(image.getWidth()));
-            dataElement.setAttribute(IMAGE_HEIGHT, Integer.toString(image.getHeight()));
-            
-            // set content
-            dataElement.setTextContent(PictureConverter.convertToString(image));
-            element.appendChild(dataElement);            
-        }
+        convertAllPictureElements(clone, getStdBitmapPath(doc));
         
-        // set output string lengths
-        NodeList outputstrings = clone.getElementsByTagName(OUTPUTSTRING); 
-        for (int i = 0, n = outputstrings.getLength(); i < n; i++) {
-            Element outputstring = (Element) outputstrings.item(i);
-            String value = outputstring.getAttribute(VALUE);
-            int valLen = value.length();
-            String length = outputstring.getAttribute(LENGTH);
-            
-            // FIXME: what is this for?
-            if (length.equals("")) {
-                out.println(outputstring.getAttribute(NAME));
-            }
-            
-            int len = 0;
-            try {
-                len = Integer.parseInt(length);
-            }
-            catch (NumberFormatException ex) { 
-                // do nothing
-            }
-            if (valLen > len) {
-                outputstring.setAttribute(LENGTH, Integer.toString(valLen));
-            }
-        }
-        
-        // set input string lengths
-        NodeList inputstrings = clone.getElementsByTagName(INPUTSTRING); 
-        for (int i = 0, n = inputstrings.getLength(); i < n; i++) {
-            Element inputstring = (Element) inputstrings.item(i);
-            String value = inputstring.getAttribute(VALUE);
-            int valLen = value.length();
-            String length = inputstring.getAttribute(LENGTH);
-            int len = Integer.parseInt(length);
-            if (valLen > len) {
-                inputstring.setAttribute(LENGTH, Integer.toString(valLen));
-            }
-        }
+        setAllOutputStringLengths(clone);
+        setAllInputStringLengths(clone);
                 
-        // create id to all objects
-        nodes = clone.getElementsByTagName("*"); 
-        TreeSet<Integer> usedIDs = new TreeSet<>();
-        
-        // find all ids and remove id from include_objects
-        for (int i = 0, n = nodes.getLength(); i < n; i++) {
-            Element element = (Element) nodes.item(i);
-            String id = element.getAttribute(ID);
-            if (!id.isEmpty()) {
-                if (element.getNodeName().equals(INCLUDE_OBJECT)) {
-                    element.removeAttribute(ID);
-                    out.println("Removing ID " + id + " from " + element.getAttribute(NAME) +
-                            " (include_object)");
-                }                
-                else {
-                    Integer idn = Integer.valueOf(id);
-                    if (idn == null || usedIDs.contains(idn)) {
-                        element.removeAttribute(ID);
-                        out.println("ID " + idn + " already in use. Removing id from " +
-                                element.getAttribute(NAME) + " (" + element.getNodeName() + ")");   
-                    }
-                    else {
-                        usedIDs.add(idn);
-                        out.println("Reserving ID " + idn + " for " + element.getAttribute(NAME) + 
-                                " (" + element.getNodeName() + ")"); 
-                    }
-                }
-            }
-        }
-        
-        // find all real elements with no id and them a unused id
-        int nextMacroId = 0;
-        int nextId = 256;
-        for (int i = 0; i < nodes.getLength(); i++) {
-            Element element = (Element) nodes.item(i);
-            String id = element.getAttribute("id");
-            // if a real isobus objects has no id, then create it one
-            if (id.isEmpty() && Utils.equals(element.getNodeName(), OBJECTS)) {
-                
-                // macro ids are [0..255]
-                if (element.getNodeName().equals(MACRO)) {
-                    while (usedIDs.contains(nextMacroId)) nextMacroId++;
-                    if (nextMacroId >= 256) {
-                        throw new PoolException("Too many macros (>256)!");
-                    }
-                    element.setAttribute(ID, Integer.toString(nextMacroId));
-                    usedIDs.add(nextMacroId);
-                    out.println("Created ID " + nextMacroId + " for " + element.getAttribute(NAME) + 
-                                " (" + element.getNodeName() + ")");
-                }
-                // other ids are [256..65535]
-                else {
-                    while (usedIDs.contains(nextId)) nextId++;
-                    if (nextMacroId >= 65536) {
-                        throw new PoolException("Too many objects!");
-                    }
-                    element.setAttribute(ID, Integer.toString(nextId));
-                    usedIDs.add(nextId);
-                    out.println("Created ID "+ nextId + " for " + element.getAttribute(NAME) + 
-                                " (" + element.getNodeName() + ")");
-                }
-            }
-        }
-        
-        // use name map to add right id to all include_objects
         Map<String, Element> nameMap = Tools.createNameMap(clone);
-        nodes = clone.getElementsByTagName(INCLUDE_OBJECT);         
-        for (int i = 0, n = nodes.getLength(); i < n; i++) {
-            Element element = (Element) nodes.item(i);
-            String name = element.getAttribute(NAME);
-            if (nameMap.containsKey(name)) {
-                element.setAttribute("id", nameMap.get(name).getAttribute("id"));
-            } 
-            else {
-                out.println("ERROR: Can't find object: \"" + name + "\"");
-            }            
-        }
+        createObjectIDs(out, clone);
+        createObjectIDsForIncludeObjects(out, clone, nameMap);
         
-        // replace all block_font-attributes with block_font_size
-        nodes = clone.getElementsByTagName("*");         
-        for (int i = 0, n = nodes.getLength(); i < n; i++) {
-            Element element = (Element) nodes.item(i);
-            String blockFont = element.getAttribute(BLOCK_FONT);
-            if (!blockFont.isEmpty()){
-                if (nameMap.containsKey(blockFont)) {
-                    Element font = nameMap.get(blockFont);
-                    element.setAttribute(BLOCK_FONT_SIZE, font.getAttribute(FONT_SIZE));
-                }
-                element.removeAttribute(BLOCK_FONT);
-            } 
-            else {
-                // if no block font then these are not needed
-                element.removeAttribute(BLOCK_COL);
-                element.removeAttribute(BLOCK_ROW);
-                element.removeAttribute(BLOCK_FONT);
-            }
-        }
+        replaceAllBlockFontAttributes(clone, nameMap);
         
-        nodes = clone.getElementsByTagName("*");
-        for (int i = 0, n = nodes.getLength(); i < n; i++) {
-            Element element = (Element) nodes.item(i);
-            String name = element.getNodeName();
-            if (Utils.equals(name, DATAMASK, ALARMMASK)) {
-                markChildrenMask(out, element, nameMap);
-            }
-            // marking softkeymask is necessary as it can contain pointers as well as keys
-            else if (Utils.equals(name, WORKINGSET, SOFTKEYMASK, KEY, AUXILIARYFUNCTION, AUXILIARYINPUT)) {
-                markChildrenDesignator(out, element, nameMap);
-            }
-        }
-        
-        // FIXME: add an extra pass to find out unreferenced elements?
-        
-        /*
-        // DIDN'T WORK TOO WELL, PROBLEMS WITH SPECIAL RELATIONS E.G. activemask, etc.
-        // generate missing use attributes
-        List<Element> list = new ArrayList<Element>();
-        nodes = clone.getElementsByTagName("*");
-        for (int i = 0, n = nodes.getLength(); i < n; i++) {
-            Element element = (Element) nodes.item(i);
-            String name = element.getNodeName();
-            if (!equals(name, OBJECTS)) {
-                continue;
-            }
-            list.clear();
-            list.add(element); // if the element is e.g. working set its use should be designator
-            findAncestorElements(element, list);
-            boolean mask = containsElements(list, DATAMASK, ALARMMASK);
-            boolean designator = containsElements(list, WORKINGSET, KEY, AUXILIARYFUNCTION, AUXILIARYINPUT);
- 
-            // special case: even if datamask is used in working set as "activemask"
-            // it does not mean it is used inside a designator!
-            if (equals(name, DATAMASK, ALARMMASK)) {
-                designator = false;
-            }
-            // special case: even if softkeymask is used in datamask as "softkeymask"
-            // it does not mean it is used inside a mask!
-            if (equals(name, SOFTKEYMASK)) {
-                mask = false;
-            }
-            if (mask && designator) {                
-                if (equals(element.getAttribute(USE), "both")) {
-                    System.out.println("WARNING: element \"" + element.getAttribute(NAME) + "\" (" + name +
-                        ") use attribute is \"both\"!");
-                }
-                else {
-                    System.err.println("ERROR: element \"" + element.getAttribute(NAME) + "\" (" + name + 
-                        ") is used both in mask and designator!");
-                }
-                element.setAttribute(USE, "both");
-            }
-            else if (mask) {
-                if (!equals(element.getAttribute(USE), "", "mask")) {
-                    System.out.println("WARNING: element \"" + element.getAttribute(NAME) + "\" (" + name +
-                        ") use attribute is overriden to \"mask\"!");
-                }
-                element.setAttribute(USE, "mask");
-            }
-            else if (designator) {
-                if (!equals(element.getAttribute(USE), "", "designator")) {
-                    System.out.println("WARNING: element \"" + element.getAttribute(NAME) + "\" (" + name +
-                        ") use attribute is overriden to \"designator\"!");
-                }
-                element.setAttribute(USE, "designtor");
-            }
-            else {
-                System.out.println("WARNING: element \"" + element.getAttribute(NAME) + "\" (" + name +
-                        ") is not used in mask or designator (please specify \"mask\" or \"designator\" manually)!");
-            }
-        }
-        */
+        markAllChildMasksAndDesignators(out, clone, nameMap);
         
         OutputStream os = new FileOutputStream(new File(fileName));
         writeXML(clone, os, "ISO-8859-1"); //"UTF-8");
@@ -1609,6 +1390,241 @@ public class Tools {
             }
         }
         return true;
+    }
+    /**
+     * Embeds all picture elements in the document using PictureConverter.
+     * 
+     * @param doc
+     * @param clone
+     * @throws IOException 
+     */
+    private static void convertAllPictureElements(Document clone, String bitmapPath)
+            throws IOException {
+
+        // find all picture elements
+        NodeList nodes = clone.getElementsByTagName(PICTUREGRAPHIC); 
+        for (int i = 0, n = nodes.getLength(); i < n; i++) {
+            Element element = (Element) nodes.item(i);
+            
+            // get image and convert it to base64
+            BufferedImage image = getImageFile(element, FILE, bitmapPath);
+            
+            // remove attributes that are no longer needed
+            removeAttributes(element, FILE, FILE1, FILE4, FILE8, FORMAT, RLE);
+            
+            // remove all children
+            NodeList childs = element.getChildNodes();
+            for (int j = childs.getLength() - 1; j >= 0; j--) {
+                element.removeChild(childs.item(j)); 
+            }
+            
+            // create image data element
+            Element dataElement = clone.createElement(IMAGE_DATA);
+            
+            // add image_width and image_height attributes
+            dataElement.setAttribute(IMAGE_WIDTH, Integer.toString(image.getWidth()));
+            dataElement.setAttribute(IMAGE_HEIGHT, Integer.toString(image.getHeight()));
+            
+            // set content
+            dataElement.setTextContent(PictureConverter.convertToString(image));
+            element.appendChild(dataElement);            
+        }
+    }
+
+    private static int parseIntOrZero(String val) {
+        try {
+            return Integer.parseInt(val);
+        }
+        catch (NumberFormatException ex) { 
+            return 0;
+        }
+    }
+    /**
+     * Makes sure that no OutputString element is truncated by increasing
+     * length attribute when necessary.
+     *
+     * @param clone 
+     */
+    private static void setAllOutputStringLengths(Document clone) {
+        // set output string lengths
+        NodeList outputstrings = clone.getElementsByTagName(OUTPUTSTRING); 
+        for (int i = 0, n = outputstrings.getLength(); i < n; i++) {
+            Element outputstring = (Element) outputstrings.item(i);
+            String value = outputstring.getAttribute(VALUE);
+            int valLen = value.length();
+            String length = outputstring.getAttribute(LENGTH);
+            int len = parseIntOrZero(length);
+            if (valLen > len) {
+                outputstring.setAttribute(LENGTH, Integer.toString(valLen));
+            }
+        }
+    }
+
+    /**
+     * Makes sure that no InputString element is truncated by increasing
+     * length attribute when necessary.
+     * 
+     * @param clone 
+     */
+    private static void setAllInputStringLengths(Document clone) {
+        // set input string lengths
+        NodeList inputstrings = clone.getElementsByTagName(INPUTSTRING); 
+        for (int i = 0, n = inputstrings.getLength(); i < n; i++) {
+            Element inputstring = (Element) inputstrings.item(i);
+            String value = inputstring.getAttribute(VALUE);
+            int valLen = value.length();
+            String length = inputstring.getAttribute(LENGTH);
+            int len = parseIntOrZero(length);
+            if (valLen > len) {
+                inputstring.setAttribute(LENGTH, Integer.toString(valLen));
+            }
+        }
+    }
+
+    /**
+     * Adds ID attributes to all normal elements and removes ID attributes
+     * from all include_objects.
+     * 
+     * @param out
+     * @param clone
+     * @throws PoolException 
+     */
+    private static void createObjectIDs(PrintStream out, Document clone)
+            throws PoolException {
+        
+        // create id to all objects
+        NodeList nodes = clone.getElementsByTagName("*"); 
+        TreeSet<Integer> usedIDs = new TreeSet<>();
+        
+        // find all ids and remove id from include_objects
+        for (int i = 0, n = nodes.getLength(); i < n; i++) {
+            Element element = (Element) nodes.item(i);
+            String id = element.getAttribute(ID);
+            if (!id.isEmpty()) {
+                if (element.getNodeName().equals(INCLUDE_OBJECT)) {
+                    element.removeAttribute(ID);
+                    out.println("Removing ID " + id + " from " + element.getAttribute(NAME) +
+                            " (include_object)");
+                }                
+                else {
+                    Integer idn = Integer.valueOf(id);
+                    if (idn == null || usedIDs.contains(idn)) {
+                        element.removeAttribute(ID);
+                        out.println("ID " + idn + " already in use. Removing id from " +
+                                element.getAttribute(NAME) + " (" + element.getNodeName() + ")");   
+                    }
+                    else {
+                        usedIDs.add(idn);
+                        out.println("Reserving ID " + idn + " for " + element.getAttribute(NAME) + 
+                                " (" + element.getNodeName() + ")"); 
+                    }
+                }
+            }
+        }
+        
+        // find all real elements with no id and them a unused id
+        int nextMacroId = 0;
+        int nextId = 256;
+        for (int i = 0; i < nodes.getLength(); i++) {
+            Element element = (Element) nodes.item(i);
+            String id = element.getAttribute("id");
+            // if a real isobus objects has no id, then create it one
+            if (id.isEmpty() && Utils.equals(element.getNodeName(), OBJECTS)) {
+                
+                // macro ids are [0..255]
+                if (element.getNodeName().equals(MACRO)) {
+                    while (usedIDs.contains(nextMacroId)) nextMacroId++;
+                    if (nextMacroId >= 256) {
+                        throw new PoolException("Too many macros (>256)!");
+                    }
+                    element.setAttribute(ID, Integer.toString(nextMacroId));
+                    usedIDs.add(nextMacroId);
+                    out.println("Created ID " + nextMacroId + " for " + element.getAttribute(NAME) + 
+                                " (" + element.getNodeName() + ")");
+                }
+                // other ids are [256..65535]
+                else {
+                    while (usedIDs.contains(nextId)) nextId++;
+                    if (nextMacroId >= 65536) {
+                        throw new PoolException("Too many objects!");
+                    }
+                    element.setAttribute(ID, Integer.toString(nextId));
+                    usedIDs.add(nextId);
+                    out.println("Created ID "+ nextId + " for " + element.getAttribute(NAME) + 
+                                " (" + element.getNodeName() + ")");
+                }
+            }
+        }
+    }
+
+    /**
+     * Adds ID attributes to all include_objects.
+     * 
+     * @param out
+     * @param clone 
+     */
+    private static void createObjectIDsForIncludeObjects(PrintStream out,
+            Document clone, Map<String, Element> nameMap) {
+
+        // use name map to add right id to all include_objects
+
+        NodeList nodes = clone.getElementsByTagName(INCLUDE_OBJECT);         
+        for (int i = 0, n = nodes.getLength(); i < n; i++) {
+            Element element = (Element) nodes.item(i);
+            String name = element.getAttribute(NAME);
+            if (nameMap.containsKey(name)) {
+                element.setAttribute("id", nameMap.get(name).getAttribute("id"));
+            } 
+            else {
+                out.println("ERROR: Can't find object: \"" + name + "\"");
+            }            
+        }
+    }
+
+    /**
+     * 
+     * @param clone
+     * @param nameMap 
+     */
+    private static void replaceAllBlockFontAttributes(Document clone,
+            Map<String, Element> nameMap) {
+        
+        // replace all block_font-attributes with block_font_size
+        NodeList nodes = clone.getElementsByTagName("*");         
+        for (int i = 0, n = nodes.getLength(); i < n; i++) {
+            Element element = (Element) nodes.item(i);
+            String blockFont = element.getAttribute(BLOCK_FONT);
+            if (!blockFont.isEmpty()){
+                if (nameMap.containsKey(blockFont)) {
+                    Element font = nameMap.get(blockFont);
+                    element.setAttribute(BLOCK_FONT_SIZE, font.getAttribute(FONT_SIZE));
+                }
+                element.removeAttribute(BLOCK_FONT);
+            } 
+            else {
+                // if no block font then these are not needed
+                element.removeAttribute(BLOCK_COL);
+                element.removeAttribute(BLOCK_ROW);
+                element.removeAttribute(BLOCK_FONT);
+            }
+        }
+    }
+
+    private static void markAllChildMasksAndDesignators(PrintStream out,
+            Document clone, Map<String, Element> nameMap) {
+        
+        NodeList nodes = clone.getElementsByTagName("*");
+        for (int i = 0, n = nodes.getLength(); i < n; i++) {
+            Element element = (Element) nodes.item(i);
+            String name = element.getNodeName();
+            if (Utils.equals(name, DATAMASK, ALARMMASK)) {
+                markChildrenMask(out, element, nameMap);
+            }
+            // marking softkeymask is necessary as it can contain pointers as well as keys
+            else if (Utils.equals(name, WORKINGSET, SOFTKEYMASK, KEY, AUXILIARYFUNCTION, AUXILIARYINPUT)) {
+                markChildrenDesignator(out, element, nameMap);
+            }
+        }
     }
     
     /**

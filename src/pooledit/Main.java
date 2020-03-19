@@ -395,6 +395,7 @@ public class Main {
         
         docArea.setDragEnabled(true);
         
+        @SuppressWarnings("unchecked")
         List<JButton> ovList = (List<JButton>) ovView.getCustomTabComponents();
         ovList.add(createButton(Icons.ZOOM_PLUS_ICON, "Zoom in", new ActionListener() {
             @Override
@@ -435,6 +436,7 @@ public class Main {
             }
         }));
         
+        @SuppressWarnings("unchecked")
         List<JButton> xmlList = (List<JButton>) xmlView.getCustomTabComponents();
         xmlList.add(createButton(Icons.XML_PARSE_ICON, "Parse XML", new ActionListener() {
             @Override
@@ -465,6 +467,7 @@ public class Main {
             }
         }));
         
+        @SuppressWarnings("unchecked")
         List<JButton> msgList = (List<JButton>) msgView.getCustomTabComponents();
         msgList.add(createButton(Icons.CLEAR_ICON, "Clear messages", new ActionListener() {
             @Override
@@ -1059,8 +1062,8 @@ public class Main {
                     return;
                 }
                 try {
-                    Tools.exportToXML1(file.getAbsolutePath(), doc.actual());
-                } catch (IOException ex) {
+                    Tools.exportToISOAgLibXML(msgOutput, file.getAbsolutePath(), doc.actual());
+                } catch (Exception ex) {
                     ex.printStackTrace();
                 }
             }
@@ -1102,7 +1105,7 @@ public class Main {
                     return;
                 }
                 try {
-                    Tools.exportToXML3(msgOutput, file.getAbsolutePath(), doc.actual());
+                    Tools.exportToEmbeddedXML(msgOutput, file.getAbsolutePath(), doc.actual());
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(frame,
                             ex.getMessage(),
@@ -1418,9 +1421,9 @@ public class Main {
                 JOptionPane.showMessageDialog(frame,
                         new String[] {
                     "PoolEdit",
-                    "Version 1.5.0",
+                    "Version 1.5.1",
                     " ",
-                    "Copyright (C) 2007-2019 Automation technology laboratory,",
+                    "Copyright (C) 2007-2020 Automation technology laboratory,",
                     "Helsinki University of Technology",
                     " ",
                     "Visit automation.tkk.fi for information about the automation",
