@@ -320,14 +320,7 @@ public class XMLTreeModel implements TreeModel, EventListener {
                     break;
                 case XMLTreeAction.actionInsert:
                     lastUndo.parentPath = getPath(lastUndo.elem).getParentPath();
-
-                    XMLTreeNode parentNode = (XMLTreeNode)lastUndo.parentPath.getLastPathComponent();
-                    XMLTreeNodeList c = getXMLTreeNodeList(parentNode);
-                    for (int i = 0; i < c.size(); i++) {
-                        if (lastUndo.elem.getAttribute(NAME).equals(c.get(i).getName()) && i < (c.size() - 1)) {
-                            lastUndo.nextSibling = c.get(i + 1).effective();
-                        }
-                    }
+                    lastUndo.nextSibling = getNextSibling(lastUndo.elem, lastUndo.parentPath);
 
                     lastUndo.elem.getParentNode().removeChild(lastUndo.elem);
                     break;
@@ -356,14 +349,7 @@ public class XMLTreeModel implements TreeModel, EventListener {
                     break;
                 case XMLTreeAction.actionInsert:
                     lastRedo.parentPath = getPath(lastRedo.elem).getParentPath();
-
-                    XMLTreeNode parentNode = (XMLTreeNode)lastRedo.parentPath.getLastPathComponent();
-                    XMLTreeNodeList c = getXMLTreeNodeList(parentNode);
-                    for (int i = 0; i < c.size(); i++) {
-                        if (lastRedo.elem.getAttribute(NAME).equals(c.get(i).getName()) && i < (c.size() - 1)) {
-                            lastRedo.nextSibling = c.get(i + 1).effective();
-                        }
-                    }
+                    lastRedo.nextSibling = getNextSibling(lastRedo.elem, lastRedo.parentPath);
                     
                     lastRedo.elem.getParentNode().removeChild(lastRedo.elem);
                     break;
@@ -658,13 +644,7 @@ public class XMLTreeModel implements TreeModel, EventListener {
                         parentPath = lastRedo.parentPath;
                         nextSibling = lastRedo.nextSibling;
                     } else {
-                        XMLTreeNode parentNode = (XMLTreeNode)parentPath.getLastPathComponent();
-                        XMLTreeNodeList c = getXMLTreeNodeList(parentNode);
-                        for (int i = 0; i < c.size(); i++) {
-                            if (target.getAttribute(NAME).equals(c.get(i).getName()) && i < (c.size() - 1)) {
-                                nextSibling = c.get(i + 1).effective();
-                            }
-                        }
+                        nextSibling = getNextSibling(target, parentPath);
                     }
                     
                     XMLTreeAction action = new XMLTreeAction(XMLTreeAction.actionRemove, target, parentPath, nextSibling, NAME, "", target.getAttribute(NAME));
@@ -1123,6 +1103,17 @@ public class XMLTreeModel implements TreeModel, EventListener {
         return indices;
     }
      */
+    
+    public Element getNextSibling(Element element, TreePath parentPath) {
+        XMLTreeNode parentNode = (XMLTreeNode)parentPath.getLastPathComponent();
+        XMLTreeNodeList c = getXMLTreeNodeList(parentNode);
+        for (int i = 0; i < c.size(); i++) {
+            if (element.getAttribute(NAME).equals(c.get(i).getName()) && i < (c.size() - 1)) {
+                return c.get(i + 1).effective();
+            }
+        }
+        return null;
+    }
     
     public TreePath getPath(Element element) {
         return getPath(element, new TreePath(root));
