@@ -38,6 +38,7 @@ import javax.swing.border.Border;
 import attributetable.AttributeTable;
 import attributetable.AttributeTableModel;
 import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -71,6 +72,8 @@ import javax.swing.JToolBar;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.JFileChooser;
+import javax.swing.JPanel;
+import javax.swing.KeyStroke;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.TreeSelectionEvent;
@@ -288,6 +291,7 @@ public class Main {
             @Override
             public void stateChanged(ChangeEvent e) {
                 objecttree.setActivePath(multidom.getActivePath());
+                model.setActivePath(multidom.getActivePath());
             }
         });
            
@@ -517,6 +521,23 @@ public class Main {
         // Add a mouse button listener that closes a window when it's
         // clicked with the middle mouse button.
         rootWindow.addTabMouseButtonListener(DockingWindowActionMouseButtonListener.MIDDLE_BUTTON_CLOSE_LISTENER);
+        
+        rootWindow.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("control Z"), "undo");
+        rootWindow.getActionMap().put("undo", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                multidom.getActiveDocument().getTreeModel().undoAction();
+            }
+        });
+        
+        rootWindow.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("control Y"), "redo");
+        rootWindow.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("control shift Z"), "redo");
+        rootWindow.getActionMap().put("redo", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                multidom.getActiveDocument().getTreeModel().redoAction();
+            }
+        });
     }
     
     /**
@@ -614,8 +635,11 @@ public class Main {
      * Creates the frame tool bar.
      * @return the frame tool bar
      */
-    private JToolBar createToolBar() {
-        JToolBar toolBar = new JToolBar();
+    private JPanel createToolBar() {
+        JPanel panel = new JPanel();
+        panel.setLayout(new FlowLayout(FlowLayout.LEFT));
+        
+        JToolBar toolBarObjects = new JToolBar();
         
         TransferHandler hnd = new TransferHandler("XML");
         MouseListener listener = new MouseAdapter() {
@@ -630,10 +654,10 @@ public class Main {
             JLabel lbl = new DragLabel(Definitions.OBJECTS[i], libdoc);
             lbl.setTransferHandler(hnd);
             lbl.addMouseListener(listener);
-            Border bdr = BorderFactory.createRaisedBevelBorder();            
+            Border bdr = BorderFactory.createRaisedBevelBorder();
             lbl.setBorder(bdr);
-            toolBar.add(lbl);
-            toolBar.addSeparator(new Dimension(2, 1));
+            toolBarObjects.add(lbl);
+            toolBarObjects.addSeparator(new Dimension(2, 1));
         }
         
         /*
@@ -651,7 +675,35 @@ public class Main {
             }
         });
          */
-        return toolBar;
+        
+        JToolBar toolBarTools = new JToolBar();
+        
+        JButton btnUndo = new JButton("Undo");
+        btnUndo.setToolTipText("Undo");
+        btnUndo.setBorder(BorderFactory.createRaisedBevelBorder());
+        btnUndo.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                multidom.getActiveDocument().getTreeModel().undoAction();
+            }
+        });
+        toolBarTools.add(btnUndo);
+        
+        JButton btnRedo = new JButton("Redo");
+        btnRedo.setToolTipText("Redo");
+        btnRedo.setBorder(BorderFactory.createRaisedBevelBorder());
+        btnRedo.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                multidom.getActiveDocument().getTreeModel().redoAction();
+            }
+        });
+        toolBarTools.add(btnRedo);
+        
+        panel.add(toolBarObjects);
+        panel.add(toolBarTools);
+
+        return panel;
     }
     
     /**
@@ -1435,7 +1487,7 @@ public class Main {
                     "3 of the License, or (at your option) any later version.",
                     " ",
                     "Authors:",
-                    "Matti Öhman (matti.ohman@aalto.fi)",
+                    "Matti Ohman (matti.ohman@aalto.fi)",
                     "Jouko Kalmari"},
                         "About PoolEdit", JOptionPane.INFORMATION_MESSAGE, Icons.POOLEDIT_LOGO);
             }

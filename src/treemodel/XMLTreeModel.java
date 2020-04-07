@@ -33,6 +33,7 @@ import org.w3c.dom.events.EventListener;
 import org.w3c.dom.events.EventTarget;
 import org.w3c.dom.events.MutationEvent;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
@@ -60,6 +61,14 @@ public class XMLTreeModel implements TreeModel, EventListener {
     
     private final Map<XMLTreeNode, XMLTreeNodeList> childMap;
     
+    private LinkedList<XMLTreeAction> undoActions = new LinkedList<>();
+    private LinkedList<XMLTreeAction> redoActions = new LinkedList<>();
+    private XMLTreeAction lastUndo;
+    private XMLTreeAction lastRedo;
+    private boolean undoing;
+    private boolean redoing;
+    private TreePath activePath;
+    
     /**
      * Default constructor.
      */
@@ -77,6 +86,10 @@ public class XMLTreeModel implements TreeModel, EventListener {
         this.nameMap = nameMap;
         childMap = new HashMap<>();
         root = createRootAndCategoryNodes();
+        lastUndo = null;
+        lastRedo = null;
+        undoing = false;
+        redoing = false;
     }
     
     /**
@@ -264,6 +277,102 @@ public class XMLTreeModel implements TreeModel, EventListener {
         synchronized (listeners) {
             // System.out.println("REMOVING TREE MODEL LISTENER: " + l);
             listeners.remove(l);
+        }
+    }
+    
+        public void setActivePath(TreePath path) {
+        activePath = path;
+    }
+    
+    private void newAction(XMLTreeAction action) {
+        if ((lastUndo == null) || !((lastUndo.name.equals(action.name) && lastUndo.elem.equals(action.elem) && lastUndo.newValue.equals(action.oldValue)))) {
+            undoActions.addFirst(action);
+            
+            if (undoActions.size() > 50) {
+                undoActions.removeLast();
+            }
+            
+            if (lastRedo != null && !((lastRedo.name.equals(action.name) && lastRedo.elem.equals(action.elem) && lastRedo.newValue.equals(action.oldValue)))) {
+                redoActions.clear();
+            }
+        } else {
+            redoActions.addFirst(action);
+            
+            if (redoActions.size() > 50) {
+                redoActions.removeLast();
+            }
+        }
+    }
+    
+    public void undoAction() {
+        if (!undoActions.isEmpty()) {
+            lastUndo = undoActions.removeFirst();
+            undoing = true;
+            
+            switch (lastUndo.type) {
+                case XMLTreeAction.actionRemove:
+                    XMLTreeNode parent = (XMLTreeNode)lastUndo.parentPath.getLastPathComponent();
+                    if (!parent.isType(OBJECTS)) {
+                        TreePath parentPath =  new TreePath(root);
+                        parent = (XMLTreeNode) parentPath.getLastPathComponent();
+                    }
+                    parent.actual().insertBefore(lastUndo.elem, lastUndo.nextSibling);
+                    break;
+                case XMLTreeAction.actionInsert:
+                    lastUndo.parentPath = getPath(lastUndo.elem).getParentPath();
+
+                    XMLTreeNode parentNode = (XMLTreeNode)lastUndo.parentPath.getLastPathComponent();
+                    XMLTreeNodeList c = getXMLTreeNodeList(parentNode);
+                    for (int i = 0; i < c.size(); i++) {
+                        if (lastUndo.elem.getAttribute(NAME).equals(c.get(i).getName()) && i < (c.size() - 1)) {
+                            lastUndo.nextSibling = c.get(i + 1).effective();
+                        }
+                    }
+
+                    lastUndo.elem.getParentNode().removeChild(lastUndo.elem);
+                    break;
+                case XMLTreeAction.actionChange:
+                    lastUndo.elem.setAttribute(lastUndo.name, lastUndo.oldValue);
+                    break;
+            }
+            
+            fixModel();
+        }
+    }
+    
+    public void redoAction() {
+        if (!redoActions.isEmpty()) {
+            lastRedo = redoActions.removeFirst();
+            redoing = true;
+            
+            switch (lastRedo.type) {
+                case XMLTreeAction.actionRemove:
+                    XMLTreeNode parent = (XMLTreeNode)lastRedo.parentPath.getLastPathComponent();
+                    if (!parent.isType(OBJECTS)) {
+                        TreePath parentPath =  new TreePath(root);
+                        parent = (XMLTreeNode) parentPath.getLastPathComponent();
+                    }
+                    parent.actual().insertBefore(lastRedo.elem, lastRedo.nextSibling);
+                    break;
+                case XMLTreeAction.actionInsert:
+                    lastRedo.parentPath = getPath(lastRedo.elem).getParentPath();
+
+                    XMLTreeNode parentNode = (XMLTreeNode)lastRedo.parentPath.getLastPathComponent();
+                    XMLTreeNodeList c = getXMLTreeNodeList(parentNode);
+                    for (int i = 0; i < c.size(); i++) {
+                        if (lastRedo.elem.getAttribute(NAME).equals(c.get(i).getName()) && i < (c.size() - 1)) {
+                            lastRedo.nextSibling = c.get(i + 1).effective();
+                        }
+                    }
+                    
+                    lastRedo.elem.getParentNode().removeChild(lastRedo.elem);
+                    break;
+                case XMLTreeAction.actionChange:
+                    lastRedo.elem.setAttribute(lastRedo.name, lastRedo.oldValue);
+                    break;
+            }
+            
+            fixModel();
         }
     }
     
@@ -539,15 +648,50 @@ public class XMLTreeModel implements TreeModel, EventListener {
                 String type = mev.getType();
                 if (type.equals("DOMNodeRemoved")) {
                     //System.out.println("REMOVING: " + target.getAttribute(NAME));
+                    TreePath parentPath = activePath.getParentPath();
+                    Element nextSibling = null;
+                    
+                    if (undoing) {
+                        parentPath = lastUndo.parentPath;
+                        nextSibling = lastUndo.nextSibling;
+                    } else if (redoing) {
+                        parentPath = lastRedo.parentPath;
+                        nextSibling = lastRedo.nextSibling;
+                    } else {
+                        XMLTreeNode parentNode = (XMLTreeNode)parentPath.getLastPathComponent();
+                        XMLTreeNodeList c = getXMLTreeNodeList(parentNode);
+                        for (int i = 0; i < c.size(); i++) {
+                            if (target.getAttribute(NAME).equals(c.get(i).getName()) && i < (c.size() - 1)) {
+                                nextSibling = c.get(i + 1).effective();
+                            }
+                        }
+                    }
+                    
+                    XMLTreeAction action = new XMLTreeAction(XMLTreeAction.actionRemove, target, parentPath, nextSibling, NAME, "", target.getAttribute(NAME));
+                    newAction(action);
                     changeAttribute(target, NAME, "", target.getAttribute(NAME));
                 } else if (type.equals("DOMNodeInserted")) {
                     //System.out.println("INSERTING: " + target.getAttribute(NAME));
                     changeAttribute(target, NAME, target.getAttribute(NAME), "");
-                }
-                if (type.equals("DOMAttrModified")) {
+                    
+                    TreePath parentPath = activePath;
+                    Element nextSibling = null;
+                    
+                    if (undoing) {
+                        parentPath = lastUndo.parentPath;
+                        nextSibling = lastUndo.nextSibling;
+                    } else if (redoing) {
+                        parentPath = lastRedo.parentPath;
+                        nextSibling = lastRedo.nextSibling;
+                    }
+                    XMLTreeAction action = new XMLTreeAction(XMLTreeAction.actionInsert, target, parentPath, nextSibling, NAME, target.getAttribute(NAME), "");
+                    newAction(action);
+                } else if (type.equals("DOMAttrModified")) {
                     String name = mev.getAttrName();
                     String newValue = mev.getNewValue();
                     String oldValue = mev.getPrevValue(); // can be null
+                    XMLTreeAction action = new XMLTreeAction(XMLTreeAction.actionChange, target, null, null, name, newValue, oldValue);
+                    newAction(action);
                     changeAttribute(target, name, newValue, oldValue);
                     if (!name.equals(NAME)) {
                         return;
@@ -555,6 +699,9 @@ public class XMLTreeModel implements TreeModel, EventListener {
                 }
                 
                 fixModel();
+                
+                undoing = false;
+                redoing = false;
             }
         });
     }
@@ -976,6 +1123,25 @@ public class XMLTreeModel implements TreeModel, EventListener {
         return indices;
     }
      */
+    
+    public TreePath getPath(Element element) {
+        return getPath(element, new TreePath(root));
+    }
+    
+    private TreePath getPath(Element element, TreePath path) {
+        XMLTreeNode node = (XMLTreeNode) path.getLastPathComponent();
+        XMLTreeNodeList c = getXMLTreeNodeList(node);
+        for (XMLTreeNode n : c) {
+            if (n.actual()== element || n.link() == element) {
+                return path.pathByAddingChild(n);
+            }
+            TreePath nodePath = getPath(element, path.pathByAddingChild(n));
+            if (nodePath != null) {
+                return nodePath;
+            }
+        }
+        return null;
+    }
     
     /**
      * Tries to convert string path into TreePath of XMLTreeNodes. 

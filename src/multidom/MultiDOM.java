@@ -148,6 +148,7 @@ public class MultiDOM {
         SingleDOM doc = newDocument();
         doc.setName(name);
         doc.loadDocument(); // can throw Exception!
+        setActiveDocument(doc);
         return doc;
     }
     
