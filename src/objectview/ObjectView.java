@@ -711,6 +711,12 @@ public class ObjectView extends JComponent implements TreeModelListener,
                 case AUXILIARYINPUT:
                     shape = processAuxiliaryInput(gfx, node, oper);
                     break;
+                case AUXILIARYFUNCTION2:
+                    shape = processAuxiliaryFunction2(gfx, node, oper);
+                    break;
+                case AUXILIARYINPUT2:
+                    shape = processAuxiliaryInput2(gfx, node, oper);
+                    break;
                 default:
                     // node is not drawable, do nothing
                     break;
@@ -1281,6 +1287,58 @@ public class ObjectView extends JComponent implements TreeModelListener,
         
 	return restoreClip(gfx, oldc);
     }
+    
+        public Shape processAuxiliaryFunction2(Graphics2D gfx, XMLTreeNode node, ObjectOperations oper) {
+	dmsg("paintAuxiliaryFunction2");
+	Shape oldc = changeClip(gfx, sk_width, sk_height);
+        
+        oper.opAuxiliaryFunction2(gfx, node, sk_width, sk_height);
+        
+	// paint children
+        oper.incDepth();
+	for (int i = 0, n = model.getChildCount(node); i < n; i++) {
+	    XMLTreeNode nd = (XMLTreeNode) model.getChild(node, i);
+            if (nd.isType(MACRO)) {
+                // do nothing?                
+            }
+            // this could be more specific
+            else if (nd.isType(OBJECTS)) {
+                AffineTransform oldx = gfx.getTransform();
+                gfx.translate(nd.getX(), nd.getY());
+                processNode(gfx, nd, oper);
+                gfx.setTransform(oldx);
+            }
+	}
+        oper.decDepth();
+        
+	return restoreClip(gfx, oldc);
+    }
+    
+    public Shape processAuxiliaryInput2(Graphics2D gfx, XMLTreeNode node, ObjectOperations oper) {
+	dmsg("paintAuxiliaryInput2");
+	Shape oldc = changeClip(gfx, sk_width, sk_height);
+        
+        oper.opAuxiliaryInput2(gfx, node, sk_width, sk_height);
+        
+	// paint children
+        oper.incDepth();
+	for (int i = 0, n = model.getChildCount(node); i < n; i++) {
+	    XMLTreeNode nd = (XMLTreeNode) model.getChild(node, i);
+            if (nd.isType(MACRO)) {
+                // do nothing?                
+            }
+            // this could be more specific
+            else if (nd.isType(OBJECTS)) {
+                AffineTransform oldx = gfx.getTransform();
+                gfx.translate(nd.getX(), nd.getY());
+                processNode(gfx, nd, oper);
+                gfx.setTransform(oldx);
+            }
+	}
+        oper.decDepth();
+        
+	return restoreClip(gfx, oldc);
+    }
 
     /**
      * Calculates required size by using a very limited recursion.
@@ -1314,7 +1372,8 @@ public class ObjectView extends JComponent implements TreeModelListener,
             // reserve roperm for one extra key
             lim.set(sk_width, (model.getChildCount(node) + 1) * sk_height);
 	}
-	else if (node.isType(KEY, AUXILIARYFUNCTION, AUXILIARYINPUT)) {
+	else if (node.isType(KEY, AUXILIARYFUNCTION, AUXILIARYINPUT,
+                AUXILIARYFUNCTION2, AUXILIARYINPUT2)) {
 	    lim.set(sk_width, sk_height);
 	}
 	else if (node.isType(CONTAINER, BUTTON, 

@@ -47,6 +47,10 @@ public interface ObjectOperations {
     void opAuxiliaryFunction(Graphics2D gfx, XMLTreeNode node, int w, int h);
 
     void opAuxiliaryInput(Graphics2D gfx, XMLTreeNode node, int w, int h);
+    
+    void opAuxiliaryFunction2(Graphics2D gfx, XMLTreeNode node, int w, int h);
+
+    void opAuxiliaryInput2(Graphics2D gfx, XMLTreeNode node, int w, int h);
 
     void opButton(Graphics2D gfx, XMLTreeNode node);
 

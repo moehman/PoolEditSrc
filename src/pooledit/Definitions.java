@@ -83,6 +83,8 @@ public class Definitions {
     static public final String MACROS_ = "Macros";
     static public final String AUXILIARYFUNCTIONS_ = "AuxiliaryFunctions";
     static public final String AUXILIARYINPUTS_ = "AuxiliaryInputs";
+    static public final String AUXILIARYFUNCTIONS2_ = "AuxiliaryFunctions2";
+    static public final String AUXILIARYINPUTS2_ = "AuxiliaryInputs2";
 
     static public final String[][] SUBCATEGORYGROUPS = {
 	{WORKINGSETS_, DATAMASKS_, ALARMMASKS_, CONTAINERS_}, 
@@ -96,7 +98,7 @@ public class Definitions {
 	{FONTATTRIBUTES_, LINEATTRIBUTES_, FILLATTRIBUTES_, INPUTATTRIBUTES_},
 	{OBJECTPOINTERS_}, 
 	{MACROS_}, 
-	{AUXILIARYFUNCTIONS_, AUXILIARYINPUTS_}
+	{AUXILIARYFUNCTIONS_, AUXILIARYINPUTS_, AUXILIARYFUNCTIONS2_, AUXILIARYINPUTS2_}
     };
 
     static public final String[] SUBCATEGORIES = {
@@ -111,7 +113,7 @@ public class Definitions {
 	FONTATTRIBUTES_, LINEATTRIBUTES_, FILLATTRIBUTES_, INPUTATTRIBUTES_,
 	OBJECTPOINTERS_, 
 	MACROS_, 
-	AUXILIARYFUNCTIONS_, AUXILIARYINPUTS_
+	AUXILIARYFUNCTIONS_, AUXILIARYINPUTS_, AUXILIARYFUNCTIONS2_, AUXILIARYINPUTS2_
     };
 
     // objects
@@ -146,6 +148,8 @@ public class Definitions {
     static public final String MACRO = "macro";
     static public final String AUXILIARYFUNCTION = "auxiliaryfunction";
     static public final String AUXILIARYINPUT = "auxiliaryinput";
+    static public final String AUXILIARYFUNCTION2 = "auxiliaryfunction2";
+    static public final String AUXILIARYINPUT2 = "auxiliaryinput2";
     
     static public final String[] OBJECTS = {
 	WORKINGSET, DATAMASK, ALARMMASK, CONTAINER, 
@@ -157,7 +161,8 @@ public class Definitions {
 	METER, LINEARBARGRAPH, ARCHEDBARGRAPH, PICTUREGRAPHIC,
 	NUMBERVARIABLE, STRINGVARIABLE,
 	FONTATTRIBUTES, LINEATTRIBUTES, FILLATTRIBUTES, INPUTATTRIBUTES,
-	OBJECTPOINTER, MACRO, AUXILIARYFUNCTION, AUXILIARYINPUT
+	OBJECTPOINTER, MACRO, AUXILIARYFUNCTION, AUXILIARYINPUT,
+        AUXILIARYFUNCTION2, AUXILIARYINPUT2
     };
   
     // pseudo objects
@@ -187,7 +192,7 @@ public class Definitions {
 	FONTATTRIBUTES_, LINEATTRIBUTES_, FILLATTRIBUTES_, INPUTATTRIBUTES_,
 	OBJECTPOINTERS_, 
 	MACROS_, 
-	AUXILIARYFUNCTIONS_, AUXILIARYINPUTS_,
+	AUXILIARYFUNCTIONS_, AUXILIARYINPUTS_, AUXILIARYFUNCTIONS2_, AUXILIARYINPUTS2_,
 	WORKINGSET, DATAMASK, ALARMMASK, CONTAINER, 
 	SOFTKEYMASK, KEY, BUTTON, 
 	INPUTBOOLEAN, INPUTSTRING, 
@@ -198,6 +203,7 @@ public class Definitions {
 	NUMBERVARIABLE, STRINGVARIABLE,
 	FONTATTRIBUTES, LINEATTRIBUTES, FILLATTRIBUTES, INPUTATTRIBUTES,
 	OBJECTPOINTER, MACRO, AUXILIARYFUNCTION, AUXILIARYINPUT,
+        AUXILIARYFUNCTION2, AUXILIARYINPUT2,
 	POINT, LANGUAGE, INCLUDE_OBJECT, FIXEDBITMAP, COMMAND
     };
 
@@ -226,6 +232,7 @@ public class Definitions {
 	"macro.png",
 	// --- objects ---
 	"auxiliaryfunction.png", "auxiliaryinput.png",
+        "auxiliaryfunction2.png", "auxiliaryinput2.png",
 	"workingset.png", "datamask.png", "alarmmask.png", "container.png", 
 	"softkeymask.png", "softkey.png", "button.png",
 	"inputbooleanfield.png", "inputstringfield.png", "inputnumberfield.png", "inputlistfield.png",
@@ -238,6 +245,7 @@ public class Definitions {
 	"objectpointer.png",
 	"macro.png",
 	"auxiliaryfunction.png", "auxiliaryinput.png",
+        "auxiliaryfunction2.png", "auxiliaryinput2.png",
 	// --- pseudo objects ---
 	"point.png", "language.png", "includeobject.png", "fixedbitmap.png", "command.png"
     };

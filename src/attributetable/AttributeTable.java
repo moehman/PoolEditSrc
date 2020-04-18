@@ -84,7 +84,10 @@ public class AttributeTable extends JTable {
     private final TableCellEditor archedBarGraphOptionEditor;
     private final TableCellEditor outputStringOptionEditor;
     private final TableCellEditor outputNumberOptionEditor;
-    private final TableCellEditor booleanAnalogEditor;    
+    private final TableCellEditor auxFunction2OptionEditor;
+    private final TableCellEditor auxInput2OptionEditor;
+    private final TableCellEditor booleanAnalogEditor;
+    private final TableCellEditor aux2typeEditor;
     private final TableCellEditor validationTypeEditor;
     private final TableCellEditor maskTypeEditor;
     
@@ -124,7 +127,13 @@ public class AttributeTable extends JTable {
         archedBarGraphOptionEditor = new CheckBoxListCellEditor("border", "targetline", "nofill", "clockwise");
         outputStringOptionEditor = new CheckBoxListCellEditor("transparent", "autowrap");
         outputNumberOptionEditor = new CheckBoxListCellEditor("transparent", "leadingzeros", "blankzero");
+        auxFunction2OptionEditor = new CheckBoxListCellEditor("criticalcontrol", "assignmentlock", "singleassignment");
+        auxInput2OptionEditor = new CheckBoxListCellEditor("criticalcontrol", "singleassignment");
         booleanAnalogEditor = createEditor("boolean", "analog");
+        aux2typeEditor = createEditor("latchingboolean", "analog", "nonlatchingboolean", "analogreturnto50", "analogreturnto0",
+                                      "bothlatchingdualboolean", "bothnonlatchingdualboolean", "latchingdualbooleanup",
+                                      "latchingdualbooleandown", "combinedanalogreturnto50duallatchingboolean", "combinedanalogduallatchingboolean",
+                                      "nonlatchingquadboolean", "analogquad", "analogreturnto50quad", "encoder");
         validationTypeEditor = createEditor("invalidcharacters", "validcharacters");
         maskTypeEditor = createEditor("datamask", "alarmmask");
         
@@ -300,11 +309,15 @@ public class AttributeTable extends JTable {
             else if (Utils.equals(type, ARCHEDBARGRAPH)) {
                 return archedBarGraphOptionEditor;
             }
-            else if (Utils.equals(type, OUTPUTSTRING)) {
+            else if (Utils.equals(type, OUTPUTSTRING, INPUTSTRING)) {
                 return outputStringOptionEditor;
             }
             else if (Utils.equals(type, OUTPUTNUMBER, INPUTNUMBER)) {
                 return outputNumberOptionEditor;
+            } else if (Utils.equals(type, AUXILIARYFUNCTION2)) {
+                return auxFunction2OptionEditor;
+            } else if (Utils.equals(type, AUXILIARYINPUT2)) {
+                return auxInput2OptionEditor;
             }
             else {
                 return super.getCellEditor(row, col);
@@ -347,7 +360,11 @@ public class AttributeTable extends JTable {
 	    return colorEditor;
 	}
         else if (Utils.equals(attr, FUNCTION_TYPE)) {
-            return booleanAnalogEditor;
+            if (Utils.equals(type, AUXILIARYFUNCTION, AUXILIARYINPUT)) {
+                return booleanAnalogEditor;
+            } else {
+                return aux2typeEditor;
+            }
         }
         else if (Utils.equals(attr, VALIDATION_TYPE)) {
             return validationTypeEditor;

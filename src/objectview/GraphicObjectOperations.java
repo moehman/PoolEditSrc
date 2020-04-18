@@ -1062,6 +1062,24 @@ public class GraphicObjectOperations implements ObjectOperations {
         drawBorders(gfx, w, h);
     }
     
+    @Override
+    public void opAuxiliaryFunction2(Graphics2D gfx, XMLTreeNode node, int w, int h) {
+        // fill back ground
+        gfx.setColor(node.getBackgroundColor(colorDepth));
+        gfx.fillRect(0, 0, w, h);
+        
+        drawBorders(gfx, w, h);
+    }
+    
+    @Override
+    public void opAuxiliaryInput2(Graphics2D gfx, XMLTreeNode node, int w, int h) {
+        // fill back ground
+        gfx.setColor(node.getBackgroundColor(colorDepth));
+        gfx.fillRect(0, 0, w, h);
+        
+        drawBorders(gfx, w, h);
+    }
+    
     /**
      * Sets depth.
      * @param depth

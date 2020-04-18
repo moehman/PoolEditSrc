@@ -133,6 +133,16 @@ public class PointObjectOperations implements ObjectOperations {
     public void opAuxiliaryInput(Graphics2D gfx, XMLTreeNode node, int w, int h) {
         check(gfx, node);
     }
+    
+    @Override
+    public void opAuxiliaryFunction2(Graphics2D gfx, XMLTreeNode node, int w, int h) {
+        check(gfx, node);
+    }
+
+    @Override
+    public void opAuxiliaryInput2(Graphics2D gfx, XMLTreeNode node, int w, int h) {
+        check(gfx, node);
+    }
 
     @Override
     public void opButton(Graphics2D gfx, XMLTreeNode node) {
