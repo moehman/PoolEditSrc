@@ -1314,7 +1314,7 @@ public class XMLTreeNode {
      * @return 
      */
     public Dimension getNodeSize(Dimension dim) {
-        if (isType(WORKINGSET, KEY, AUXILIARYFUNCTION, AUXILIARYINPUT)) {
+        if (isType(WORKINGSET, KEY, AUXILIARYFUNCTION, AUXILIARYINPUT, AUXILIARYFUNCTION2, AUXILIARYINPUT2)) {
             XMLTreeNode root = (XMLTreeNode) model.getRoot();
             dim.setSize(root.getSKWidth(), root.getSKHeight());
 	}

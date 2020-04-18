@@ -226,6 +226,38 @@
       <xs:maxInclusive value="250"/>
     </xs:restriction>
   </xs:simpleType>
+  
+  <xs:simpleType name="attrOptionsFunction2">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="none|((criticalcontrol|assignmentlock|singleassignment)(\+(criticalcontrol|assignmentlock|singleassignment))*)?"/>
+    </xs:restriction>
+  </xs:simpleType>
+  
+  <xs:simpleType name="attrOptionsInput2">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="none|((criticalcontrol|singleassignment)(\+(criticalcontrol|singleassignment))*)?"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="attrFunction2Type">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="latchingboolean"/>
+      <xs:enumeration value="analog"/>
+      <xs:enumeration value="nonlatchingboolean"/>
+      <xs:enumeration value="analogreturnto50"/>
+      <xs:enumeration value="analogreturnto0"/>
+      <xs:enumeration value="bothlatchingdualboolean"/>
+      <xs:enumeration value="bothnonlatchingdualboolean"/>
+      <xs:enumeration value="latchingdualbooleanup"/>
+      <xs:enumeration value="latchingdualbooleandown"/>
+      <xs:enumeration value="combinedanalogreturnto50duallatchingboolean"/>
+      <xs:enumeration value="combinedanalogduallatchingboolean"/>
+      <xs:enumeration value="nonlatchingquadboolean"/>
+      <xs:enumeration value="analogquad"/>
+      <xs:enumeration value="analogreturnto50quad"/>
+      <xs:enumeration value="encoder"/>
+    </xs:restriction>
+  </xs:simpleType>
 
   <xs:simpleType name="attrMaskType">
     <xs:restriction base="xs:string">
@@ -1038,6 +1070,52 @@
   </xs:complexType>
 
 
+<!-- ### AUXILIARY2 OBJECTS ### -->
+<xs:complexType name="elemAuxiliaryFunction2">
+    <xs:sequence>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">        
+        <xs:element name="container"                             type="elemContainer"/>
+        <xs:element name="outputstring"                          type="elemOutputString"/>
+        <xs:element name="outputnumber"                          type="elemOutputNumber"/>
+        <xs:element name="line"                                  type="elemLine"/>
+        <xs:element name="rectangle"                             type="elemRectangle"/>
+        <xs:element name="ellipse"                               type="elemEllipse"/>
+        <xs:element name="polygon"                               type="elemPolygon"/>
+        <xs:element name="picturegraphic"                        type="elemPictureGraphic"/>
+        
+        <xs:element name="include_object"                        type="elemIncludeObject"/>
+      </xs:choice>
+    </xs:sequence>
+    <xs:attribute use="optional" name="name"                     type="xs:string"           default=""/>
+    <xs:attribute use="optional" name="id"                       type="attrObjectId"        default=""/>
+    <xs:attribute                name="background_colour"        type="attrColour"          default="black"/>
+    <xs:attribute                name="function_type"            type="attrFunction2Type"   default="latchingboolean"/>
+    <xs:attribute                name="options"                  type="attrOptionsFunction2"    default=""/>
+</xs:complexType>
+
+<xs:complexType name="elemAuxiliaryInput2">
+    <xs:sequence>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="container"                             type="elemContainer"/>
+        <xs:element name="outputstring"                          type="elemOutputString"/>
+        <xs:element name="outputnumber"                          type="elemOutputNumber"/>
+        <xs:element name="line"                                  type="elemLine"/>
+        <xs:element name="rectangle"                             type="elemRectangle"/>
+        <xs:element name="ellipse"                               type="elemEllipse"/>
+        <xs:element name="polygon"                               type="elemPolygon"/>
+        <xs:element name="picturegraphic"                        type="elemPictureGraphic"/>
+        
+        <xs:element name="include_object"                        type="elemIncludeObject"/>
+      </xs:choice>
+    </xs:sequence>
+    <xs:attribute use="optional" name="name"                     type="xs:string"           default=""/>
+    <xs:attribute use="optional" name="id"                       type="attrObjectId"        default=""/>
+    <xs:attribute                name="background_colour"        type="attrColour"          default="black"/>
+    <xs:attribute                name="function_type"            type="attrFunction2Type"   default="latchingboolean"/>
+    <xs:attribute                name="options"                  type="attrOptionsInput2"   default=""/>
+</xs:complexType>
+
+
   <!-- ### COMMAND OBJECTS ### -->
   <xs:complexType name="elemCommandHideShowObject">
     <xs:attribute use="optional" name="object_id"                type="attrObjectId" default=""/>
@@ -1243,6 +1321,9 @@
 
           <xs:element name="auxiliaryfunction"                   type="elemAuxiliaryFunction"/>
     	  <xs:element name="auxiliaryinput"                      type="elemAuxiliaryInput"/>
+          
+          <xs:element name="auxiliaryfunction2"                  type="elemAuxiliaryFunction2"/>
+    	  <xs:element name="auxiliaryinput2"                     type="elemAuxiliaryInput2"/>
 
 	  <!-- this really should not be here, but it makes creating new objects somewhat easier -->
     	  <xs:element name="include_object"                      type="elemIncludeObject"/>

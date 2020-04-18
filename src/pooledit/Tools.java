@@ -984,7 +984,8 @@ public class Tools {
         
         // objects with x-y-object references
         if (Utils.equals(trgName, WORKINGSET, DATAMASK, ALARMMASK, 
-                CONTAINER, KEY, BUTTON, AUXILIARYFUNCTION, AUXILIARYINPUT) &&
+                CONTAINER, KEY, BUTTON, AUXILIARYFUNCTION, AUXILIARYINPUT,
+                AUXILIARYFUNCTION2, AUXILIARYINPUT2) &&
                 Utils.equals(frgName, CONTAINER, BUTTON, 
                 INPUTBOOLEAN, INPUTSTRING, INPUTNUMBER, INPUTLIST, OUTPUTSTRING, 
                 OUTPUTNUMBER, LINE, RECTANGLE, ELLIPSE, POLYGON, METER, 
@@ -1621,7 +1622,8 @@ public class Tools {
                 markChildrenMask(out, element, nameMap);
             }
             // marking softkeymask is necessary as it can contain pointers as well as keys
-            else if (Utils.equals(name, WORKINGSET, SOFTKEYMASK, KEY, AUXILIARYFUNCTION, AUXILIARYINPUT)) {
+            else if (Utils.equals(name, WORKINGSET, SOFTKEYMASK, KEY,
+                    AUXILIARYFUNCTION, AUXILIARYINPUT, AUXILIARYFUNCTION2, AUXILIARYINPUT2)) {
                 markChildrenDesignator(out, element, nameMap);
             }
         }

@@ -224,6 +224,34 @@
       </outputstring>
     </container>
   </auxiliaryinput>
+  <auxiliaryfunction2 background_colour="white" function_type="latchingboolean" id="" name="auxfun2">
+    <container block_col="0" block_font="" block_row="0" height="32" hidden="no" id="" name="container" pos_x="14" pos_y="0" width="32">
+      <rectangle block_col="0" block_font="" block_row="0" height="28" id="" line_suppression="" name="background" pos_x="0" pos_y="2" width="32">
+        <include_object name="white" role="fill_attributes"/>
+        <include_object name="black1" role="line_attributes"/>
+      </rectangle>
+      <outputstring background_colour="black" block_col="0" block_font="" block_row="0" height="8" horizontal_justification="middle" id="" language="" length="5" name="label0" options="transparent" pos_x="1" pos_y="6" value="AUX2" width="30">
+        <include_object name="black6x8" role="font_attributes"/>
+      </outputstring>
+      <outputstring background_colour="black" block_col="0" block_font="" block_row="0" height="8" horizontal_justification="middle" id="" language="" length="5" name="label1" options="transparent" pos_x="1" pos_y="18" value="FUN" width="30">
+        <include_object name="black6x8" role="font_attributes"/>
+      </outputstring>
+    </container>
+  </auxiliaryfunction2>
+  <auxiliaryinput2 background_colour="white" function_type="latchingboolean" id="" name="auxinp2">
+    <container block_col="0" block_font="" block_row="0" height="32" hidden="no" id="" name="container" pos_x="14" pos_y="0" width="32">
+      <rectangle block_col="0" block_font="" block_row="0" height="28" id="" line_suppression="" name="background" pos_x="0" pos_y="2" width="32">
+        <include_object name="white" role=""/>
+        <include_object name="black1" role=""/>
+      </rectangle>
+      <outputstring background_colour="black" block_col="0" block_font="" block_row="0" height="8" horizontal_justification="middle" id="" language="" length="5" name="label0" options="transparent" pos_x="1" pos_y="6" value="AUX2" width="30">
+        <include_object name="black6x8" role="font_attributes"/>
+      </outputstring>
+      <outputstring background_colour="black" block_col="0" block_font="" block_row="0" height="8" horizontal_justification="middle" id="" language="" length="5" name="label1" options="transparent" pos_x="1" pos_y="18" value="IN" width="30">
+        <include_object name="black6x8" role="font_attributes"/>
+      </outputstring>
+    </container>
+  </auxiliaryinput2>
   <lineattributes id="" line_art="1111111111111111" line_colour="red" line_width="1" name="red1" role=""/>
   <lineattributes id="" line_art="1111111111111111" line_colour="magenta" line_width="1" name="magenta1" role=""/>
   <lineattributes id="" line_art="1111111111111111" line_colour="yellow" line_width="1" name="yellow1" role=""/>

@@ -101,6 +101,8 @@ public class PoolImporter {
     static public final String MACRO = "macro";
     static public final String AUXILIARYFUNCTION = "auxiliaryfunction";
     static public final String AUXILIARYINPUT = "auxiliaryinput";
+    static public final String AUXILIARYFUNCTION2 = "auxiliaryfunction2";
+    static public final String AUXILIARYINPUT2 = "auxiliaryinput2";
     static public final String POINT_OBJECT = "point";
 
     static public final String DIMENSION = "dimension";
@@ -1001,6 +1003,26 @@ public class PoolImporter {
     public String getPictureGraphicOptions(int opt) {
 	//none|(rle|rle1|rle4|rle8|opaque|normal|transparent|flashing
 	final String[] OPTS = {"transparent", "flashing"}; // FIXME: STUFF MISSING! CHECK THE STANDARD!
+	return getOptions(opt, OPTS);
+    }
+    
+    /**
+    * This method is used by auxiliary function2.
+    * @param opt
+    * @return
+    */
+    public String getFunction2Options(int opt) {
+	final String[] OPTS = {"criticalcontrol", "assignmentlock", "singleassignment"};
+	return getOptions(opt, OPTS);
+    }    
+
+    /**
+    * This method is used by auxiliary input2.
+    * @param opt
+    * @return
+    */
+    public String getInput2Options(int opt) {
+	final String[] OPTS = {"criticalcontrol", "singleassignment"};
 	return getOptions(opt, OPTS);
     }
 
@@ -2575,6 +2597,84 @@ public class PoolImporter {
 		    root.appendChild(auxiliaryinput);
 		}
 		public String getType() { return "auxiliaryinput"; }
+	    };
+        case 31: // aux2 function
+	    return new VTAbstObj() {
+		int bgcol;
+		int funtype;
+                int options;
+		List<RefXY> objects;
+		public void read(ByteReader br) {
+		    bgcol = br.readColor();
+		    funtype = br.readByte();
+                    options = br.readByte();
+		    int nroObjects = br.readByte();
+		    objects = br.readRefXYs(nroObjects);
+		}
+		public void emitXML(Map<Integer, String> map, PrintStream out) {
+		    out.format("<auxiliaryfunction2 name=\"%s\">\n", name);
+		    for (RefXY ref : objects) {
+			out.format("  <include_object name=\"%s\" pos_x=\"%d\" pos_y=\"%d\"/>\n",
+				   map.get(ref.id), ref.x, ref.y);
+		    }
+		    out.format("</auxiliaryfunction2>\n");
+		}
+		public void appendDoc(Map<Integer, String> map, Document doc) {
+		    Element root = doc.getDocumentElement();
+		    Element auxiliaryfunction2 = doc.createElement(AUXILIARYFUNCTION2);
+		    auxiliaryfunction2.setAttribute(NAME, map.get(id));
+		    auxiliaryfunction2.setAttribute(BACKGROUND_COLOUR, getColor(bgcol));
+		    auxiliaryfunction2.setAttribute(FUNCTION_TYPE, getFunctionType(funtype));
+                    auxiliaryfunction2.setAttribute(OPTIONS, getFunction2Options(options));
+		    for (RefXY ref : objects) {
+			Element child = doc.createElement(INCLUDE_OBJECT);
+			child.setAttribute(NAME, map.get(ref.id));
+			child.setAttribute(POS_X, Integer.toString(ref.x));
+			child.setAttribute(POS_Y, Integer.toString(ref.y));
+			auxiliaryfunction2.appendChild(child);
+		    }
+		    root.appendChild(auxiliaryfunction2);
+		}
+		public String getType() { return "auxiliaryfunction2"; }
+	    };
+	case 32: // aux2 input
+	    return new VTAbstObj() {
+		int bgcol;
+		int funtype;
+		int options;
+		List<RefXY> objects;
+		public void read(ByteReader br) {
+		    bgcol = br.readColor();
+		    funtype = br.readByte();
+		    options = br.readByte();
+		    int nroObjects = br.readByte();
+		    objects = br.readRefXYs(nroObjects);
+		}
+		public void emitXML(Map<Integer, String> map, PrintStream out) {
+		    out.format("<auxiliaryinput2 name=\"%s\">\n", name);
+		    for (RefXY ref : objects) {
+			out.format("  <include_object name=\"%s\" pos_x=\"%d\" pos_y=\"%d\"/>\n",
+				   map.get(ref.id), ref.x, ref.y);
+		    }
+		    out.format("</auxiliaryinput2>\n");
+		}
+		public void appendDoc(Map<Integer, String> map, Document doc) {
+		    Element root = doc.getDocumentElement();
+		    Element auxiliaryinput2 = doc.createElement(AUXILIARYINPUT2);
+		    auxiliaryinput2.setAttribute(NAME, map.get(id));
+		    auxiliaryinput2.setAttribute(BACKGROUND_COLOUR, getColor(bgcol));
+		    auxiliaryinput2.setAttribute(FUNCTION_TYPE, getFunctionType(funtype));
+		    auxiliaryinput2.setAttribute(OPTIONS, getInput2Options(options));
+		    for (RefXY ref : objects) {
+			Element child = doc.createElement(INCLUDE_OBJECT);
+			child.setAttribute(NAME, map.get(ref.id));
+			child.setAttribute(POS_X, Integer.toString(ref.x));
+			child.setAttribute(POS_Y, Integer.toString(ref.y));
+			auxiliaryinput2.appendChild(child);
+		    }
+		    root.appendChild(auxiliaryinput2);
+		}
+		public String getType() { return "auxiliaryinput2"; }
 	    };
 	default:
 	    throw new RuntimeException("unknown type encountered: " + type);
