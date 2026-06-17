@@ -877,7 +877,9 @@ public abstract class TreeEditPopup {
             width = root.getDimension();
             height = width;
         } 
-        else if (Utils.equals(type, KEY, AUXILIARYFUNCTION, AUXILIARYINPUT, WORKINGSET)) {
+        else if (Utils.equals(type, WORKINGSET, KEY,
+			      AUXILIARYFUNCTION, AUXILIARYINPUT,
+			      AUXILIARYFUNCTION2, AUXILIARYINPUT2)) {
             XMLTreeNode root = (XMLTreeNode) node.getModel().getRoot();
             width = root.getSKWidth();
             height = root.getSKHeight();
@@ -1021,8 +1023,11 @@ public abstract class TreeEditPopup {
             }
         }
 
-        if (Utils.equals(type, CONTAINER, BUTTON, DATAMASK, ALARMMASK, KEY,
-                AUXILIARYFUNCTION, AUXILIARYINPUT, WORKINGSET, OBJECTPOINTER)) {
+        if (Utils.equals(type,
+			 CONTAINER, BUTTON, DATAMASK, ALARMMASK,
+			 WORKINGSET, KEY, OBJECTPOINTER,
+			 AUXILIARYFUNCTION, AUXILIARYINPUT,
+			 AUXILIARYFUNCTION2, AUXILIARYINPUT2)) {
             // search through all childs and apply transformation for them
             XMLTreeModel model = node.getModel();
             for (int i = 0,  n = node.getModel().getChildCount(node); i < n; i++) {

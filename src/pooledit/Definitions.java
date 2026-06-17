@@ -44,11 +44,13 @@ public class Definitions {
     static public final String POINTEROBJECTS_ = "PointerObjects";
     static public final String MACROOBJECTS_ = "MacroObjects";
     static public final String AUXILIARYOBJECTS_ = "AuxiliaryObjects";
+    static public final String AUXILIARYOBJECTS2_ = "AuxiliaryObjects2";
 
     static public final String[] CATEGORIES = {
 	TOPLEVELOBJECTS_, KEYOBJECTS_, INPUTFIELDOBJECTS_, OUTPUTFIELDOBJECTS_,
 	SHAPEOBJECTS_, GRAPHICSOBJECTS_, PICTUREOBJECTS_, VARIABLEOBJECTS_,
-	ATTRIBUTESOBJECTS_, POINTEROBJECTS_, MACROOBJECTS_, AUXILIARYOBJECTS_
+	ATTRIBUTESOBJECTS_, POINTEROBJECTS_, MACROOBJECTS_,
+	AUXILIARYOBJECTS_, AUXILIARYOBJECTS2_
     };
 
     // sub-categories
@@ -83,6 +85,8 @@ public class Definitions {
     static public final String MACROS_ = "Macros";
     static public final String AUXILIARYFUNCTIONS_ = "AuxiliaryFunctions";
     static public final String AUXILIARYINPUTS_ = "AuxiliaryInputs";
+    static public final String AUXILIARYFUNCTIONS2_ = "AuxiliaryFunctions2";
+    static public final String AUXILIARYINPUTS2_ = "AuxiliaryInputs2";
 
     static public final String[][] SUBCATEGORYGROUPS = {
 	{WORKINGSETS_, DATAMASKS_, ALARMMASKS_, CONTAINERS_}, 
@@ -96,7 +100,8 @@ public class Definitions {
 	{FONTATTRIBUTES_, LINEATTRIBUTES_, FILLATTRIBUTES_, INPUTATTRIBUTES_},
 	{OBJECTPOINTERS_}, 
 	{MACROS_}, 
-	{AUXILIARYFUNCTIONS_, AUXILIARYINPUTS_}
+	{AUXILIARYFUNCTIONS_, AUXILIARYINPUTS_},
+	{AUXILIARYFUNCTIONS2_, AUXILIARYINPUTS2_}
     };
 
     static public final String[] SUBCATEGORIES = {
@@ -111,7 +116,8 @@ public class Definitions {
 	FONTATTRIBUTES_, LINEATTRIBUTES_, FILLATTRIBUTES_, INPUTATTRIBUTES_,
 	OBJECTPOINTERS_, 
 	MACROS_, 
-	AUXILIARYFUNCTIONS_, AUXILIARYINPUTS_
+	AUXILIARYFUNCTIONS_, AUXILIARYINPUTS_,
+	AUXILIARYFUNCTIONS2_, AUXILIARYINPUTS2_
     };
 
     // objects
@@ -146,6 +152,8 @@ public class Definitions {
     static public final String MACRO = "macro";
     static public final String AUXILIARYFUNCTION = "auxiliaryfunction";
     static public final String AUXILIARYINPUT = "auxiliaryinput";
+    static public final String AUXILIARYFUNCTION2 = "auxiliaryfunction2";
+    static public final String AUXILIARYINPUT2 = "auxiliaryinput2";
     
     static public final String[] OBJECTS = {
 	WORKINGSET, DATAMASK, ALARMMASK, CONTAINER, 
@@ -157,7 +165,9 @@ public class Definitions {
 	METER, LINEARBARGRAPH, ARCHEDBARGRAPH, PICTUREGRAPHIC,
 	NUMBERVARIABLE, STRINGVARIABLE,
 	FONTATTRIBUTES, LINEATTRIBUTES, FILLATTRIBUTES, INPUTATTRIBUTES,
-	OBJECTPOINTER, MACRO, AUXILIARYFUNCTION, AUXILIARYINPUT
+	OBJECTPOINTER, MACRO,
+	AUXILIARYFUNCTION, AUXILIARYINPUT,
+	AUXILIARYFUNCTION2, AUXILIARYINPUT2
     };
   
     // pseudo objects
@@ -172,10 +182,14 @@ public class Definitions {
     
     // tree elements
     static public final String[] TREE_ELEMENTS = {
+	// --- root ---
 	OBJECTPOOL,
+	// --- categories ---
 	TOPLEVELOBJECTS_, KEYOBJECTS_, INPUTFIELDOBJECTS_, OUTPUTFIELDOBJECTS_,
 	SHAPEOBJECTS_, GRAPHICSOBJECTS_, PICTUREOBJECTS_, VARIABLEOBJECTS_,
-	ATTRIBUTESOBJECTS_, POINTEROBJECTS_, MACROOBJECTS_, AUXILIARYOBJECTS_,
+	ATTRIBUTESOBJECTS_, POINTEROBJECTS_, MACROOBJECTS_,
+	AUXILIARYOBJECTS_, AUXILIARYOBJECTS2_,
+	// --- subcategories ---
 	WORKINGSETS_, DATAMASKS_, ALARMMASKS_, CONTAINERS_, 
 	SOFTKEYMASKS_, KEYS_, BUTTONS_, 
 	INPUTBOOLEANFIELDS_, INPUTSTRINGFIELDS_, INPUTNUMBERFIELDS_, INPUTLISTFIELDS_, 
@@ -188,6 +202,8 @@ public class Definitions {
 	OBJECTPOINTERS_, 
 	MACROS_, 
 	AUXILIARYFUNCTIONS_, AUXILIARYINPUTS_,
+	AUXILIARYFUNCTIONS2_, AUXILIARYINPUTS2_,
+	// --- objects ---
 	WORKINGSET, DATAMASK, ALARMMASK, CONTAINER, 
 	SOFTKEYMASK, KEY, BUTTON, 
 	INPUTBOOLEAN, INPUTSTRING, 
@@ -197,7 +213,10 @@ public class Definitions {
 	METER, LINEARBARGRAPH, ARCHEDBARGRAPH, PICTUREGRAPHIC,
 	NUMBERVARIABLE, STRINGVARIABLE,
 	FONTATTRIBUTES, LINEATTRIBUTES, FILLATTRIBUTES, INPUTATTRIBUTES,
-	OBJECTPOINTER, MACRO, AUXILIARYFUNCTION, AUXILIARYINPUT,
+	OBJECTPOINTER, MACRO,
+	AUXILIARYFUNCTION, AUXILIARYINPUT,
+	AUXILIARYFUNCTION2, AUXILIARYINPUT2,
+	// --- pseudo objects ---
 	POINT, LANGUAGE, INCLUDE_OBJECT, FIXEDBITMAP, COMMAND
     };
 
@@ -211,7 +230,8 @@ public class Definitions {
 	// --- categories ---
 	"toplevelobjects.png", "keyobjects.png", "inputfieldobjects.png", "outputfieldobjects.png",
 	"outputshapeobjects.png", "outputgraphicobjects.png", "picturegraphicobjects.png", "variableobjects.png",
-	"attributeobjects.png", "pointerobjects.png", "macroobjects.png", "auxiliarycontrolobjects.png",
+	"attributeobjects.png", "pointerobjects.png", "macroobjects.png",
+	"auxiliarycontrolobjects.png", "auxiliarycontrolobjects2.png",
 	// --- subcategories ---
 	"workingset.png", "datamask.png", "alarmmask.png", "container.png", 
 	"softkeymask.png", "softkey.png", "button.png",
@@ -224,8 +244,9 @@ public class Definitions {
 	"fontattribute.png", "lineattribute.png", "fillattribute.png", "inputattribute.png",
 	"objectpointer.png",
 	"macro.png",
-	// --- objects ---
 	"auxiliaryfunction.png", "auxiliaryinput.png",
+	"auxiliaryfunction2.png", "auxiliaryinput2.png",
+	// --- objects ---
 	"workingset.png", "datamask.png", "alarmmask.png", "container.png", 
 	"softkeymask.png", "softkey.png", "button.png",
 	"inputbooleanfield.png", "inputstringfield.png", "inputnumberfield.png", "inputlistfield.png",
@@ -238,6 +259,7 @@ public class Definitions {
 	"objectpointer.png",
 	"macro.png",
 	"auxiliaryfunction.png", "auxiliaryinput.png",
+	"auxiliaryfunction2.png", "auxiliaryinput2.png",
 	// --- pseudo objects ---
 	"point.png", "language.png", "includeobject.png", "fixedbitmap.png", "command.png"
     };
@@ -315,6 +337,8 @@ public class Definitions {
     static public final String PRIORITY = "priority";
     static public final String ACOUSTIC_SIGNAL = "acoustic_signal";
     static public final String FUNCTION_TYPE = "function_type";
+    static public final String FUNCTION_ATTRIBUTES_A = "function_attributes_a";
+    static public final String FUNCTION_ATTRIBUTES_B = "function_attributes_b";
     static public final String VALIDATION_TYPE = "validation_type";    
     static public final String MASK_TYPE = "mask_type";
     

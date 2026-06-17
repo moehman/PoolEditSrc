@@ -164,6 +164,7 @@ public class SingleDOM {
 	// Tools.removeNesting(doc);
         Tools.createRoles(doc.getDocumentElement());
         Tools.checkNaming(doc);
+        Tools.checkRoles(doc);
         treeModel.setDocument(doc);       
     }
     

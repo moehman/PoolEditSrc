@@ -31,52 +31,52 @@
   <key background_colour="white" id="" key_code="1" name="menukey">
     <include_object block_col="0" block_font="" block_row="0" name="container" pos_x="14" pos_y="0"/>
   </key>
-  <button background_colour="white" block_col="0" block_font="" block_row="0" border_colour="black" height="17" id="" key_code="1" latchable="no" name="button" pos_x="0" pos_y="0" width="34">
+  <button background_colour="white" border_colour="black" height="17" id="" key_code="1" latchable="no" name="button" width="34">
     <include_object block_col="0" block_font="" block_row="0" name="abcd" pos_x="0" pos_y="1"/>
   </button>
-  <inputboolean background_colour="white" block_col="0" block_font="" block_row="0" enabled="yes" id="" name="inputboolean" pos_x="0" pos_y="0" value="1" width="8">
+  <inputboolean background_colour="white" enabled="yes" id="" name="inputboolean" value="1" width="8">
     <include_object name="black6x8" role="foreground_colour"/>
   </inputboolean>
-  <picturegraphic block_col="0" block_font="" block_row="0" file="simpleBitmap.bmp" file1="" file4="" file8="" format="8bit" id="" name="picturegraphic" options="" pos_x="0" pos_y="0" rle="auto" transparency_colour="black" width="120"/>
-  <outputstring background_colour="black" block_col="0" block_font="" block_row="0" height="8" horizontal_justification="left" id="" language="" length="4" name="abcd" options="transparent" pos_x="0" pos_y="0" value="ABCD" width="24">
+  <picturegraphic file="simpleBitmap.bmp" file1="" file4="" file8="" format="8bit" id="" name="picturegraphic" options="" rle="auto" transparency_colour="black" width="120"/>
+  <outputstring background_colour="black" height="8" horizontal_justification="left" id="" language="" length="4" name="abcd" options="transparent" value="ABCD" width="24">
     <include_object name="black6x8" role="font_attributes"/>
   </outputstring>
-  <inputstring background_colour="black" block_col="0" block_font="" block_row="0" enabled="true" height="8" horizontal_justification="left" id="" length="0" name="inputstring" options="transparent" pos_x="0" pos_y="0" value="ABCD" width="24">
+  <inputstring background_colour="black" enabled="true" height="8" horizontal_justification="left" id="" length="0" name="inputstring" options="transparent" value="ABCD" width="24">
     <include_object name="black6x8" role="font_attributes"/>
   </inputstring>
-  <inputnumber background_colour="white" block_col="0" block_font="" block_row="0" enabled="yes" format="fixed" height="8" horizontal_justification="left" id="" max_value="2000" min_value="0" name="inputnumber" number_of_decimals="0" offset="0" options="transparent" pos_x="0" pos_y="0" scale="1.0" value="1234" width="24">
+  <inputnumber background_colour="white" enabled="yes" format="fixed" height="8" horizontal_justification="left" id="" max_value="2000" min_value="0" name="inputnumber" number_of_decimals="0" offset="0" options="transparent" scale="1.0" value="1234" width="24">
     <include_object name="black6x8" role="font_attributes"/>
   </inputnumber>
-  <inputlist block_col="0" block_font="" block_row="0" enabled="yes" height="8" id="" name="inputlist" pos_x="0" pos_y="0" value="2" width="24">
+  <inputlist enabled="yes" height="8" id="" name="inputlist" value="2" width="24">
     <include_object name="efgh"/>
     <include_object name="ijkl"/>
   </inputlist>
-  <outputnumber background_colour="white" block_col="0" block_font="" block_row="0" format="fixed" height="8" horizontal_justification="left" id="" max_value="6000" min_value="0" name="outputnumber" number_of_decimals="0" offset="0" options="" pos_x="0" pos_y="0" scale="1.0" value="5678" width="32">
+  <outputnumber background_colour="white" format="fixed" height="8" horizontal_justification="left" id="" max_value="6000" min_value="0" name="outputnumber" number_of_decimals="0" offset="0" options="" scale="1.0" value="5678" width="32">
     <include_object name="black6x8" role="font_attributes"/>
   </outputnumber>
-  <outputstring background_colour="black" block_col="0" block_font="" block_row="0" height="8" horizontal_justification="left" id="" language="" length="4" name="efgh" options="transparent" pos_x="0" pos_y="0" value="EFGH" width="24">
+  <outputstring background_colour="black" height="8" horizontal_justification="left" id="" language="" length="4" name="efgh" options="transparent" value="EFGH" width="24">
     <include_object name="black6x8" role="font_attributes"/>
   </outputstring>
-  <outputstring background_colour="black" block_col="0" block_font="" block_row="0" height="8" horizontal_justification="left" id="" language="" length="4" name="ijkl" options="transparent" pos_x="0" pos_y="0" value="IJKL" width="24">
+  <outputstring background_colour="black" height="8" horizontal_justification="left" id="" language="" length="4" name="ijkl" options="transparent" value="IJKL" width="24">
     <include_object name="black6x8" role="font_attributes"/>
   </outputstring>
   <lineattributes id="" line_art="1111111111111111" line_colour="black" line_width="1" name="black1" role=""/>
-  <line block_col="0" block_font="" block_row="0" height="20" id="" line_direction="toplefttobottomright" name="line" pos_x="0" pos_y="0" width="20">
+  <line height="20" id="" line_direction="toplefttobottomright" name="line" width="20">
     <include_object name="black1" role="line_attributes"/>
   </line>
-  <container block_col="0" block_font="" block_row="0" height="32" hidden="false" id="" name="container" pos_x="0" pos_y="0" width="32">
+  <container height="32" hidden="false" id="" name="container" width="32">
     <include_object block_col="0" block_font="" block_row="0" name="a" pos_x="8" pos_y="8"/>
   </container>
-  <rectangle block_col="0" block_font="" block_row="0" height="16" id="" line_suppression="" name="rectangle" pos_x="0" pos_y="0" width="32">
+  <rectangle height="16" id="" line_suppression="" name="rectangle" width="32">
     <include_object name="black1" role="line_attributes"/>
     <include_object name="green" role="fill_attributes"/>
   </rectangle>
   <fillattributes fill_colour="green" fill_type="fillcolour" id="" name="green" role=""/>
-  <ellipse block_col="0" block_font="" block_row="0" ellipse_type="closedsegment" end_angle="224" height="16" id="" name="ellipse" pos_x="0" pos_y="0" start_angle="316" width="32">
+  <ellipse ellipse_type="closedsegment" end_angle="224" height="16" id="" name="ellipse" start_angle="316" width="32">
     <include_object name="black1" role="line_attributes"/>
     <include_object name="green" role="fill_attributes"/>
   </ellipse>
-  <polygon block_col="0" block_font="" block_row="0" height="20" id="" name="polygon" polygon_type="convex" pos_x="0" pos_y="0" width="20">
+  <polygon height="20" id="" name="polygon" polygon_type="convex" width="20">
     <include_object name="black1" role="line_attributes"/>
     <include_object name="green" role="fill_attributes"/>
     <point pos_x="00" pos_y="20"/>
@@ -86,47 +86,47 @@
   </polygon>
   <numbervariable id="" name="val" role="" value="333"/>
   <numbervariable id="" name="trg" role="" value="666"/>
-  <meter arc_and_tick_colour="black" block_col="0" block_font="" block_row="0" border_colour="green" end_angle="224" id="" max_value="1000" min_value="0" name="basicmeter" needle_colour="red" number_of_ticks="11" options="arc+clockwise+ticks+border" pos_x="0" pos_y="0" start_angle="316" value="0" width="50"/>
-  <linearbargraph block_col="0" block_font="" block_row="0" colour="green" height="8" id="" max_value="1000" min_value="0" name="linearbargraph" number_of_ticks="11" options="border+targetline+ticks+horizontal+growpositive" pos_x="0" pos_y="0" target_line_colour="red" target_value="667" value="333" width="50">
+  <meter arc_and_tick_colour="black" border_colour="green" end_angle="224" id="" max_value="1000" min_value="0" name="basicmeter" needle_colour="red" number_of_ticks="11" options="arc+clockwise+ticks+border" start_angle="316" value="0" width="50"/>
+  <linearbargraph colour="green" height="8" id="" max_value="1000" min_value="0" name="linearbargraph" number_of_ticks="11" options="border+targetline+ticks+horizontal+growpositive" target_line_colour="red" target_value="667" value="333" width="50">
     <include_object name="val" role="variable_reference"/>
     <include_object name="trg" role="target_value_variable_reference"/>
   </linearbargraph>
-  <outputstring background_colour="green" block_col="0" block_font="" block_row="0" height="16" horizontal_justification="left" id="" language="" length="0" name="a" options="transparent" pos_x="0" pos_y="0" value="A" width="16">
+  <outputstring background_colour="green" height="16" horizontal_justification="left" id="" language="" length="0" name="a" options="transparent" value="A" width="16">
     <include_object name="black16x16sk" role="font_attributes"/>
   </outputstring>
   <fontattributes font_colour="black" font_size="16x16" font_style="" font_type="latin1" id="" language="" name="black16x16sk" role=""/>
-  <archedbargraph bar_graph_width="8" block_col="0" block_font="" block_row="0" colour="green" end_angle="180" height="40" id="" max_value="1000" min_value="0" name="archedbargraph" options="border+targetline+clockwise" pos_x="0" pos_y="0" start_angle="0" target_line_colour="red" target_value="667" value="333" width="40">
+  <archedbargraph bar_graph_width="8" colour="green" end_angle="180" height="40" id="" max_value="1000" min_value="0" name="archedbargraph" options="border+targetline+clockwise" start_angle="0" target_line_colour="red" target_value="667" value="333" width="40">
     <include_object name="val" role="variable_reference"/>
     <include_object name="trg" role="target_value_variable_reference"/>
   </archedbargraph>
-  <objectpointer block_col="0" block_font="" block_row="0" id="" name="objectpointer" pos_x="0" pos_y="0" value="">
+  <objectpointer id="" name="objectpointer" value="">
     <include_object name="ellipse" role="value"/>
   </objectpointer>
   <auxiliaryfunction background_colour="white" function_type="boolean" id="" name="auxfun">
     <container block_col="0" block_font="" block_row="0" height="32" hidden="no" id="" name="container" pos_x="14" pos_y="0" width="32">
       <rectangle block_col="0" block_font="" block_row="0" height="28" id="" line_suppression="" name="background" pos_x="0" pos_y="2" width="32">
-        <fillattributes fill_colour="white" fill_type="fillcolour" id="" name="white" role=""/>
-        <lineattributes id="" line_art="1111111111111111" line_colour="black" line_width="1" name="black1" role=""/>
+        <fillattributes fill_colour="white" fill_type="fillcolour" id="" name="white" role="fill_attributes"/>
+        <lineattributes id="" line_art="1111111111111111" line_colour="black" line_width="1" name="black1" role="line_attributes"/>
       </rectangle>
       <outputstring background_colour="black" block_col="0" block_font="" block_row="0" height="8" horizontal_justification="middle" id="" language="" length="5" name="label0" options="transparent" pos_x="1" pos_y="6" value="AUX" width="30">
-        <fontattributes font_colour="black" font_size="6x8" font_style="" font_type="latin1" id="" language="" name="black6x8" role=""/>
+        <fontattributes font_colour="black" font_size="6x8" font_style="" font_type="latin1" id="" language="" name="black6x8" role="font_attributes"/>
       </outputstring>
       <outputstring background_colour="black" block_col="0" block_font="" block_row="0" height="8" horizontal_justification="middle" id="" language="" length="5" name="label1" options="transparent" pos_x="1" pos_y="18" value="FUN" width="30">
-        <fontattributes font_colour="black" font_size="6x8" font_style="" font_type="latin1" id="" language="" name="black6x8" role=""/>
+        <fontattributes font_colour="black" font_size="6x8" font_style="" font_type="latin1" id="" language="" name="black6x8" role="font_attributes"/>
       </outputstring>
     </container>
   </auxiliaryfunction>
   <auxiliaryinput background_colour="white" function_type="boolean" id="" input_id="0" name="auxinp">
     <container block_col="0" block_font="" block_row="0" height="32" hidden="no" id="" name="container" pos_x="14" pos_y="0" width="32">
       <rectangle block_col="0" block_font="" block_row="0" height="28" id="" line_suppression="" name="background" pos_x="0" pos_y="2" width="32">
-        <fillattributes fill_colour="white" fill_type="fillcolour" id="" name="white" role=""/>
-        <lineattributes id="" line_art="1111111111111111" line_colour="black" line_width="1" name="black1" role=""/>
+        <fillattributes fill_colour="white" fill_type="fillcolour" id="" name="white" role="fill_attributes"/>
+        <lineattributes id="" line_art="1111111111111111" line_colour="black" line_width="1" name="black1" role="line_attributes"/>
       </rectangle>
       <outputstring background_colour="black" block_col="0" block_font="" block_row="0" height="8" horizontal_justification="middle" id="" language="" length="5" name="label0" options="transparent" pos_x="1" pos_y="6" value="AUX" width="30">
-        <fontattributes font_colour="black" font_size="6x8" font_style="" font_type="latin1" id="" language="" name="black6x8" role=""/>
+        <fontattributes font_colour="black" font_size="6x8" font_style="" font_type="latin1" id="" language="" name="black6x8" role="font_attributes"/>
       </outputstring>
       <outputstring background_colour="black" block_col="0" block_font="" block_row="0" height="8" horizontal_justification="middle" id="" language="" length="5" name="label1" options="transparent" pos_x="1" pos_y="18" value="IN" width="30">
-        <fontattributes font_colour="black" font_size="6x8" font_style="" font_type="latin1" id="" language="" name="black6x8" role=""/>
+        <fontattributes font_colour="black" font_size="6x8" font_style="" font_type="latin1" id="" language="" name="black6x8" role="font_attributes"/>
       </outputstring>
     </container>
   </auxiliaryinput>

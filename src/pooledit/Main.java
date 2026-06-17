@@ -1421,9 +1421,9 @@ public class Main {
                 JOptionPane.showMessageDialog(frame,
                         new String[] {
                     "PoolEdit",
-                    "Version 1.5.1",
+                    "Version 1.5.2",
                     " ",
-                    "Copyright (C) 2007-2020 Automation technology laboratory,",
+                    "Copyright (C) 2007-2026 Automation technology laboratory,",
                     "Helsinki University of Technology",
                     " ",
                     "Visit automation.tkk.fi for information about the automation",
@@ -1435,7 +1435,7 @@ public class Main {
                     "3 of the License, or (at your option) any later version.",
                     " ",
                     "Authors:",
-                    "Matti Öhman (matti.ohman@aalto.fi)",
+                    "Matti Ã–hman (matti.ohman@aalto.fi)",
                     "Jouko Kalmari"},
                         "About PoolEdit", JOptionPane.INFORMATION_MESSAGE, Icons.POOLEDIT_LOGO);
             }

@@ -101,6 +101,8 @@ public class PoolImporter {
     static public final String MACRO = "macro";
     static public final String AUXILIARYFUNCTION = "auxiliaryfunction";
     static public final String AUXILIARYINPUT = "auxiliaryinput";
+    static public final String AUXILIARYFUNCTION2 = "auxiliaryfunction2"; // not implemented
+    static public final String AUXILIARYINPUT2 = "auxiliaryinput2";       // not implemented
     static public final String POINT_OBJECT = "point";
 
     static public final String DIMENSION = "dimension";
@@ -2576,6 +2578,9 @@ public class PoolImporter {
 		}
 		public String getType() { return "auxiliaryinput"; }
 	    };
+	case 31: // aux function 2
+	case 32: // aux input 2
+	    throw new RuntimeException("not implemented: " + type);
 	default:
 	    throw new RuntimeException("unknown type encountered: " + type);
 	}

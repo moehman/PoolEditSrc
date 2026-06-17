@@ -212,14 +212,47 @@
     </xs:restriction>
   </xs:simpleType>
 
-
+  <!-- ### AUXILIARY OBJECTS ### -->
   <xs:simpleType name="attrFunctionType">
     <xs:restriction base="xs:string">
       <xs:enumeration value="boolean"/>
       <xs:enumeration value="analog"/>
+      <xs:enumeration value="bool-latch-none"/>
     </xs:restriction>
   </xs:simpleType>
 
+  <!-- ### AUXILIARY OBJECTS, VERSION 2 ### -->
+<!--
+  <xs:simpleType name="attrFunctionAttributes">">
+    <xs:union memberTypes="attrFunctionAttributesA attrFunctionAttributesB"/>
+  </xs:simpleType>
+-->
+  <xs:simpleType name="attrFunctionAttributesA">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="bool-latch"/>                    <!-- 0 -->
+      <xs:enumeration value="analog-return-none"/>            <!-- 1 -->
+      <xs:enumeration value="bool-latch-none"/>               <!-- 2 -->
+      <xs:enumeration value="analog-return-50"/>              <!-- 3 -->
+      <xs:enumeration value="analog-return-0"/>               <!-- 4 -->
+      <xs:enumeration value="dual-bool-latch-both"/>          <!-- 5 -->
+      <xs:enumeration value="dual-bool-latch-none"/>          <!-- 6 -->
+      <xs:enumeration value="dual-bool-latch-up"/>            <!-- 7 -->
+      <xs:enumeration value="dual-bool-latch-down"/>          <!-- 8 -->
+      <xs:enumeration value="combined-analog-return-50"/>     <!-- 9 -->
+      <xs:enumeration value="combined-analog-return-none"/>   <!-- 10 -->
+      <xs:enumeration value="quadrature-bool-latch-none"/>    <!-- 11 -->
+      <xs:enumeration value="quadrature-analog-return-none"/> <!-- 12 -->
+      <xs:enumeration value="quadrature-analog-return-50"/>   <!-- 13 -->
+      <xs:enumeration value="bidir-encoder"/>                 <!-- 14 -->
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="attrFunctionAttributesB">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="none|((criticalcontrol|assingmentrestriction|singleassignment)(\+(criticalcontrol|assingmentrestriction|singleassignment))*)?"/>
+    </xs:restriction>
+  </xs:simpleType>
+  
   <xs:simpleType name="attrInputId">
     <xs:restriction base="xs:integer">
       <xs:minInclusive value="0"/>
@@ -1015,7 +1048,7 @@
     <xs:attribute                name="function_type"            type="attrFunctionType" default="boolean"/>    
   </xs:complexType>
 
-<xs:complexType name="elemAuxiliaryInput">
+  <xs:complexType name="elemAuxiliaryInput">
     <xs:sequence>
       <xs:choice minOccurs="0" maxOccurs="unbounded">        
         <xs:element name="container"                             type="elemContainer"/>
@@ -1034,6 +1067,52 @@
     <xs:attribute use="optional" name="id"                       type="attrObjectId"     default=""/>
     <xs:attribute                name="background_colour"        type="attrColour"       default="black"/>
     <xs:attribute                name="function_type"            type="attrFunctionType" default="boolean"/>  
+    <xs:attribute                name="input_id"                 type="attrInputId"      default="0"/>
+  </xs:complexType>
+
+  <!-- ### AUXILIARY OBJECTS, VERSION 2 ### -->
+  <xs:complexType name="elemAuxiliaryFunction2">
+    <xs:sequence>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">        
+        <xs:element name="container"                             type="elemContainer"/>
+        <xs:element name="outputstring"                          type="elemOutputString"/>
+        <xs:element name="outputnumber"                          type="elemOutputNumber"/>   
+        <xs:element name="line"                                  type="elemLine"/>
+        <xs:element name="rectangle"                             type="elemRectangle"/>
+        <xs:element name="ellipse"                               type="elemEllipse"/>
+        <xs:element name="polygon"                               type="elemPolygon"/>
+        <xs:element name="picturegraphic"                        type="elemPictureGraphic"/>	  
+        
+        <xs:element name="include_object"                        type="elemIncludeObject"/>  
+      </xs:choice>
+    </xs:sequence>
+    <xs:attribute use="optional" name="name"                     type="xs:string"        default=""/>
+    <xs:attribute use="optional" name="id"                       type="attrObjectId"     default=""/>
+    <xs:attribute                name="background_colour"        type="attrColour"       default="black"/>
+    <xs:attribute                name="function_attributes_a"    type="attrFunctionAttributesA" default="bool-latch"/>
+    <xs:attribute                name="function_attributes_b"    type="attrFunctionAttributesB" default="none"/>    
+  </xs:complexType>
+
+<xs:complexType name="elemAuxiliaryInput2">
+    <xs:sequence>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">        
+        <xs:element name="container"                             type="elemContainer"/>
+        <xs:element name="outputstring"                          type="elemOutputString"/>
+        <xs:element name="outputnumber"                          type="elemOutputNumber"/>   
+        <xs:element name="line"                                  type="elemLine"/>
+        <xs:element name="rectangle"                             type="elemRectangle"/>
+        <xs:element name="ellipse"                               type="elemEllipse"/>
+        <xs:element name="polygon"                               type="elemPolygon"/>
+        <xs:element name="picturegraphic"                        type="elemPictureGraphic"/>	  
+        
+        <xs:element name="include_object"                        type="elemIncludeObject"/>  
+      </xs:choice>
+    </xs:sequence>
+    <xs:attribute use="optional" name="name"                     type="xs:string"        default=""/>
+    <xs:attribute use="optional" name="id"                       type="attrObjectId"     default=""/>
+    <xs:attribute                name="background_colour"        type="attrColour"       default="black"/>
+    <xs:attribute                name="function_attributes_a"    type="attrFunctionAttributesA" default="bool-latch"/>
+    <xs:attribute                name="function_attributes_b"    type="attrFunctionAttributesB" default="none"/>
     <xs:attribute                name="input_id"                 type="attrInputId"      default="0"/>
   </xs:complexType>
 
@@ -1243,6 +1322,8 @@
 
           <xs:element name="auxiliaryfunction"                   type="elemAuxiliaryFunction"/>
     	  <xs:element name="auxiliaryinput"                      type="elemAuxiliaryInput"/>
+          <xs:element name="auxiliaryfunction2"                  type="elemAuxiliaryFunction2"/>
+    	  <xs:element name="auxiliaryinput2"                     type="elemAuxiliaryInput2"/>
 
 	  <!-- this really should not be here, but it makes creating new objects somewhat easier -->
     	  <xs:element name="include_object"                      type="elemIncludeObject"/>

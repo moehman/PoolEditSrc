@@ -17,7 +17,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, 
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston,
  * MA 02111-1307, USA.
  */
 package attributetable;
@@ -58,7 +58,7 @@ import treemodel.XMLTreeNode;
 public class AttributeTable extends JTable {
 
     private final AttributeTablePopupMenu popup = new AttributeTablePopupMenu(this);
-    
+
     private final TableCellEditor yesNoEditor;
     //private final TableCellEditor trueFalseEditor;
     private final TableCellEditor hideShowEditor;
@@ -84,20 +84,22 @@ public class AttributeTable extends JTable {
     private final TableCellEditor archedBarGraphOptionEditor;
     private final TableCellEditor outputStringOptionEditor;
     private final TableCellEditor outputNumberOptionEditor;
-    private final TableCellEditor booleanAnalogEditor;    
+    private final TableCellEditor booleanAnalogEditor;
+    private final TableCellEditor funattributeEditorA;
+    private final TableCellEditor funattributeEditorB;
     private final TableCellEditor validationTypeEditor;
     private final TableCellEditor maskTypeEditor;
-    
-    private final FileCellEditor fileEditor;    
+
+    private final FileCellEditor fileEditor;
     private final FileCellRenderer fileRenderer;
     private final TableCellRenderer colorRenderer;
-    
+
     /**
      * Private constructor, call getInstance() instead.
      * @param model
      */
     private AttributeTable(TableModel model) {
-	super(model);
+        super(model);
         yesNoEditor = createEditor("no", "yes");
         //trueFalseEditor = createEditor("false", "true");
         hideShowEditor = createEditor("hide", "show");
@@ -114,20 +116,36 @@ public class AttributeTable extends JTable {
         fontTypeEditor = createEditor("latin1", "latin9");
         fontStyleEditor = new CheckBoxListCellEditor("bold", "crossed", "underlined", "italic", "inverted", "flashinginverted", "flashinghidden");
         fillTypeEditor = createEditor("nofill", "linecolour", "fillcolour", "pattern");
-	priorityEditor = createEditor("high", "medium", "low");
-	acousticSignalEditor = createEditor("high", "medium", "low", "none");
-	colorEditor = createEditor(createColorListRenderer(), ColorPalette.getAllColorNames());
-	colorRenderer = createColorRenderer();
+        priorityEditor = createEditor("high", "medium", "low");
+        acousticSignalEditor = createEditor("high", "medium", "low", "none");
+        colorEditor = createEditor(createColorListRenderer(), ColorPalette.getAllColorNames());
+        colorRenderer = createColorRenderer();
         pictureGraphicOptionEditor = new CheckBoxListCellEditor("transparent", "flashing");
         meterOptionEditor = new CheckBoxListCellEditor("arc", "clockwise", "ticks", "border");
         linearBbarGraphOptionEditor = new CheckBoxListCellEditor("border", "targetline", "ticks", "nofill", "horizontal", "growpositive");
         archedBarGraphOptionEditor = new CheckBoxListCellEditor("border", "targetline", "nofill", "clockwise");
         outputStringOptionEditor = new CheckBoxListCellEditor("transparent", "autowrap");
         outputNumberOptionEditor = new CheckBoxListCellEditor("transparent", "leadingzeros", "blankzero");
-        booleanAnalogEditor = createEditor("boolean", "analog");
+        booleanAnalogEditor = createEditor("boolean", "analog", "bool-latch-none");
+        funattributeEditorA = createEditor("bool-latch",
+                                           "analog-return-none",
+                                           "bool-latch-none",
+                                           "analog-return-50",
+                                           "analog-return-0",
+                                           "dual-bool-latch-both",
+                                           "dual-bool-latch-none",
+                                           "dual-bool-latch-up",
+                                           "dual-bool-latch-down",
+                                           "combined-analog-return-50",
+                                           "combined-analog-return-none",
+                                           "quadrature-bool-latch-none",
+                                           "quadrature-analog-return-none",
+                                           "quadrature-analog-return-50",
+                                           "bidir-encoder");
+        funattributeEditorB = new CheckBoxListCellEditor("criticalcontrol", "assingmentrestriction", "singleassignment");
         validationTypeEditor = createEditor("invalidcharacters", "validcharacters");
         maskTypeEditor = createEditor("datamask", "alarmmask");
-        
+
         fileRenderer = FileCellRenderer.getInstance();
         fileEditor = FileCellEditor.getInstance();
     }
@@ -152,7 +170,7 @@ public class AttributeTable extends JTable {
 
     /*
      * Overrides the corresponding method in the super class. Stops editing
-     * when the table is changed. 
+     * when the table is changed.
      *
      * NOTE: THIS WILL CAUSE INFINITE RECURSION AS STOPCELLEDITING WILL
      * TRIGGER A NEW TABLE CHANGED EVENT!
@@ -167,11 +185,11 @@ public class AttributeTable extends JTable {
     */
 
     private static TableCellRenderer createColorRenderer() {
-	return new DefaultTableCellRenderer() {
+        return new DefaultTableCellRenderer() {
             private final ColorIcon icon = ColorIcon.getInstance();
             @Override
             public Component getTableCellRendererComponent
-                (JTable tbl, Object val, boolean isSel, 
+                (JTable tbl, Object val, boolean isSel,
                  boolean hasFocus, int row, int col) {
                 super.getTableCellRendererComponent
                 (tbl, val, isSel, hasFocus, row, col);
@@ -190,7 +208,7 @@ public class AttributeTable extends JTable {
      * @return
      */
     public static ListCellRenderer<String> createColorListRenderer() {
-	return new ListCellRenderer<String>() {
+        return new ListCellRenderer<String>() {
             protected DefaultListCellRenderer defren = new DefaultListCellRenderer();
             private final ColorIcon icon = ColorIcon.getInstance();
             @Override
@@ -221,21 +239,21 @@ public class AttributeTable extends JTable {
         if (col != 1) {
             return super.getCellRenderer(row, col);
         }
-	String attr = (String) getModel().getValueAt(row, 0);
-	if (Utils.equals(attr, BACKGROUND_COLOUR, ARC_AND_TICK_COLOUR,
-                BORDER_COLOUR, NEEDLE_COLOUR, TARGET_LINE_COLOUR, 
+        String attr = (String) getModel().getValueAt(row, 0);
+        if (Utils.equals(attr, BACKGROUND_COLOUR, ARC_AND_TICK_COLOUR,
+                BORDER_COLOUR, NEEDLE_COLOUR, TARGET_LINE_COLOUR,
                 COLOUR, TRANSPARENCY_COLOUR, FONT_COLOUR, // color is only for bar graphs!
                 LINE_COLOUR, FILL_COLOUR)) {
-	    return colorRenderer;
-	}
+            return colorRenderer;
+        }
         else if (Utils.equals(attr, FILE, FILE1, FILE4, FILE8)) {
             return fileRenderer;
         }
-	else {
-	    return super.getCellRenderer(row, col);
-	}
+        else {
+            return super.getCellRenderer(row, col);
+        }
     }
-    
+
     /**
      * Gets an appropriate cell editor.
      * @param row
@@ -248,16 +266,16 @@ public class AttributeTable extends JTable {
         if (col != 1) {
             return super.getCellEditor(row, col);
         }
-        AttributeTableModel model = (AttributeTableModel) getModel();        
-	String attr = (String) model.getValueAt(row, 0);
+        AttributeTableModel model = (AttributeTableModel) getModel();
+        String attr = (String) model.getValueAt(row, 0);
         Element elem = model.getCurrentElement();
         Document doc = model.getDocument(); // should be the same as elem.getOwnerDocument() ?
-        
+
         if (elem == null) {
             return null;
         }
         String type = elem.getNodeName();
-	if (Utils.equals(attr, SELECTABLE, LATCHABLE, ENABLED, HIDDEN)) {
+        if (Utils.equals(attr, SELECTABLE, LATCHABLE, ENABLED, HIDDEN)) {
             return yesNoEditor;
         }
         else if (Utils.equals(attr, HIDE_SHOW)) { // for the hide_show_object command
@@ -277,7 +295,7 @@ public class AttributeTable extends JTable {
         }
         else if (Utils.equals(attr, FORMAT)) {
             if (Utils.equals(type, INPUTNUMBER, OUTPUTNUMBER)) {
-                return formatEditor;    
+                return formatEditor;
             }
             else if (Utils.equals(type, PICTUREGRAPHIC, FIXEDBITMAP)) {
                  // FIXME: do something else...
@@ -335,19 +353,25 @@ public class AttributeTable extends JTable {
             return fillTypeEditor;
         }
         else if (Utils.equals(attr, PRIORITY)) {
-	    return priorityEditor;
-	}
-	else if (Utils.equals(attr, ACOUSTIC_SIGNAL)) {
-	    return acousticSignalEditor;
-	}
-	else if (Utils.equals(attr, BACKGROUND_COLOUR, ARC_AND_TICK_COLOUR, 
+            return priorityEditor;
+        }
+        else if (Utils.equals(attr, ACOUSTIC_SIGNAL)) {
+            return acousticSignalEditor;
+        }
+        else if (Utils.equals(attr, BACKGROUND_COLOUR, ARC_AND_TICK_COLOUR,
                 BORDER_COLOUR, NEEDLE_COLOUR, TARGET_LINE_COLOUR,
                 COLOUR, TRANSPARENCY_COLOUR, FONT_COLOUR,
                 LINE_COLOUR, FILL_COLOUR)) {
-	    return colorEditor;
-	}
+            return colorEditor;
+        }
         else if (Utils.equals(attr, FUNCTION_TYPE)) {
             return booleanAnalogEditor;
+        }
+        else if (Utils.equals(attr, FUNCTION_ATTRIBUTES_A)) {
+            return funattributeEditorA;
+        }
+        else if (Utils.equals(attr, FUNCTION_ATTRIBUTES_B)) {
+            return funattributeEditorB;
         }
         else if (Utils.equals(attr, VALIDATION_TYPE)) {
             return validationTypeEditor;
@@ -360,17 +384,17 @@ public class AttributeTable extends JTable {
         }
         // NOTE: font_attributes is a name of an attribute, fontattributes
         // is a name of an ISOBUS object
-        else if (Utils.equals(attr, FONT_ATTRIBUTES, BLOCK_FONT) || 
+        else if (Utils.equals(attr, FONT_ATTRIBUTES, BLOCK_FONT) ||
                 (Utils.equals(type, INPUTBOOLEAN) && Utils.equals(attr, FOREGROUND_COLOUR))) {
-            return createEditor(findElements(doc, false, FONTATTRIBUTES));     
+            return createEditor(findElements(doc, false, FONTATTRIBUTES));
         }
         else if (Utils.equals(attr, VARIABLE_REFERENCE, TARGET_VALUE_VARIABLE_REFERENCE)) {
             if (Utils.equals(type, OUTPUTSTRING, INPUTSTRING)) {
-                return createEditor(findElements(doc, true, STRINGVARIABLE)); 
+                return createEditor(findElements(doc, true, STRINGVARIABLE));
             }
             else if (Utils.equals(type, INPUTBOOLEAN, INPUTNUMBER, INPUTLIST,
                     OUTPUTNUMBER, METER, LINEARBARGRAPH, ARCHEDBARGRAPH)) {
-                return createEditor(findElements(doc, true, NUMBERVARIABLE));     
+                return createEditor(findElements(doc, true, NUMBERVARIABLE));
             }
             else {
                 return super.getCellEditor(row, col);
@@ -383,13 +407,13 @@ public class AttributeTable extends JTable {
             return createEditor(findElements(doc, true, SOFTKEYMASK));
         }
         else if (Utils.equals(attr, LINE_ATTRIBUTES)) {
-            return createEditor(findElements(doc, true, LINEATTRIBUTES));     
+            return createEditor(findElements(doc, true, LINEATTRIBUTES));
         }
         else if (Utils.equals(attr, FILL_ATTRIBUTES)) {
-            return createEditor(findElements(doc, true, FILLATTRIBUTES));     
+            return createEditor(findElements(doc, true, FILLATTRIBUTES));
         }
         else if (Utils.equals(attr, FILL_PATTERN)) {
-            return createEditor(findElements(doc, true, PICTUREGRAPHIC));     
+            return createEditor(findElements(doc, true, PICTUREGRAPHIC));
         }
         else if (Utils.equals(attr, FILE, FILE1, FILE4, FILE8)){
             return fileEditor;
@@ -397,11 +421,11 @@ public class AttributeTable extends JTable {
         else if (Utils.equals(attr, "parents")){
             return createEditor(findLinkingElements(elem));
         }
-	else {
-	    return super.getCellEditor(row, col);
-	}
+        else {
+            return super.getCellEditor(row, col);
+        }
     }
-    
+
     /**
      * Finds all elements that are given type, and returns their names.
      * @param doc
@@ -411,9 +435,9 @@ public class AttributeTable extends JTable {
      */
     private static String[] findElements(Document doc, boolean empty, String ... names){
         List<String> namelist = new ArrayList<>();
-        if (empty) { 
+        if (empty) {
             namelist.add(""); // empty string
-        } 
+        }
         for (int j = 0, m = names.length; j < m; j++) {
             NodeList nodes = doc.getElementsByTagName(names[j]);
             for (int i = 0, n = nodes.getLength(); i < n; i++) {
@@ -424,8 +448,8 @@ public class AttributeTable extends JTable {
     }
 
     /**
-     * Finds every element that has a include_object reference or a 
-     * attribute-reference to current object. Returns an array of names 
+     * Finds every element that has a include_object reference or a
+     * attribute-reference to current object. Returns an array of names
      * of elements having a link to the specified element.
      * @param elem
      * @return
@@ -433,7 +457,7 @@ public class AttributeTable extends JTable {
     private static String[] findLinkingElements(Element elem) {
         List<Element> list = new ArrayList<>();
         Tools.findParentElements(elem, list);
-        
+
         List<String> namelist = new ArrayList<>();
         namelist.add(""); // empty string
         for (Element e : list) {
@@ -452,7 +476,7 @@ public class AttributeTable extends JTable {
         Node parent = elem.getParentNode();
         if (parent.getNodeType() == Element.ELEMENT_NODE &&
                 equals(parent.getNodeName(), OBJECTS)) {
-            
+
             namelist.add(((Element) parent).getAttribute(NAME));
         }
 
@@ -466,30 +490,30 @@ public class AttributeTable extends JTable {
         NodeList nodes = doc.getElementsByTagName("*");
         for (int i = 0, n = nodes.getLength(); i < n; i++) {
             Element element = (Element) nodes.item(i);
-            
+
             // other objects can use include objects to make references
             if (element.getNodeName().equals(INCLUDE_OBJECT)) {
                 if (element.getAttribute(NAME).equals(name)) {
                     parent = element.getParentNode();
                     if (parent.getNodeType() == Element.ELEMENT_NODE) {
-                        
+
                         namelist.add(((Element) parent).getAttribute(NAME));
                     }
                 }
             }
             // other objects can use some attributes to make references
-            else if (Utils.equalsAttribute(name, element, ACTIVE_MASK, SOFT_KEY_MASK, 
-                    FONT_ATTRIBUTES, BLOCK_FONT, LINE_ATTRIBUTES, 
-                    FILL_ATTRIBUTES, FILL_PATTERN, VARIABLE_REFERENCE, 
+            else if (Utils.equalsAttribute(name, element, ACTIVE_MASK, SOFT_KEY_MASK,
+                    FONT_ATTRIBUTES, BLOCK_FONT, LINE_ATTRIBUTES,
+                    FILL_ATTRIBUTES, FILL_PATTERN, VARIABLE_REFERENCE,
                     TARGET_VALUE_VARIABLE_REFERENCE)) {
-                
+
                 namelist.add(element.getAttribute(NAME));
             }
         }
         return namelist.toArray();
     }
     */
-    
+
     /**
      * This method creates a new DefaultCellEditor with JComboBox filled with
      * the specified names. This method is divided into two parts because it
@@ -507,9 +531,9 @@ public class AttributeTable extends JTable {
         for (int i = 0, n = names.length; i < n; i++) {
             cb.addItem(names[i]);
         }
-	return new DefaultCellEditor(cb);
+        return new DefaultCellEditor(cb);
     }
-       
+
     /**
      * This method is divided into two parts because it
      * is a really bad idea to say: foo(Object ... bar)
@@ -528,9 +552,9 @@ public class AttributeTable extends JTable {
             cb.addItem(names[i]);
         }
         cb.setRenderer(renderer);
-	return new DefaultCellEditor(cb);
+        return new DefaultCellEditor(cb);
     }
-    
+
     /**
      * Checks, if at least one value equals name.
     static private boolean equals(String name, String ... values) {
@@ -542,7 +566,7 @@ public class AttributeTable extends JTable {
         return false;
     }
     */
-    
+
     /**
      * Check, if at least one attribute of the specified element has the given value.
     static private boolean equalsAttribute(String value, Element element, String ... attributes) {
@@ -552,9 +576,9 @@ public class AttributeTable extends JTable {
             }
         }
         return false;
-    }   
+    }
     */
-    
+
     /**
      * Finds possible roles for the specified node. If no roles are possible,
      * this method returns a single, empty string.
@@ -569,18 +593,18 @@ public class AttributeTable extends JTable {
         else if (node.actual() != null) {
             parentNode = node.actual().getParentNode();
         }
-        
-        if (parentNode == null || 
+
+        if (parentNode == null ||
                 parentNode.getNodeType() != Node.ELEMENT_NODE) {
             return new String[] {""};
         }
         Element parent = (Element) parentNode;
         return findPossibleRoles(parent.getNodeName(), node.getType());
     }
-    
+
     /**
      * Finds possible roles for the given element type in the context of
-     * the specified parent type. If no roles are possible, this method 
+     * the specified parent type. If no roles are possible, this method
      * returns a single, empty string.
      * @param parentType
      * @param elemType
@@ -597,7 +621,7 @@ public class AttributeTable extends JTable {
         }
         else if (Utils.equals(parentType, INPUTSTRING, INPUTNUMBER, OUTPUTSTRING, OUTPUTNUMBER) &&
                 Utils.equals(elemType, FONTATTRIBUTES)) {
-            return new String[] {FONT_ATTRIBUTES};    
+            return new String[] {FONT_ATTRIBUTES};
         }
         else if (Utils.equals(parentType, INPUTBOOLEAN) &&
                 Utils.equals(elemType, FONTATTRIBUTES)) {
@@ -624,80 +648,80 @@ public class AttributeTable extends JTable {
             return new String[] {LINE_ATTRIBUTES};
         }
         else if (Utils.equals(parentType, RECTANGLE, ELLIPSE, POLYGON) &&
-                Utils.equals(elemType, FILLATTRIBUTES)) {    
+                Utils.equals(elemType, FILLATTRIBUTES)) {
             return new String[] {FILL_ATTRIBUTES};
         }
         else if (Utils.equals(parentType, FILLATTRIBUTES) &&
                 Utils.equals(elemType, PICTUREGRAPHIC)) {
-        
+
             return new String[] {FILL_PATTERN};
         }
         // commands
         else if (Utils.equals(parentType, COMMAND_HIDE_SHOW_OBJECT) &&
                 Utils.equals(elemType, CONTAINER)) {
-            
+
             return new String[] {"object_id"};
         }
         else if (Utils.equals(parentType, COMMAND_ENABLE_DISABLE_OBJECT) &&
                 Utils.equals(elemType, INPUTBOOLEAN, INPUTSTRING, INPUTNUMBER, INPUTLIST)) {
-        
+
             return new String[] {"object_id"};
         }
         else if (Utils.equals(parentType, COMMAND_SELECT_INPUT_OBJECT) &&
                 Utils.equals(elemType, INPUTBOOLEAN, INPUTSTRING, INPUTNUMBER, INPUTLIST)) {
-        
+
             return new String[] {"object_id"};
         }
         else if (Utils.equals(parentType, COMMAND_CONTROL_AUDIO_DEVICE, COMMAND_SET_AUDIO_VOLUME)) {
-            
+
             return new String[] {""};
         }
         else if (Utils.equals(parentType, COMMAND_CHANGE_CHILD_LOCATION, COMMAND_CHANGE_CHILD_POSITION)) {
-            
+
             return new String[] {"parent_id", "child_id"};
         }
         else if (Utils.equals(parentType, COMMAND_CHANGE_SIZE)) { // FIXME: what objects can be included here?
-            
+
             return new String[] {"object_id"};
         }
         else if (Utils.equals(parentType, COMMAND_CHANGE_BACKGROUND_COLOUR)) { // FIXME: what objects can be included here?
-            
-            return new String[] {"object_id"};            
+
+            return new String[] {"object_id"};
         }
         else if (Utils.equals(parentType, COMMAND_CHANGE_NUMERIC_VALUE) &&
-                Utils.equals(elemType, INPUTNUMBER, OUTPUTNUMBER, METER, 
+                Utils.equals(elemType, INPUTNUMBER, OUTPUTNUMBER, METER,
                 LINEARBARGRAPH, ARCHEDBARGRAPH, NUMBERVARIABLE)) {
-                
+
             return new String[] {"object_id"};
         }
         else if (Utils.equals(parentType, COMMAND_CHANGE_STRING_VALUE) &&
                 Utils.equals(elemType, INPUTSTRING, OUTPUTSTRING, STRINGVARIABLE)) {
-        
+
             return new String[] {"object_id"};
         }
         else if (Utils.equals(parentType, COMMAND_CHANGE_END_POINT) &&
                 Utils.equals(elemType, LINE)) {
-                
+
             return new String[] {"object_id"};
         }
         else if (Utils.equals(parentType, COMMAND_CHANGE_FONT_ATTRIBUTES) &&
                 Utils.equals(elemType, FONTATTRIBUTES)) {
-                
+
             return new String[] {"object_id"};
         }
         else if (Utils.equals(parentType, COMMAND_CHANGE_LINE_ATTRIBUTES) &&
                 Utils.equals(elemType, LINEATTRIBUTES)) {
-                
+
             return new String[] {"object_id"};
         }
         else if (Utils.equals(parentType, COMMAND_CHANGE_FILL_ATTRIBUTES) &&
                 Utils.equals(elemType, FILLATTRIBUTES)) {
-                
+
             return new String[] {"object_id"};
         }
         else if (Utils.equals(parentType, COMMAND_CHANGE_ACTIVE_MASK)) {
-            
-            if (Utils.equals(elemType, WORKINGSET)) {                
+
+            if (Utils.equals(elemType, WORKINGSET)) {
                 return new String[] {"parent_id"};
             }
             else if (Utils.equals(elemType, DATAMASK, ALARMMASK)) {
@@ -706,10 +730,10 @@ public class AttributeTable extends JTable {
             else {
                 return new String[] {""};
             }
-        }    
+        }
         else if (Utils.equals(parentType, COMMAND_CHANGE_SOFT_KEY_MASK)) {
-            
-            if (Utils.equals(elemType, DATAMASK, ALARMMASK)) {                
+
+            if (Utils.equals(elemType, DATAMASK, ALARMMASK)) {
                 return new String[] {"parent_id"};
             }
             else if (Utils.equals(elemType, SOFTKEYMASK)) {
@@ -718,21 +742,21 @@ public class AttributeTable extends JTable {
             else {
                 return new String[] {""};
             }
-        }   
+        }
         else if (Utils.equals(parentType, COMMAND_CHANGE_ATTRIBUTE)) {
-                
+
             return new String[] {"object_id"};
         }
         else if (Utils.equals(parentType, COMMAND_CHANGE_PRIORITY) &&
                 Utils.equals(elemType, ALARMMASK)) {
-                
+
             return new String[] {"object_id"};
         }
         else if (Utils.equals(parentType, COMMAND_CHANGE_LIST_ITEM) &&
                 Utils.equals(elemType, INPUTLIST)) {
-                
+
             return new String[] {"object_id"};
-        }        
+        }
         // macros
         else if (Utils.equals(elemType, MACRO)) {
             if (Utils.equals(parentType, WORKINGSET)) {
@@ -741,42 +765,42 @@ public class AttributeTable extends JTable {
                 ON_CHANGE_CHILD_LOCATION, ON_CHANGE_CHILD_POSITION};
             }
             else if (Utils.equals(parentType, DATAMASK)) {
-                return new String[] {ON_SHOW, ON_HIDE, 
-                ON_CHANGE_BACKGROUND_COLOUR, ON_CHANGE_CHILD_LOCATION, 
-                ON_CHANGE_CHILD_POSITION, ON_CHANGE_SOFT_KEY_MASK, 
-                ON_CHANGE_ATTRIBUTE};                
+                return new String[] {ON_SHOW, ON_HIDE,
+                ON_CHANGE_BACKGROUND_COLOUR, ON_CHANGE_CHILD_LOCATION,
+                ON_CHANGE_CHILD_POSITION, ON_CHANGE_SOFT_KEY_MASK,
+                ON_CHANGE_ATTRIBUTE};
             }
             else if (Utils.equals(parentType, ALARMMASK)) {
-                return new String[] {ON_SHOW, ON_HIDE, 
-                ON_CHANGE_BACKGROUND_COLOUR, ON_CHANGE_CHILD_LOCATION, 
+                return new String[] {ON_SHOW, ON_HIDE,
+                ON_CHANGE_BACKGROUND_COLOUR, ON_CHANGE_CHILD_LOCATION,
                 ON_CHANGE_CHILD_POSITION, ON_CHANGE_PRIORITY,
-                ON_CHANGE_SOFT_KEY_MASK, ON_CHANGE_ATTRIBUTE};                
+                ON_CHANGE_SOFT_KEY_MASK, ON_CHANGE_ATTRIBUTE};
             }
             else if (Utils.equals(parentType, CONTAINER)) {
-                return new String[] {ON_SHOW, ON_HIDE, 
-                ON_CHANGE_CHILD_LOCATION, ON_CHANGE_CHILD_POSITION, 
+                return new String[] {ON_SHOW, ON_HIDE,
+                ON_CHANGE_CHILD_LOCATION, ON_CHANGE_CHILD_POSITION,
                 ON_CHANGE_SIZE};
             }
             else if (Utils.equals(parentType, SOFTKEYMASK)) {
-                return new String[] {ON_SHOW, ON_HIDE, 
+                return new String[] {ON_SHOW, ON_HIDE,
                 ON_CHANGE_BACKGROUND_COLOUR, ON_CHANGE_ATTRIBUTE};
             }
             else if (Utils.equals(parentType, KEY)) {
-                return new String[] {ON_KEY_PRESS, ON_KEY_RELEASE, 
+                return new String[] {ON_KEY_PRESS, ON_KEY_RELEASE,
                 ON_CHANGE_BACKGROUND_COLOUR, ON_CHANGE_CHILD_LOCATION,
                 ON_CHANGE_CHILD_POSITION, ON_CHANGE_ATTRIBUTE};
             }
             else if (Utils.equals(parentType, BUTTON)) {
                 return new String[] {ON_KEY_PRESS, ON_KEY_RELEASE,
-                ON_CHANGE_BACKGROUND_COLOUR, ON_CHANGE_SIZE, 
+                ON_CHANGE_BACKGROUND_COLOUR, ON_CHANGE_SIZE,
                 ON_CHANGE_CHILD_LOCATION, ON_CHANGE_CHILD_POSITION,
                 ON_CHANGE_ATTRIBUTE};
             }
-            else if (Utils.equals(parentType, INPUTBOOLEAN, INPUTSTRING, 
+            else if (Utils.equals(parentType, INPUTBOOLEAN, INPUTSTRING,
                     INPUTNUMBER, INPUTLIST)) {
                 return new String[] {ON_ENABLE, ON_DISABLE,
                 ON_INPUT_FIELD_SELECTION, ON_INPUT_FIELD_DESELECTION,
-                ON_ESC, ON_CHANGE_BACKGROUND_COLOUR, 
+                ON_ESC, ON_CHANGE_BACKGROUND_COLOUR,
                 ON_CHANGE_VALUE, // applies to both numeric and string values
                 ON_ENTRY_OF_VALUE, ON_ENTRY_OF_NEW_VALUE,
                 ON_CHANGE_ATTRIBUTE, ON_CHANGE_SIZE};
@@ -789,11 +813,11 @@ public class AttributeTable extends JTable {
                 ON_CHANGE_ATTRIBUTE, ON_CHANGE_SIZE};
             }
             else if (Utils.equals(parentType, OUTPUTSTRING, OUTPUTNUMBER)) {
-                return new String[] {ON_CHANGE_BACKGROUND_COLOUR, 
+                return new String[] {ON_CHANGE_BACKGROUND_COLOUR,
                 ON_CHANGE_VALUE, ON_CHANGE_ATTRIBUTE, ON_CHANGE_SIZE};
             }
             else if (Utils.equals(parentType, LINE)) {
-                return new String[] {ON_CHANGE_END_POINT, ON_CHANGE_ATTRIBUTE, 
+                return new String[] {ON_CHANGE_END_POINT, ON_CHANGE_ATTRIBUTE,
                 ON_CHANGE_SIZE};
             }
             else if (Utils.equals(parentType, RECTANGLE, ELLIPSE, POLYGON)) {

@@ -191,24 +191,24 @@
   <lineattributes id="" line_art="1111111111111111" line_colour="green" line_width="1" name="green1" role=""/>
   <lineattributes id="" line_art="1111111111111111" line_colour="lime" line_width="1" name="lime1" role=""/>
   <fontattributes font_colour="black" font_size="8x12" font_style="normal" font_type="latin1" id="" language="" name="black8x12" role=""/>
-  <inputlist block_col="0" block_font="" block_row="0" enabled="disable" height="64" id="" name="inputlist" pos_x="0" pos_y="0" value="0" width="64">
-    <picturegraphic block_col="0" block_font="" block_row="0" file="simpleBitmap.bmp" file1="" file4="" file8="" format="8bit" id="" name="picturegraphic0" options="" pos_x="0" pos_y="0" rle="auto" transparency_colour="black" width="64"/>
+  <inputlist enabled="disable" height="64" id="" name="inputlist" value="0" width="64">
+    <picturegraphic file="simpleBitmap.bmp" file1="" file4="" file8="" format="8bit" id="" name="picturegraphic0" options="" rle="auto" transparency_colour="black" width="64"/>
   </inputlist>
   <outputstring background_colour="black" height="8" horizontal_justification="left" id="" language="" length="5" name="label" options="transparent" value="LABEL" width="30">
-    <fontattributes font_colour="black" font_size="6x8" font_style="" font_type="latin1" id="" language="" name="black6x8" role=""/>
+    <fontattributes font_colour="black" font_size="6x8" font_style="" font_type="latin1" id="" language="" name="black6x8" role="font_attributes"/>
   </outputstring>
   <outputnumber background_colour="white" format="fixed" height="8" horizontal_justification="left" id="" max_value="32767" min_value="0" name="number" number_of_decimals="0" offset="0" options="" scale="1.0" value="12345" width="30">
-    <fontattributes font_colour="black" font_size="6x8" font_style="" font_type="latin1" id="" language="" name="black6x8" role=""/>
+    <fontattributes font_colour="black" font_size="6x8" font_style="" font_type="latin1" id="" language="" name="black6x8" role="font_attributes"/>
   </outputnumber>
   <inputlist enabled="yes" height="8" id="" name="inputlist0" value="0" width="42">
-    <outputstring background_colour="black" block_col="0" block_font="" block_row="0" height="8" horizontal_justification="left" id="" language="" length="5" name="label0" options="transparent" pos_x="0" pos_y="0" value="Alpha" width="30">
-      <fontattributes font_colour="black" font_size="6x8" font_style="" font_type="latin1" id="" language="" name="black6x8" role=""/>
+    <outputstring background_colour="black" height="8" horizontal_justification="left" id="" language="" length="5" name="label0" options="transparent" value="Alpha" width="30">
+      <fontattributes font_colour="black" font_size="6x8" font_style="" font_type="latin1" id="" language="" name="black6x8" role="font_attributes"/>
     </outputstring>
-    <outputstring background_colour="black" block_col="0" block_font="" block_row="0" height="8" horizontal_justification="left" id="" language="" length="5" name="label1" options="transparent" pos_x="0" pos_y="0" value="Bravo" width="30">
-      <fontattributes font_colour="black" font_size="6x8" font_style="" font_type="latin1" id="" language="" name="black6x8" role=""/>
+    <outputstring background_colour="black" height="8" horizontal_justification="left" id="" language="" length="5" name="label1" options="transparent" value="Bravo" width="30">
+      <fontattributes font_colour="black" font_size="6x8" font_style="" font_type="latin1" id="" language="" name="black6x8" role="font_attributes"/>
     </outputstring>
-    <outputstring background_colour="black" block_col="0" block_font="" block_row="0" height="8" horizontal_justification="left" id="" language="" length="7" name="label2" options="transparent" pos_x="0" pos_y="0" value="Charlie" width="42">
-      <fontattributes font_colour="black" font_size="6x8" font_style="" font_type="latin1" id="" language="" name="black6x8" role=""/>
+    <outputstring background_colour="black" height="8" horizontal_justification="left" id="" language="" length="7" name="label2" options="transparent" value="Charlie" width="42">
+      <fontattributes font_colour="black" font_size="6x8" font_style="" font_type="latin1" id="" language="" name="black6x8" role="font_attributes"/>
     </outputstring>
   </inputlist>
 </objectpool>

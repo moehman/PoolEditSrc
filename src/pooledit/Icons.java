@@ -171,7 +171,7 @@ public abstract class Icons implements Icon {
      */
     static public final Icon BUTTON_ROLLOVER_ICON = new Icons() {
         @Override
-         public void paintIcon(Component c, Graphics g, int x, int y) {
+        public void paintIcon(Component c, Graphics g, int x, int y) {
             Color oldColor = g.getColor();
 
             g.setColor(Color.GRAY);

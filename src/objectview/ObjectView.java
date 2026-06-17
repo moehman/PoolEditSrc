@@ -711,6 +711,14 @@ public class ObjectView extends JComponent implements TreeModelListener,
                 case AUXILIARYINPUT:
                     shape = processAuxiliaryInput(gfx, node, oper);
                     break;
+
+                case AUXILIARYFUNCTION2:
+                    shape = processAuxiliaryFunction(gfx, node, oper);
+                    break;
+                case AUXILIARYINPUT2:
+                    shape = processAuxiliaryInput(gfx, node, oper);
+                    break;
+		    
                 default:
                     // node is not drawable, do nothing
                     break;
@@ -1229,7 +1237,10 @@ public class ObjectView extends JComponent implements TreeModelListener,
         oper.opObjectPointer(gfx, node);        
         return restoreClip(gfx, oldc);
     }
-    
+
+    /**
+     * Used with both AuxiliaryFunction and AuxiliaryFunction2.
+     */
     public Shape processAuxiliaryFunction(Graphics2D gfx, XMLTreeNode node, ObjectOperations oper) {
 	dmsg("paintAuxiliaryFunction");
 	Shape oldc = changeClip(gfx, sk_width, sk_height);
@@ -1255,7 +1266,10 @@ public class ObjectView extends JComponent implements TreeModelListener,
         
 	return restoreClip(gfx, oldc);
     }
-    
+
+    /**
+     * Used with both AuxiliaryInput and AuxiliaryInput2.
+     */
     public Shape processAuxiliaryInput(Graphics2D gfx, XMLTreeNode node, ObjectOperations oper) {
 	dmsg("paintAuxiliaryInput");
 	Shape oldc = changeClip(gfx, sk_width, sk_height);
@@ -1314,7 +1328,9 @@ public class ObjectView extends JComponent implements TreeModelListener,
             // reserve roperm for one extra key
             lim.set(sk_width, (model.getChildCount(node) + 1) * sk_height);
 	}
-	else if (node.isType(KEY, AUXILIARYFUNCTION, AUXILIARYINPUT)) {
+	else if (node.isType(KEY,
+			     AUXILIARYFUNCTION, AUXILIARYINPUT,
+			     AUXILIARYFUNCTION2, AUXILIARYINPUT2)) {
 	    lim.set(sk_width, sk_height);
 	}
 	else if (node.isType(CONTAINER, BUTTON, 
