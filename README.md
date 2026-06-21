@@ -23,7 +23,12 @@ the IsoAgLib format with some minor changes.
 
 Please read the manual for more information!
 
-Current development environment:
+Previous development environment:
 * OS: Windows 7 (but should work on Windows 10 as well)
 * IDE: NetBeans 11.2
 * Java: jdk-13.0.1
+
+Current development environment:
+* OS: Ubuntu 22.04.5 LTS (but should work on Windows 11 as well)
+* IDE: Apache NetBeans IDE 30
+* Java: OpenJDK Runtime Environment 21.0.11
